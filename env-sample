@@ -1,0 +1,26 @@
+# Environment variables declared in this file are NOT automatically loaded by Prisma.
+# Please add `import "dotenv/config";` to your `prisma.config.ts` file, or use the Prisma CLI with Bun
+# to load environment variables from .env files: https://pris.ly/prisma-config-env-vars.
+
+# Prisma supports the native connection string format for PostgreSQL, MySQL, SQLite, SQL Server, MongoDB and CockroachDB.
+# See the documentation for all the connection string options: https://pris.ly/d/connection-strings
+
+DATABASE_URL="postgresql://postgres:localp@localhost:5432/store2?schema=public"
+
+# JWT
+JWT_SECRET="dstore-super-secret-jwt-key-change-in-production-2024"
+JWT_EXPIRES_IN="7d"
+
+# Next.js
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
+NEXT_PUBLIC_APP_NAME="dstore.in"
+
+# Email (SMTP)
+SMTP_HOST="smtp.gmail.com"
+SMTP_PORT="587"
+SMTP_USER="your-email@gmail.com"
+SMTP_PASS="your-app-password"
+EMAIL_FROM="noreply@dstore.in"
+
+# Upload
+MAX_FILE_SIZE="5242880"
