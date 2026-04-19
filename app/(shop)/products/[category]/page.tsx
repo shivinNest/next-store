@@ -28,6 +28,17 @@ interface Pagination {
   total: number;
 }
 
+// Module-level cache: fetched once per browser session, survives navigation
+let _categoriesCache: Category[] | null = null;
+
+async function getCategories(): Promise<Category[]> {
+  if (_categoriesCache) return _categoriesCache;
+  const res = await fetch("/api/categories");
+  const data = await res.json();
+  if (data.success) _categoriesCache = data.data;
+  return _categoriesCache || [];
+}
+
 function ProductCard({ product }: { product: Product }) {
   const discount =
     product.comparePrice && Number(product.comparePrice) > Number(product.price)
@@ -183,9 +194,7 @@ export default function ProductsPage() {
   }, [categorySlug, search, sort, page, searchParams]);
 
   useEffect(() => {
-    fetch("/api/categories")
-      .then((r) => r.json())
-      .then((d) => d.success && setCategories(d.data));
+    getCategories().then((cats) => setCategories(cats));
   }, []);
 
   useEffect(() => {

@@ -106,79 +106,6 @@ function ProductCard({ product }: { product: Product }) {
   );
 }
 
-// ─── Hero Slider ─────────────────────────────────────
-function HeroSlider({ slides }: { slides: Slide[] }) {
-  if (!slides.length) {
-    return (
-      <div
-        className="hero-slide d-flex align-items-center justify-content-center"
-        style={{ background: "linear-gradient(135deg,#e91e63 0%,#c2185b 100%)" }}
-      >
-        <div className="text-center text-white">
-          <h1 className="display-4 fw-bold">New Season Collection</h1>
-          <p className="lead">Shop the latest trends in women's fashion</p>
-          <Link href="/products/all" className="btn btn-light btn-lg mt-3 px-4">
-            Shop Now
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div
-      id="heroCarousel"
-      className="carousel slide"
-      data-bs-ride="carousel"
-      data-bs-interval="4000"
-    >
-      <div className="carousel-indicators">
-        {slides.map((_, i) => (
-          <button
-            key={i}
-            type="button"
-            data-bs-target="#heroCarousel"
-            data-bs-slide-to={i}
-            className={i === 0 ? "active" : ""}
-          />
-        ))}
-      </div>
-      <div className="carousel-inner">
-        {slides.map((slide, i) => (
-          <div key={slide.id} className={`carousel-item ${i === 0 ? "active" : ""}`}>
-            <div
-              className="hero-slide d-flex align-items-center"
-              style={{
-                backgroundImage: `url(${slide.image})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-              }}
-            >
-              <div className="container">
-                <div className="col-md-6 text-white">
-                  <h1 className="display-5 fw-bold">{slide.title}</h1>
-                  {slide.subtitle && <p className="lead">{slide.subtitle}</p>}
-                  {slide.link && (
-                    <Link href={slide.link} className="btn btn-light btn-lg mt-3 px-4">
-                      Explore
-                    </Link>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-      <button className="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-        <span className="carousel-control-prev-icon" />
-      </button>
-      <button className="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-        <span className="carousel-control-next-icon" />
-      </button>
-    </div>
-  );
-}
-
 // ─── Product Section ─────────────────────────────────
 function ProductSection({
   title,
@@ -453,7 +380,7 @@ export default function HomePage() {
                   New Season Collection
                 </h1>
                 <p className="lead" style={{ fontSize: "1.2rem", marginBottom: "2rem", opacity: 0.9 }}>
-                  Shop the latest trends in women's fashion
+                  Shop the latest trends in women&apos;s fashion
                 </p>
                 <Link href="/products/all" className="btn btn-light btn-lg mt-3 px-5" style={{ fontWeight: 700, textTransform: "uppercase", letterSpacing: "1px" }}>
                   Shop Now
@@ -670,7 +597,7 @@ export default function HomePage() {
         <section className="py-5 bg-light">
           <div className="container">
             <div className="d-flex justify-content-between align-items-center mb-4">
-              <h2 className="section-title mb-0">From Our Blog</h2>
+              <h2 className="section-title mb-0">Stories Connect Saaviya</h2>
               <Link href="/stories" className="btn btn-outline-primary btn-sm px-4">
                 All Posts
               </Link>

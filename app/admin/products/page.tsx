@@ -158,6 +158,13 @@ export default function AdminProductsPage() {
                             <i className="bi bi-pencil small" />
                           </Link>
                           <button
+                            className={`btn btn-sm px-2 py-1 ${p.isActive ? "btn-outline-warning" : "btn-outline-success"}`}
+                            onClick={() => handleToggle(p.id, "isActive", p.isActive)}
+                            title={p.isActive ? "Deactivate" : "Activate"}
+                          >
+                            <i className={`bi ${p.isActive ? "bi-eye-slash small" : "bi-eye small"}`} />
+                          </button>
+                          <button
                             className="btn btn-sm btn-outline-danger px-2 py-1"
                             onClick={() => handleDelete(p.id, p.name)}
                             title="Delete"
