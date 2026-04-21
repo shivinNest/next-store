@@ -9,27 +9,26 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     await requireAdmin();
     const { id } = await params;
     const formData = await req.formData();
-    const name = formData.get("name") as string;
-    const location = formData.get("location") as string;
-    const review = formData.get("review") as string;
-    const rating = parseInt(formData.get("rating") as string) || 5;
+    const title = formData.get("title") as string;
+    const subtitle = (formData.get("subtitle") as string) || null;
+    const link = (formData.get("link") as string) || null;
     const sortOrder = parseInt(formData.get("sortOrder") as string) || 0;
     const isActive = formData.get("isActive") === "true";
-    const avatarFile = formData.get("avatar") as File | null;
+    const imageFile = formData.get("image") as File | null;
 
-    const existing = await prisma.testimonial.findUnique({ where: { id } });
+    const existing = await prisma.heroSlide.findUnique({ where: { id } });
     if (!existing) return errorResponse("Not found", 404);
 
-    let avatar = existing.avatar;
-    if (avatarFile && avatarFile.size > 0) {
-      avatar = await saveFile(avatarFile, "avatars");
+    let image = existing.image;
+    if (imageFile && imageFile.size > 0) {
+      image = await saveFile(imageFile, "banners");
     }
 
-    const t = await prisma.testimonial.update({
+    const slide = await prisma.heroSlide.update({
       where: { id },
-      data: { name, location, review, rating, sortOrder, isActive, avatar },
+      data: { title, subtitle, link, sortOrder, isActive, image },
     });
-    return successResponse(t);
+    return successResponse(slide);
   } catch (err: unknown) {
     if (err instanceof Error && (err.message === "Unauthorized" || err.message === "Forbidden")) {
       return errorResponse(err.message, 403);
@@ -42,7 +41,7 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
   try {
     await requireAdmin();
     const { id } = await params;
-    await prisma.testimonial.delete({ where: { id } });
+    await prisma.heroSlide.delete({ where: { id } });
     return successResponse(null);
   } catch (err: unknown) {
     if (err instanceof Error && (err.message === "Unauthorized" || err.message === "Forbidden")) {

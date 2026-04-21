@@ -68,8 +68,8 @@ export default function BlogListPage() {
           </div>
         ) : (
           <div className="row g-4">
-            {blogs.map((blog, idx) => (
-              <div key={blog.id} className={idx === 0 ? "col-12 col-lg-8" : "col-sm-6 col-lg-4"}>
+            {blogs.map((blog) => (
+              <div key={blog.id} className="col-sm-6 col-lg-4">
                 <Link href={`/stories/${blog.slug}`} className="text-decoration-none d-block h-100"
                   style={{ color: "inherit" }}>
                   <article
@@ -93,20 +93,20 @@ export default function BlogListPage() {
                     }}
                   >
                     {/* Image */}
-                    <div style={{ position: "relative", height: idx === 0 ? 360 : 220, overflow: "hidden", flexShrink: 0 }}>
+                    <div style={{ position: "relative", height: 220, overflow: "hidden", flexShrink: 0 }}>
                       {blog.image ? (
                         <Image
                           src={blog.image}
                           alt={blog.title}
                           fill
-                          sizes={idx === 0 ? "(max-width:992px) 100vw, 66vw" : "(max-width:576px) 100vw, 33vw"}
+                          sizes="(max-width:576px) 100vw, 33vw"
                           style={{ objectFit: "cover", transition: "transform 0.4s ease" }}
                           onMouseEnter={e => ((e.target as HTMLElement).style.transform = "scale(1.04)")}
                           onMouseLeave={e => ((e.target as HTMLElement).style.transform = "scale(1)")}
                         />
                       ) : (
                         <div style={{ width: "100%", height: "100%", background: "linear-gradient(135deg, #e8ddd7, #c9b4a8)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                          <span style={{ fontSize: "2rem", opacity: 0.4 }}>âœ¦</span>
+                          <span style={{ fontSize: "2rem", opacity: 0.4 }}>&#10022;</span>
                         </div>
                       )}
 
@@ -132,7 +132,7 @@ export default function BlogListPage() {
                     </div>
 
                     {/* Body */}
-                    <div style={{ padding: idx === 0 ? "24px 28px 20px" : "20px 22px 16px", display: "flex", flexDirection: "column", flex: 1 }}>
+                    <div style={{ padding: "20px 22px 16px", display: "flex", flexDirection: "column", flex: 1 }}>
                       {/* Meta */}
                       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
                         <div style={{
@@ -147,7 +147,7 @@ export default function BlogListPage() {
                         <span style={{ fontSize: "0.8rem", color: "#888", fontWeight: 500 }}>{blog.author}</span>
                         {blog.publishedAt && (
                           <>
-                            <span style={{ color: "#ddd", fontSize: "0.75rem" }}>Â·</span>
+                            <span style={{ color: "#ddd", fontSize: "0.75rem" }}>&middot;</span>
                             <span style={{ fontSize: "0.78rem", color: "#aaa" }}>{formatDate(blog.publishedAt)}</span>
                           </>
                         )}
@@ -155,7 +155,7 @@ export default function BlogListPage() {
 
                       {/* Title */}
                       <h2 style={{
-                        fontSize: idx === 0 ? "1.35rem" : "1.05rem",
+                        fontSize: "1.05rem",
                         fontWeight: 700,
                         color: "#111",
                         lineHeight: 1.35,
@@ -174,7 +174,7 @@ export default function BlogListPage() {
                           flex: 1,
                           margin: "0 0 18px",
                           display: "-webkit-box",
-                          WebkitLineClamp: idx === 0 ? 3 : 2,
+                          WebkitLineClamp: 2,
                           WebkitBoxOrient: "vertical",
                           overflow: "hidden",
                         }}>

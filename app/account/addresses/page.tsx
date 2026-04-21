@@ -99,31 +99,30 @@ export default function AddressesPage() {
 
   return (
     <div>
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h5 className="fw-bold mb-0">My Addresses</h5>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 28 }}>
+        <div>
+          <p style={{ fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#9f523a", marginBottom: 4 }}>Account</p>
+          <h2 style={{ fontSize: "1.3rem", fontWeight: 700, color: "#111", letterSpacing: "-0.01em", margin: 0 }}>My Addresses</h2>
+        </div>
         <button
-          className="btn btn-primary btn-sm px-3"
-          onClick={() => {
-            setEditId(null);
-            setForm(emptyForm);
-            setShowForm(true);
-          }}
+          style={{ background: "#9f523a", color: "#fff", border: "none", padding: "9px 18px", borderRadius: 8, fontSize: "0.85rem", fontWeight: 700, cursor: "pointer", letterSpacing: "0.03em" }}
+          onClick={() => { setEditId(null); setForm(emptyForm); setShowForm(true); }}
         >
-          <i className="bi bi-plus me-1" />Add Address
+          + Add Address
         </button>
       </div>
 
       {/* Address Form */}
       {showForm && (
-        <div className="card border-0 shadow-sm mb-4">
-          <div className="card-body">
-            <h6 className="fw-bold mb-3">
+          <div style={{ background: "#fff", border: "1px solid #ece9e4", borderRadius: 12, padding: "28px 32px", marginBottom: 20 }}>
+            <p style={{ fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#9f523a", marginBottom: 6 }}>{editId ? "Edit" : "New"} Address</p>
+            <h3 style={{ fontSize: "1.05rem", fontWeight: 700, color: "#111", marginBottom: 20 }}>
               {editId ? "Edit Address" : "Add New Address"}
-            </h6>
+            </h3>
             <form onSubmit={handleSubmit}>
               <div className="row g-3">
                 <div className="col-md-6">
-                  <label className="form-label small fw-semibold">Full Name *</label>
+                  <label style={{ display: "block", fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#666", marginBottom: 6 }}>Full Name *</label>
                   <input
                     className={`form-control ${fieldErrors.name ? "is-invalid" : ""}`}
                     value={form.name}
@@ -133,7 +132,7 @@ export default function AddressesPage() {
                   {fieldErrors.name && <div className="invalid-feedback">{fieldErrors.name}</div>}
                 </div>
                 <div className="col-md-6">
-                  <label className="form-label small fw-semibold">Phone *</label>
+                  <label style={{ display: "block", fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#666", marginBottom: 6 }}>Phone *</label>
                   <input
                     className={`form-control ${fieldErrors.phone ? "is-invalid" : ""}`}
                     value={form.phone}
@@ -145,7 +144,7 @@ export default function AddressesPage() {
                   {fieldErrors.phone && <div className="invalid-feedback">{fieldErrors.phone}</div>}
                 </div>
                 <div className="col-12">
-                  <label className="form-label small fw-semibold">Address Line 1 *</label>
+                  <label style={{ display: "block", fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#666", marginBottom: 6 }}>Address Line 1 *</label>
                   <input
                     className={`form-control ${fieldErrors.line1 ? "is-invalid" : ""}`}
                     placeholder="House/flat no., street name"
@@ -156,7 +155,7 @@ export default function AddressesPage() {
                   {fieldErrors.line1 && <div className="invalid-feedback">{fieldErrors.line1}</div>}
                 </div>
                 <div className="col-12">
-                  <label className="form-label small fw-semibold">Address Line 2</label>
+                  <label style={{ display: "block", fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#666", marginBottom: 6 }}>Address Line 2</label>
                   <input
                     className="form-control"
                     placeholder="Area, landmark (optional)"
@@ -165,7 +164,7 @@ export default function AddressesPage() {
                   />
                 </div>
                 <div className="col-md-4">
-                  <label className="form-label small fw-semibold">City *</label>
+                  <label style={{ display: "block", fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#666", marginBottom: 6 }}>City *</label>
                   <input
                     className={`form-control ${fieldErrors.city ? "is-invalid" : ""}`}
                     value={form.city}
@@ -174,7 +173,7 @@ export default function AddressesPage() {
                   />
                 </div>
                 <div className="col-md-4">
-                  <label className="form-label small fw-semibold">State *</label>
+                  <label style={{ display: "block", fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#666", marginBottom: 6 }}>State *</label>
                   <select
                     className={`form-select ${fieldErrors.state ? "is-invalid" : ""}`}
                     value={form.state}
@@ -186,7 +185,7 @@ export default function AddressesPage() {
                   </select>
                 </div>
                 <div className="col-md-4">
-                  <label className="form-label small fw-semibold">Pincode *</label>
+                  <label style={{ display: "block", fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#666", marginBottom: 6 }}>Pincode *</label>
                   <input
                     className={`form-control ${fieldErrors.pincode ? "is-invalid" : ""}`}
                     value={form.pincode}
@@ -212,13 +211,11 @@ export default function AddressesPage() {
                   </div>
                 </div>
               </div>
-              <div className="d-flex gap-2 mt-4">
-                <button type="submit" className="btn btn-primary" disabled={saving}>
-                  {saving ? <span className="spinner-border spinner-border-sm" /> : saving ? "" : editId ? "Update Address" : "Add Address"}
+              <div style={{ display: "flex", gap: 10, marginTop: 20 }}>
+                <button type="submit" disabled={saving} style={{ background: "#9f523a", color: "#fff", border: "none", padding: "10px 24px", borderRadius: 8, fontSize: "0.875rem", fontWeight: 700, cursor: saving ? "not-allowed" : "pointer", opacity: saving ? 0.7 : 1 }}>
+                  {saving ? "Saving…" : editId ? "Update Address" : "Add Address"}
                 </button>
-                <button
-                  type="button"
-                  className="btn btn-outline-secondary"
+                <button type="button" style={{ background: "#fff", color: "#555", border: "1px solid #ddd", padding: "10px 24px", borderRadius: 8, fontSize: "0.875rem", fontWeight: 600, cursor: "pointer" }}
                   onClick={() => { setShowForm(false); setEditId(null); }}
                 >
                   Cancel
@@ -226,48 +223,35 @@ export default function AddressesPage() {
               </div>
             </form>
           </div>
-        </div>
       )}
 
       {/* Address List */}
       {loading ? (
         <div className="text-center py-4"><div className="spinner-border text-primary" /></div>
       ) : addresses.length === 0 ? (
-        <div className="text-center py-5">
-          <i className="bi bi-geo-alt fs-1 text-muted" />
-          <h6 className="mt-3 text-muted">No addresses saved</h6>
+        <div style={{ textAlign: "center", padding: "64px 20px", background: "#fff", border: "1px solid #ece9e4", borderRadius: 12 }}>
+          <p style={{ fontSize: "2.4rem", marginBottom: 12 }}>&#128205;</p>
+          <p style={{ fontWeight: 600, color: "#555", fontSize: "0.975rem" }}>No addresses saved yet</p>
         </div>
       ) : (
         <div className="row g-3">
           {addresses.map((a) => (
             <div key={a.id} className="col-md-6">
-              <div className={`card h-100 ${a.isDefault ? "border-primary border-2" : "border-0 shadow-sm"}`}>
-                <div className="card-body">
-                  <div className="d-flex justify-content-between mb-2">
-                    <span className="fw-semibold">{a.name}</span>
-                    {a.isDefault && <span className="badge bg-primary">Default</span>}
-                  </div>
-                  <p className="text-muted small mb-1">
-                    {a.line1}{a.line2 ? `, ${a.line2}` : ""}
-                  </p>
-                  <p className="text-muted small mb-1">
-                    {a.city}, {a.state} – {a.pincode}
-                  </p>
-                  <p className="text-muted small mb-3">📞 {a.phone}</p>
-                  <div className="d-flex gap-2">
-                    <button
-                      className="btn btn-sm btn-outline-secondary"
-                      onClick={() => handleEdit(a)}
-                    >
-                      <i className="bi bi-pencil me-1" />Edit
-                    </button>
-                    <button
-                      className="btn btn-sm btn-outline-danger"
-                      onClick={() => handleDelete(a.id)}
-                    >
-                      <i className="bi bi-trash me-1" />Delete
-                    </button>
-                  </div>
+              <div style={{ border: a.isDefault ? "2px solid #9f523a" : "1px solid #ece9e4", borderRadius: 12, padding: "20px 22px", height: "100%", background: "#fff" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 10 }}>
+                  <span style={{ fontWeight: 700, fontSize: "0.925rem", color: "#111" }}>{a.name}</span>
+                  {a.isDefault && <span style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "#9f523a", background: "#fdf3ef", padding: "3px 8px", borderRadius: 4 }}>Default</span>}
+                </div>
+                <p style={{ fontSize: "0.875rem", color: "#666", marginBottom: 4 }}>
+                  {a.line1}{a.line2 ? `, ${a.line2}` : ""}
+                </p>
+                <p style={{ fontSize: "0.875rem", color: "#666", marginBottom: 4 }}>
+                  {a.city}, {a.state} &ndash; {a.pincode}
+                </p>
+                <p style={{ fontSize: "0.875rem", color: "#888", marginBottom: 18 }}>{a.phone}</p>
+                <div style={{ display: "flex", gap: 8 }}>
+                  <button style={{ background: "#fff", border: "1px solid #ddd", padding: "6px 14px", borderRadius: 6, fontSize: "0.8rem", fontWeight: 600, color: "#555", cursor: "pointer" }} onClick={() => handleEdit(a)}>Edit</button>
+                  <button style={{ background: "#fff", border: "1px solid #fecaca", padding: "6px 14px", borderRadius: 6, fontSize: "0.8rem", fontWeight: 600, color: "#b91c1c", cursor: "pointer" }} onClick={() => handleDelete(a.id)}>Delete</button>
                 </div>
               </div>
             </div>

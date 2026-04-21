@@ -6,6 +6,7 @@ const navLinks = [
   { href: "/admin/dashboard", icon: "bi-speedometer2", label: "Dashboard" },
   { href: "/admin/products", icon: "bi-bag", label: "Products" },
   { href: "/admin/categories", icon: "bi-tag", label: "Categories" },
+  { href: "/admin/hero-slides", icon: "bi-play-circle", label: "Hero Slides" },
   { href: "/admin/banners", icon: "bi-image", label: "Banners" },
   { href: "/admin/testimonials", icon: "bi-chat-quote", label: "Testimonials" },
   { href: "/admin/orders", icon: "bi-clipboard-check", label: "Orders" },

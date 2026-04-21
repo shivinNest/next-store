@@ -14,6 +14,13 @@ function LoginForm() {
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
+  // Forgot password
+  const [forgotMode, setForgotMode] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [forgotLoading, setForgotLoading] = useState(false);
+  const [forgotSent, setForgotSent] = useState(false);
+  const [forgotError, setForgotError] = useState("");
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -79,7 +86,17 @@ function LoginForm() {
           </div>
 
           <div className="mb-4">
-            <label className="form-label fw-semibold small">Password</label>
+            <div className="d-flex justify-content-between align-items-center mb-1">
+              <label className="form-label fw-semibold small mb-0">Password</label>
+              <button
+                type="button"
+                className="btn btn-link btn-sm p-0 text-decoration-none"
+                style={{ fontSize: "0.8rem", color: "#9f523a" }}
+                onClick={() => { setForgotMode(true); setForgotEmail(form.email); setForgotError(""); setForgotSent(false); }}
+              >
+                Forgot password?
+              </button>
+            </div>
             <div className="input-group">
               <input
                 type={showPassword ? "text" : "password"}
@@ -111,6 +128,60 @@ function LoginForm() {
             )}
           </button>
         </form>
+
+        {/* Forgot password inline panel */}
+        {forgotMode && (
+          <div style={{ marginTop: 20, background: "#faf9f7", border: "1px solid #ece9e4", borderRadius: 10, padding: "20px 22px" }}>
+            <p style={{ fontWeight: 700, fontSize: "0.875rem", color: "#111", marginBottom: 4 }}>Reset your password</p>
+            <p style={{ fontSize: "0.8rem", color: "#888", marginBottom: 14 }}>Enter your email and we&apos;ll send you a reset link.</p>
+            {forgotSent ? (
+              <div style={{ background: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: 8, padding: "10px 14px", fontSize: "0.85rem", color: "#15803d" }}>
+                Check your inbox — a reset link has been sent.
+              </div>
+            ) : (
+              <form onSubmit={async (e) => {
+                e.preventDefault();
+                setForgotLoading(true); setForgotError("");
+                try {
+                  const res = await fetch("/api/auth/forgot-password", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email: forgotEmail }),
+                  });
+                  const data = await res.json();
+                  if (data.success) setForgotSent(true);
+                  else setForgotError(data.error || "Something went wrong");
+                } catch { setForgotError("Network error"); }
+                finally { setForgotLoading(false); }
+              }}>
+                {forgotError && (
+                  <div style={{ background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 7, padding: "8px 12px", fontSize: "0.8rem", color: "#b91c1c", marginBottom: 10 }}>
+                    {forgotError}
+                  </div>
+                )}
+                <input
+                  type="email"
+                  className="form-control form-control-sm mb-3"
+                  placeholder="your@email.com"
+                  value={forgotEmail}
+                  onChange={e => setForgotEmail(e.target.value)}
+                  required
+                  autoFocus
+                />
+                <div style={{ display: "flex", gap: 8 }}>
+                  <button type="submit" disabled={forgotLoading}
+                    style={{ background: "#9f523a", color: "#fff", border: "none", padding: "8px 18px", borderRadius: 7, fontSize: "0.85rem", fontWeight: 700, cursor: forgotLoading ? "not-allowed" : "pointer", opacity: forgotLoading ? 0.7 : 1 }}>
+                    {forgotLoading ? "Sending\u2026" : "Send reset link"}
+                  </button>
+                  <button type="button" onClick={() => setForgotMode(false)}
+                    style={{ background: "#fff", color: "#555", border: "1px solid #ddd", padding: "8px 16px", borderRadius: 7, fontSize: "0.85rem", fontWeight: 600, cursor: "pointer" }}>
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
+        )}
 
         <p className="text-center text-muted small mt-4 mb-0">
           Don't have an account?{" "}

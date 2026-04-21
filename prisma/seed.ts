@@ -348,21 +348,48 @@ async function main() {
   }
   console.log("✅ Banners created:", banners.length);
 
-  // Blog post
-  await prisma.blog.create({
-    data: {
+  // Blog posts
+  const blogPosts = [
+    {
       title: "5 Must-Have Kurtas This Festive Season",
       slug: "5-must-have-kurtas-festive-season",
       excerpt: "Elevate your festive wardrobe with these stunning kurta styles that are trending this season.",
-      content: "<p>Festive season calls for vibrant colors and timeless silhouettes. Here are 5 kurta styles you must have...</p>",
-      image: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=800&h=400&fit=crop",
+      content: "<p>Festive season calls for vibrant colors and timeless silhouettes. Here are 5 kurta styles you must have in your wardrobe this year...</p>",
+      image: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=800&h=500&fit=crop",
       author: "Style Team",
-      isPublished: true,
-      publishedAt: new Date(),
       tags: ["fashion", "festive", "kurtas"],
+      publishedAt: new Date("2026-03-15"),
     },
-  }).catch(() => {});
-  console.log("✅ Sample blog post created");
+    {
+      title: "How to Style a Saree for a Modern Look",
+      slug: "how-to-style-saree-modern-look",
+      excerpt: "Discover contemporary ways to drape and accessorize your saree for a fresh, fashion-forward appearance.",
+      content: "<p>The saree is timeless, but styling it for today's woman requires a creative eye. From belt draping to pairing with sneakers, here's how to make your saree uniquely yours...</p>",
+      image: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=800&h=500&fit=crop",
+      author: "Priya Sharma",
+      tags: ["saree", "styling", "contemporary"],
+      publishedAt: new Date("2026-03-28"),
+    },
+    {
+      title: "The Complete Guide to Choosing Ethnic Wear for Weddings",
+      slug: "complete-guide-ethnic-wear-weddings",
+      excerpt: "From lehengas to anarkalis — find the perfect outfit for every wedding function this season.",
+      content: "<p>Wedding season is a showcase of India's most beautiful textiles and craftsmanship. Whether you're the bride, bridesmaid or a guest, this guide will help you dress perfectly for every ceremony...</p>",
+      image: "https://images.unsplash.com/photo-1619410283995-43d9134e7656?w=800&h=500&fit=crop",
+      author: "Fashion Desk",
+      tags: ["wedding", "lehenga", "ethnic"],
+      publishedAt: new Date("2026-04-05"),
+    },
+  ];
+
+  for (const post of blogPosts) {
+    await prisma.blog.upsert({
+      where: { slug: post.slug },
+      update: {},
+      create: { ...post, isPublished: true },
+    });
+  }
+  console.log("✅ Blog posts seeded:", blogPosts.length);
 
   // Testimonials
   const testimonialData = [

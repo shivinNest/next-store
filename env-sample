@@ -5,7 +5,7 @@
 # Prisma supports the native connection string format for PostgreSQL, MySQL, SQLite, SQL Server, MongoDB and CockroachDB.
 # See the documentation for all the connection string options: https://pris.ly/d/connection-strings
 
-DATABASE_URL="postgresql://postgres:localp@localhost:5432/store2?schema=public"
+DATABASE_URL=""
 
 # JWT
 JWT_SECRET="dstore-super-secret-jwt-key-change-in-production-2024"
@@ -24,3 +24,11 @@ EMAIL_FROM="noreply@dstore.in"
 
 # Upload
 MAX_FILE_SIZE="5242880"
+
+# Cloudinary (https://cloudinary.com/console)
+CLOUDINARY_CLOUD_NAME="your-cloud-name"
+CLOUDINARY_API_KEY="your-api-key"
+CLOUDINARY_API_SECRET="your-api-secret"
+
+# WhatsApp (include country code, no + or spaces, e.g. 919876543210 for India)
+NEXT_PUBLIC_WHATSAPP_NUMBER="919876543210"

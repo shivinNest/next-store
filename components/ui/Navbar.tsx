@@ -9,6 +9,7 @@ interface User {
   name: string;
   email: string;
   role: string;
+  avatar?: string | null;
 }
 
 interface CartCount {
@@ -129,27 +130,43 @@ export default function Navbar() {
         }
         .cart-link {
           position: relative;
-          font-size: 1.1rem;
-          transition: all 0.3s ease;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 38px;
+          height: 38px;
+          border-radius: 8px;
+          color: #333;
+          transition: color 0.2s, background 0.2s;
+          text-decoration: none;
         }
         .cart-link:hover {
-          color: #9f523a !important;
+          color: #9f523a;
+          background: rgba(159, 82, 58, 0.07);
+        }
+        .cart-link .cart-icon {
+          font-size: 1.2rem;
+          line-height: 1;
         }
         .cart-badge {
           position: absolute;
-          top: -8px;
-          right: -8px;
-          background: #9f523a;
-          color: white;
+          top: 2px;
+          right: 2px;
+          background: #e53935;
+          color: #fff;
           border-radius: 50%;
-          width: 20px;
-          height: 20px;
+          min-width: 16px;
+          height: 16px;
+          padding: 0 3px;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 0.75rem;
-          font-weight: 700;
-          box-shadow: 0 2px 4px rgba(159, 82, 58, 0.3);
+          font-size: 0.62rem;
+          font-weight: 800;
+          line-height: 1;
+          box-shadow: 0 1px 4px rgba(229,57,53,0.5);
+          border: 1.5px solid #fff;
+          pointer-events: none;
         }
         .user-btn {
           background: linear-gradient(135deg, #9f523a 0%, #7a3f2c 100%) !important;
@@ -165,24 +182,27 @@ export default function Navbar() {
           box-shadow: 0 4px 12px rgba(159, 82, 58, 0.3) !important;
         }
         .dropdown-menu {
-          border: 1px solid rgba(159, 82, 58, 0.15) !important;
-          border-radius: 8px !important;
-          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
-          padding: 8px 0 !important;
+          border: 1px solid rgba(159, 82, 58, 0.12) !important;
+          border-radius: 10px !important;
+          box-shadow: 0 16px 40px rgba(0, 0, 0, 0.10) !important;
+          padding: 6px !important;
+          min-width: 200px !important;
         }
         .dropdown-item {
-          padding: 0.7rem 1rem !important;
-          transition: all 0.2s ease;
+          padding: 0.6rem 0.9rem !important;
+          border-radius: 6px !important;
+          transition: background 0.15s ease;
           color: #333 !important;
-          font-size: 0.9rem;
+          font-size: 0.875rem;
+          font-weight: 500;
         }
         .dropdown-item:hover {
-          background: rgba(159, 82, 58, 0.08) !important;
+          background: rgba(159, 82, 58, 0.07) !important;
           color: #9f523a !important;
-          padding-left: 1.2rem !important;
+          padding-left: 0.9rem !important;
         }
         .dropdown-item.text-danger:hover {
-          background: rgba(220, 53, 69, 0.1) !important;
+          background: rgba(220, 53, 69, 0.07) !important;
           color: #dc3545 !important;
         }
         .navbar-toggler {
@@ -264,10 +284,10 @@ export default function Navbar() {
 
             {/* Cart */}
             <li className="nav-item">
-              <Link href="/cart" className="cart-link nav-link px-2">
-                <i className="bi bi-bag" />
+              <Link href="/cart" className="cart-link">
+                <i className="bi bi-bag cart-icon" />
                 {cartCount > 0 && (
-                  <span className="cart-badge">{cartCount}</span>
+                  <span className="cart-badge">{cartCount > 99 ? "99+" : cartCount}</span>
                 )}
               </Link>
             </li>
@@ -278,46 +298,65 @@ export default function Navbar() {
                 <button
                   className="btn user-btn dropdown-toggle"
                   data-bs-toggle="dropdown"
-                  style={{ fontSize: "0.9rem" }}
+                  style={{ fontSize: "0.875rem", display: "flex", alignItems: "center", gap: 8, padding: "4px 12px 4px 4px" }}
                 >
-                  <i className="bi bi-person-circle me-2" />
+                  {user.avatar ? (
+                    <img src={user.avatar} alt={user.name} style={{ width: 28, height: 28, borderRadius: "50%", objectFit: "cover", flexShrink: 0, border: "2px solid rgba(255,255,255,0.4)" }} />
+                  ) : (
+                    <span style={{
+                      width: 28, height: 28, borderRadius: "50%",
+                      background: "rgba(255,255,255,0.25)",
+                      display: "inline-flex", alignItems: "center", justifyContent: "center",
+                      fontSize: "0.78rem", fontWeight: 800, flexShrink: 0,
+                    }}>
+                      {user.name[0].toUpperCase()}
+                    </span>
+                  )}
                   {user.name.split(" ")[0]}
                 </button>
                 <ul className="dropdown-menu dropdown-menu-end">
-                  <li>
-                    <Link className="dropdown-item" href="/account/profile">
-                      <i className="bi bi-person me-2" style={{ color: "#9f523a" }} />My Profile
-                    </Link>
+                  <li style={{ padding: "10px 12px 12px", borderBottom: "1px solid rgba(159,82,58,0.08)", marginBottom: 4, display: "flex", alignItems: "center", gap: 10 }}>
+                    {user.avatar ? (
+                      <img src={user.avatar} alt={user.name} style={{ width: 40, height: 40, borderRadius: "50%", objectFit: "cover", flexShrink: 0, border: "2px solid rgba(159,82,58,0.15)" }} />
+                    ) : (
+                      <span style={{
+                        width: 40, height: 40, borderRadius: "50%",
+                        background: "linear-gradient(135deg, #9f523a, #7a3f2c)",
+                        display: "inline-flex", alignItems: "center", justifyContent: "center",
+                        fontSize: "1rem", fontWeight: 800, color: "#fff", flexShrink: 0,
+                      }}>
+                        {user.name[0].toUpperCase()}
+                      </span>
+                    )}
+                    <div style={{ overflow: "hidden" }}>
+                      <p style={{ margin: 0, fontSize: "0.875rem", color: "#111", fontWeight: 700, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 148 }}>{user.name}</p>
+                      <p style={{ margin: 0, fontSize: "0.75rem", color: "#999", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 148 }}>{user.email}</p>
+                    </div>
                   </li>
                   <li>
-                    <Link className="dropdown-item" href="/account/orders">
-                      <i className="bi bi-box me-2" style={{ color: "#9f523a" }} />My Orders
-                    </Link>
+                    <Link className="dropdown-item" href="/account/profile">My Profile</Link>
                   </li>
                   <li>
-                    <Link className="dropdown-item" href="/account/wishlist">
-                      <i className="bi bi-heart me-2" style={{ color: "#9f523a" }} />Wishlist
-                    </Link>
+                    <Link className="dropdown-item" href="/account/orders">My Orders</Link>
                   </li>
                   <li>
-                    <Link className="dropdown-item" href="/account/addresses">
-                      <i className="bi bi-geo-alt me-2" style={{ color: "#9f523a" }} />Addresses
-                    </Link>
+                    <Link className="dropdown-item" href="/account/wishlist">Wishlist</Link>
+                  </li>
+                  <li>
+                    <Link className="dropdown-item" href="/account/addresses">Addresses</Link>
                   </li>
                   {user.role === "ADMIN" && (
                     <>
-                      <li><hr className="dropdown-divider" style={{ margin: "8px 0", borderColor: "rgba(159, 82, 58, 0.1)" }} /></li>
+                      <li><hr className="dropdown-divider" style={{ margin: "6px 4px", borderColor: "rgba(159, 82, 58, 0.1)" }} /></li>
                       <li>
-                        <Link className="dropdown-item" href="/admin/dashboard">
-                          <i className="bi bi-speedometer2 me-2" style={{ color: "#9f523a" }} />Admin Panel
-                        </Link>
+                        <Link className="dropdown-item" href="/admin/dashboard">Admin Panel</Link>
                       </li>
                     </>
                   )}
-                  <li><hr className="dropdown-divider" style={{ margin: "8px 0", borderColor: "rgba(159, 82, 58, 0.1)" }} /></li>
+                  <li><hr className="dropdown-divider" style={{ margin: "6px 4px", borderColor: "rgba(159, 82, 58, 0.1)" }} /></li>
                   <li>
-                    <button className="dropdown-item text-danger" onClick={handleLogout} style={{ width: "100%", textAlign: "left", border: "none", background: "none", padding: "0.7rem 1rem", transition: "all 0.2s ease" }}>
-                      <i className="bi bi-box-arrow-right me-2" />Logout
+                    <button className="dropdown-item text-danger" onClick={handleLogout} style={{ width: "100%", textAlign: "left", border: "none", background: "none" }}>
+                      Sign Out
                     </button>
                   </li>
                 </ul>

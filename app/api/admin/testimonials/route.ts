@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth";
 import { saveFile } from "@/lib/upload";
@@ -8,12 +8,12 @@ export async function GET() {
   try {
     await requireAdmin();
     const testimonials = await prisma.testimonial.findMany({ orderBy: { sortOrder: "asc" } });
-    return NextResponse.json(successResponse(testimonials));
+    return successResponse(testimonials);
   } catch (err: unknown) {
     if (err instanceof Error && (err.message === "Unauthorized" || err.message === "Forbidden")) {
-      return NextResponse.json(errorResponse(err.message), { status: 403 });
+      return errorResponse(err.message, 403);
     }
-    return NextResponse.json(errorResponse("Internal server error"), { status: 500 });
+    return errorResponse("Internal server error", 500);
   }
 }
 
@@ -41,11 +41,11 @@ export async function POST(req: NextRequest) {
     const t = await prisma.testimonial.create({
       data: { name, location, review, rating, sortOrder, isActive, avatar },
     });
-    return NextResponse.json(successResponse(t), { status: 201 });
+    return successResponse(t, 201);
   } catch (err: unknown) {
     if (err instanceof Error && (err.message === "Unauthorized" || err.message === "Forbidden")) {
-      return NextResponse.json(errorResponse(err.message), { status: 403 });
+      return errorResponse(err.message, 403);
     }
-    return NextResponse.json(errorResponse("Internal server error"), { status: 500 });
+    return errorResponse("Internal server error", 500);
   }
 }

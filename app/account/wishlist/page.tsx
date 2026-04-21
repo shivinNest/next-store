@@ -33,7 +33,10 @@ export default function WishlistPage() {
 
   return (
     <div>
-      <h5 className="fw-bold mb-4">My Wishlist ({items.length} items)</h5>
+      <p style={{ fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#9f523a", marginBottom: 6 }}>Account</p>
+      <h2 style={{ fontSize: "1.3rem", fontWeight: 700, color: "#111", letterSpacing: "-0.01em", marginBottom: 28 }}>
+        Wishlist <span style={{ fontSize: "0.875rem", fontWeight: 500, color: "#aaa" }}>({items.length})</span>
+      </h2>
 
       {loading ? (
         <div className="row g-3">
@@ -45,10 +48,12 @@ export default function WishlistPage() {
           ))}
         </div>
       ) : items.length === 0 ? (
-        <div className="text-center py-5">
-          <i className="bi bi-heart fs-1 text-muted" />
-          <h6 className="mt-3 text-muted">Your wishlist is empty</h6>
-          <Link href="/products/all" className="btn btn-primary mt-3">Browse Products</Link>
+        <div style={{ textAlign: "center", padding: "64px 20px", background: "#fff", border: "1px solid #ece9e4", borderRadius: 12 }}>
+          <p style={{ fontSize: "2.4rem", marginBottom: 12 }}>&#10084;</p>
+          <p style={{ fontWeight: 600, color: "#555", marginBottom: 20, fontSize: "0.975rem" }}>Your wishlist is empty</p>
+          <Link href="/products/all" style={{ background: "#9f523a", color: "#fff", padding: "11px 28px", borderRadius: 8, textDecoration: "none", fontWeight: 700, fontSize: "0.875rem" }}>
+            Browse Products
+          </Link>
         </div>
       ) : (
         <div className="row g-3">
@@ -56,40 +61,31 @@ export default function WishlistPage() {
             const p = item.product;
             return (
               <div key={item.id} className="col-6 col-md-4">
-                <div className="card border-0 shadow-sm h-100 product-card">
-                  <div className="product-img-wrap">
+                <div style={{ border: "1px solid #ece9e4", borderRadius: 10, overflow: "hidden", background: "#fff", height: "100%", display: "flex", flexDirection: "column" }}>
+                  <div className="product-img-wrap" style={{ position: "relative" }}>
                     {p.images[0] ? (
-                      <Image
-                        src={p.images[0]}
-                        alt={p.name}
-                        fill
-                        className="object-fit-cover"
-                      />
+                      <Image src={p.images[0]} alt={p.name} fill className="object-fit-cover" />
                     ) : (
                       <div className="w-100 h-100 d-flex align-items-center justify-content-center bg-light">
-                        <i className="bi bi-image text-muted fs-1" />
+                        <span style={{ fontSize: "2rem", color: "#ccc" }}>&#128444;</span>
                       </div>
                     )}
                     <button
-                      className="btn btn-sm btn-danger position-absolute top-0 end-0 m-2 rounded-circle p-1 lh-1"
-                      style={{ width: 28, height: 28 }}
+                      style={{ position: "absolute", top: 8, right: 8, width: 28, height: 28, borderRadius: "50%", background: "rgba(255,255,255,0.9)", border: "1px solid #ece9e4", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: "0.8rem", color: "#b91c1c", lineHeight: 1 }}
                       onClick={() => removeItem(item.id)}
                       title="Remove"
                     >
-                      <i className="bi bi-x" />
+                      &times;
                     </button>
                   </div>
-                  <div className="card-body p-2">
-                    <Link href={`/product/${p.slug}`} className="text-decoration-none text-dark">
-                      <p className="mb-1 small fw-semibold text-truncate">{p.name}</p>
-                      <span className="fw-bold text-primary small">
-                        ₹{Number(p.price).toLocaleString("en-IN")}
-                      </span>
+                  <div style={{ padding: "12px 14px 14px", flex: 1, display: "flex", flexDirection: "column" }}>
+                    <Link href={`/product/${p.slug}`} style={{ textDecoration: "none" }}>
+                      <p style={{ fontSize: "0.85rem", fontWeight: 600, color: "#111", marginBottom: 4, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name}</p>
+                      <p style={{ fontSize: "0.875rem", fontWeight: 700, color: "#9f523a", margin: 0 }}>
+                        &#8377;{Number(p.price).toLocaleString("en-IN")}
+                      </p>
                     </Link>
-                    <Link
-                      href={`/product/${p.slug}`}
-                      className="btn btn-primary btn-sm w-100 mt-2"
-                    >
+                    <Link href={`/product/${p.slug}`} style={{ display: "block", marginTop: 10, background: "#9f523a", color: "#fff", textAlign: "center", padding: "8px", borderRadius: 7, textDecoration: "none", fontSize: "0.8rem", fontWeight: 700 }}>
                       View Product
                     </Link>
                   </div>

@@ -1,0 +1,87 @@
+.sidebar {
+  background: #fff;
+  border: 1px solid #ece9e4;
+  border-radius: 12px;
+  overflow: hidden;
+  position: sticky;
+  top: 24px;
+}
+
+.sidebarHeader {
+  padding: 20px 20px 18px;
+  border-bottom: 1px solid #ece9e4;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #555;
+  text-decoration: none;
+  border-left: 3px solid transparent;
+  transition: color 0.15s, background 0.15s;
+}
+
+.navItem:hover {
+  color: #9f523a;
+  background: #fdf8f6;
+  text-decoration: none;
+}
+
+.navItemActive {
+  color: #9f523a;
+  border-left-color: #9f523a;
+  background: #fdf8f6;
+  font-weight: 600;
+}
+
+.logoutBtn {
+  display: block;
+  width: 100%;
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #aaa;
+  background: none;
+  border: none;
+  border-top: 1px solid #ece9e4;
+  cursor: pointer;
+  text-align: left;
+  transition: color 0.15s;
+  margin-top: 8px;
+}
+
+.logoutBtn:hover {
+  color: #b91c1c;
+}
+
+.orderCard {
+  border: 1px solid #ece9e4;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+  transition: border-color 0.15s;
+}
+
+.orderCard:hover {
+  border-color: #c9b4a8;
+}
+
+.addressCard {
+  border: 1px solid #ece9e4;
+  border-radius: 12px;
+  padding: 20px 22px;
+  height: 100%;
+  background: #fff;
+  transition: border-color 0.15s;
+}
+
+.addressCard:hover {
+  border-color: #c9b4a8;
+}
+
+.addressCardDefault {
+  border: 2px solid #9f523a;
+}

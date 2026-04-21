@@ -1,0 +1,23 @@
+.valueCard {
+  background: #fff;
+  border-radius: 12px;
+  padding: 36px 28px;
+  height: 100%;
+  border: 1px solid #ece9e4;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.valueCard:hover {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+  transform: translateY(-4px);
+}
+
+.whyCard {
+  padding: 28px 24px;
+  border-top: 2px solid #ece9e4;
+  transition: border-color 0.2s;
+}
+
+.whyCard:hover {
+  border-color: #9f523a;
+}
