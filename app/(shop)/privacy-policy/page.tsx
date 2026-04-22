@@ -4,7 +4,7 @@ export default function PrivacyPolicyPage() {
       <h1 className="fw-bold mb-1">Privacy Policy</h1>
       <p className="text-muted small mb-4">Last updated: April 2025</p>
 
-      <p>At <strong>dstore.in</strong>, we respect your privacy and are committed to protecting your personal data. This policy explains how we collect, use, and safeguard your information.</p>
+      <p>At <strong>saaviya.in</strong>, we respect your privacy and are committed to protecting your personal data. This policy explains how we collect, use, and safeguard your information.</p>
 
       {[
         {
@@ -29,11 +29,11 @@ export default function PrivacyPolicyPage() {
         },
         {
           title: "6. Your Rights",
-          body: "You have the right to access, correct, or delete your personal data. To exercise these rights, please contact us at support@dstore.in.",
+          body: "You have the right to access, correct, or delete your personal data. To exercise these rights, please contact us at support@saaviya.in.",
         },
         {
           title: "7. Contact",
-          body: "For privacy-related queries, email us at support@dstore.in or write to us at 12, Fashion Street, Lajpat Nagar, New Delhi – 110024.",
+          body: "For privacy-related queries, email us at support@saaviya.in or write to us at 12, Fashion Street, Lajpat Nagar, New Delhi – 110024.",
         },
       ].map((s) => (
         <div key={s.title} className="mb-4">

@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
     // Send verification email (non-blocking)
     sendEmail({
       to: email,
-      subject: "Verify your dstore.in account",
+      subject: "Verify your saaviya.in account",
       html: verificationEmailTemplate(name, verifyToken),
     }).catch(console.error);
 

@@ -29,7 +29,7 @@ const nextConfig: NextConfig = {
       has: [
         {
           type: "host",
-          value: "dstore.in",
+          value: "saaviya.in",
         },
       ],
       destination: "https://saaviya.in/:path*",

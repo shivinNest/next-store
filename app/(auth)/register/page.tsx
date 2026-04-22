@@ -2,10 +2,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
-  const router = useRouter();
   const [form, setForm] = useState({ name: "", email: "", password: "", confirm: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -13,15 +11,38 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
+  const validate = (): boolean => {
+    const errs: Record<string, string> = {};
+    if (!form.name.trim()) {
+      errs.name = "Full name is required.";
+    } else if (form.name.trim().length < 2) {
+      errs.name = "Name must be at least 2 characters.";
+    }
+    if (!form.email.trim()) {
+      errs.email = "Email address is required.";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
+      errs.email = "Please enter a valid email address.";
+    }
+    if (!form.password) {
+      errs.password = "Password is required.";
+    } else if (form.password.length < 8) {
+      errs.password = "Password must be at least 8 characters.";
+    }
+    if (!form.confirm) {
+      errs.confirm = "Please confirm your password.";
+    } else if (form.password !== form.confirm) {
+      errs.confirm = "Passwords do not match.";
+    }
+    setFieldErrors(errs);
+    return Object.keys(errs).length === 0;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setFieldErrors({});
 
-    if (form.password !== form.confirm) {
-      setFieldErrors({ confirm: "Passwords do not match" });
-      return;
-    }
+    if (!validate()) return;
 
     setLoading(true);
     try {
@@ -62,7 +83,7 @@ export default function RegisterPage() {
           </div>
           <h2 className="h4 fw-bold mb-2">Check your email!</h2>
           <p className="text-muted mb-4">
-            We've sent a verification link to <strong>{form.email}</strong>. 
+            We&apos;ve sent a verification link to <strong>{form.email}</strong>.
             Please verify your email before logging in.
           </p>
           <Link href="/login" className="btn btn-primary w-100">
@@ -74,20 +95,21 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="w-100" style={{ maxWidth: 420 }}>
+    <div className="w-100" style={{ maxWidth: 520 }}>
       <div className="card border-0 shadow-sm rounded-4 p-4 p-md-5">
         <div className="text-center mb-4">
           <Link href="/" className="text-decoration-none d-inline-block">
             <Image
-              src="/assets/saaviya_logo_2026.png"
-              alt="Saaviya Logo"
-              width={50}
-              height={50}
-              style={{ width: 'auto', height: 'auto' }}
-            />
+                          src="/assets/saaviya_logo_2026.png"
+                          alt="Saaviya Logo"
+                          width={130}
+                          height={50}
+                          priority
+                          style={{ width: 'auto', height: 'auto' }}
+                        />
           </Link>
           <h2 className="h5 fw-semibold mt-3">Create account</h2>
-          <p className="text-muted small">Join dstore.in today</p>
+          <p className="text-muted small">Join saaviya.in today</p>
         </div>
 
         {error && (
@@ -105,7 +127,6 @@ export default function RegisterPage() {
               placeholder="Your full name"
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
-              required
               autoFocus
             />
             {fieldErrors.name && <div className="invalid-feedback">{fieldErrors.name}</div>}
@@ -119,7 +140,6 @@ export default function RegisterPage() {
               placeholder="you@example.com"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
-              required
             />
             {fieldErrors.email && <div className="invalid-feedback">{fieldErrors.email}</div>}
           </div>
@@ -133,8 +153,6 @@ export default function RegisterPage() {
                 placeholder="Min. 8 characters"
                 value={form.password}
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
-                required
-                minLength={8}
               />
               <button
                 type="button"
@@ -155,15 +173,14 @@ export default function RegisterPage() {
               placeholder="Repeat password"
               value={form.confirm}
               onChange={(e) => setForm({ ...form, confirm: e.target.value })}
-              required
             />
             {fieldErrors.confirm && <div className="invalid-feedback">{fieldErrors.confirm}</div>}
           </div>
 
           <p className="text-muted small mb-3">
             By creating an account, you agree to our{" "}
-            <Link href="#" className="text-primary text-decoration-none">Terms of Service</Link> and{" "}
-            <Link href="#" className="text-primary text-decoration-none">Privacy Policy</Link>.
+            <Link href="/terms-of-service" className="text-decoration-none fw-semibold" style={{ color: "#9f523a" }}>Terms of Service</Link> and{"\ "}
+            <Link href="/privacy-policy" className="text-decoration-none fw-semibold" style={{ color: "#9f523a" }}>Privacy Policy</Link>.
           </p>
 
           <button type="submit" className="btn btn-primary w-100 btn-lg" disabled={loading}>
@@ -177,7 +194,7 @@ export default function RegisterPage() {
 
         <p className="text-center text-muted small mt-4 mb-0">
           Already have an account?{" "}
-          <Link href="/login" className="text-primary fw-semibold text-decoration-none">
+          <Link href="/login" className="fw-semibold text-decoration-none" style={{ color: "#9f523a" }}>
             Sign in
           </Link>
         </p>

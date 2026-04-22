@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
   return {
     title: cat.name,
-    description: cat.description?.substring(0, 160) ?? `Shop ${cat.name} at dstore.in – latest styles & best prices.`,
+    description: cat.description?.substring(0, 160) ?? `Shop ${cat.name} at saaviya.in – latest styles & best prices.`,
   };
 }
 

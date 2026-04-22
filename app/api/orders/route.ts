@@ -112,7 +112,7 @@ export async function POST(req: NextRequest) {
     if (fullUser) {
       sendEmail({
         to: fullUser.email,
-        subject: `Order #${order.orderNumber} received - dstore.in`,
+        subject: `Order #${order.orderNumber} received - saaviya.in`,
         html: orderConfirmationTemplate(
           fullUser.name,
           order.orderNumber,

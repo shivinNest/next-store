@@ -13,6 +13,7 @@ function LoginForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   // Forgot password
   const [forgotMode, setForgotMode] = useState(false);
@@ -21,10 +22,26 @@ function LoginForm() {
   const [forgotSent, setForgotSent] = useState(false);
   const [forgotError, setForgotError] = useState("");
 
+  const validate = (): boolean => {
+    const errs: Record<string, string> = {};
+    if (!form.email.trim()) {
+      errs.email = "Email address is required.";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
+      errs.email = "Please enter a valid email address.";
+    }
+    if (!form.password) {
+      errs.password = "Password is required.";
+    }
+    setFieldErrors(errs);
+    return Object.keys(errs).length === 0;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setError("");
+    setFieldErrors({});
+    if (!validate()) return;
+    setLoading(true);
 
     try {
       const res = await fetch("/api/auth/login", {
@@ -48,7 +65,7 @@ function LoginForm() {
   };
 
   return (
-    <div className="w-100" style={{ maxWidth: 420 }}>
+    <div className="w-100" style={{ maxWidth: 520 }}>
       <div className="card border-0 shadow-sm rounded-4 p-4 p-md-5">
         <div className="text-center mb-4">
           <Link href="/" className="text-decoration-none d-inline-block">
@@ -76,13 +93,13 @@ function LoginForm() {
             <label className="form-label fw-semibold small">Email address</label>
             <input
               type="email"
-              className="form-control"
+              className={`form-control ${fieldErrors.email ? "is-invalid" : ""}`}
               placeholder="you@example.com"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
-              required
               autoFocus
             />
+            {fieldErrors.email && <div className="invalid-feedback">{fieldErrors.email}</div>}
           </div>
 
           <div className="mb-4">
@@ -100,12 +117,12 @@ function LoginForm() {
             <div className="input-group">
               <input
                 type={showPassword ? "text" : "password"}
-                className="form-control"
+                className={`form-control ${fieldErrors.password ? "is-invalid" : ""}`}
                 placeholder="Your password"
                 value={form.password}
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
-                required
               />
+              {fieldErrors.password && <div className="invalid-feedback d-block">{fieldErrors.password}</div>}
               <button
                 type="button"
                 className="btn btn-outline-secondary"
@@ -184,8 +201,8 @@ function LoginForm() {
         )}
 
         <p className="text-center text-muted small mt-4 mb-0">
-          Don't have an account?{" "}
-          <Link href="/register" className="text-primary fw-semibold text-decoration-none">
+          Don&apos;t have an account?{" "}
+          <Link href="/register" className="fw-semibold text-decoration-none" style={{ color: "#9f523a" }}>
             Sign up
           </Link>
         </p>

@@ -41,7 +41,7 @@ export default function AdminLoginPage() {
     >
       <div className="w-100" style={{ maxWidth: 400 }}>
         <div className="text-center mb-4">
-          <h1 className="fw-bold text-white fs-2">dstore.in</h1>
+          <h1 className="fw-bold text-white fs-2">saaviya.in</h1>
           <p className="text-secondary">Admin Dashboard</p>
         </div>
         <div className="card border-0 rounded-4 p-4">

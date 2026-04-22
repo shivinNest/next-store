@@ -10,7 +10,7 @@ const CONTACT_DETAILS = [
   {
     icon: "bi-envelope-fill",
     title: "Email Us",
-    lines: ["support@dstore.in", "orders@dstore.in"],
+    lines: ["support@saaviya.in", "orders@saaviya.in"],
   },
   {
     icon: "bi-telephone-fill",
@@ -34,11 +34,33 @@ export default function ContactPage() {
   });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [responseMsg, setResponseMsg] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+
+  const validate = (): boolean => {
+    const errs: Record<string, string> = {};
+    if (!form.name.trim()) errs.name = "Full name is required.";
+    if (!form.email.trim()) {
+      errs.email = "Email address is required.";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
+      errs.email = "Please enter a valid email address.";
+    }
+    if (form.phone && !/^\d{10}$/.test(form.phone.replace(/\s/g, ""))) {
+      errs.phone = "Enter a valid 10-digit phone number.";
+    }
+    if (!form.message.trim()) {
+      errs.message = "Message is required.";
+    } else if (form.message.trim().length < 10) {
+      errs.message = "Message must be at least 10 characters.";
+    }
+    setFieldErrors(errs);
+    return Object.keys(errs).length === 0;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setStatus("loading");
     setResponseMsg("");
+    if (!validate()) return;
+    setStatus("loading");
 
     try {
       const res = await fetch("/api/contact", {
@@ -272,7 +294,7 @@ export default function ContactPage() {
             Contact Us
           </h1>
           <p className="lead" style={{ fontSize: "1.1rem", opacity: 0.9, marginBottom: 0, maxWidth: "600px" }}>
-            We'd love to hear from you. Let us know how we can help.
+            We&apos;d love to hear from you. Let us know how we can help.
           </p>
         </div>
       </div>
@@ -308,7 +330,7 @@ export default function ContactPage() {
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="dstore.in location"
+                title="saaviya.in location"
               />
             </div>
 
@@ -363,23 +385,23 @@ export default function ContactPage() {
                   <div className="col-md-6">
                     <label className="form-label">Full Name *</label>
                     <input
-                      className="form-control"
+                      className={`form-control ${fieldErrors.name ? "is-invalid" : ""}`}
                       placeholder="Your name"
                       value={form.name}
                       onChange={(e) => setForm({ ...form, name: e.target.value })}
-                      required
                     />
+                    {fieldErrors.name && <div className="invalid-feedback">{fieldErrors.name}</div>}
                   </div>
                   <div className="col-md-6">
                     <label className="form-label">Email Address *</label>
                     <input
                       type="email"
-                      className="form-control"
+                      className={`form-control ${fieldErrors.email ? "is-invalid" : ""}`}
                       placeholder="you@example.com"
                       value={form.email}
                       onChange={(e) => setForm({ ...form, email: e.target.value })}
-                      required
                     />
+                    {fieldErrors.email && <div className="invalid-feedback">{fieldErrors.email}</div>}
                   </div>
                   <div className="col-md-6">
                     <label className="form-label">Phone Number</label>
@@ -387,12 +409,13 @@ export default function ContactPage() {
                       <span className="input-group-text">+91</span>
                       <input
                         type="tel"
-                        className="form-control"
+                        className={`form-control ${fieldErrors.phone ? "is-invalid" : ""}`}
                         placeholder="98765 43210"
                         value={form.phone}
                         onChange={(e) => setForm({ ...form, phone: e.target.value })}
                         maxLength={10}
                       />
+                      {fieldErrors.phone && <div className="invalid-feedback">{fieldErrors.phone}</div>}
                     </div>
                   </div>
                   <div className="col-md-6">
@@ -414,13 +437,13 @@ export default function ContactPage() {
                   <div className="col-12">
                     <label className="form-label">Message *</label>
                     <textarea
-                      className="form-control"
+                      className={`form-control ${fieldErrors.message ? "is-invalid" : ""}`}
                       rows={5}
                       placeholder="Tell us how we can help you..."
                       value={form.message}
                       onChange={(e) => setForm({ ...form, message: e.target.value })}
-                      required
                     />
+                    {fieldErrors.message && <div className="invalid-feedback">{fieldErrors.message}</div>}
                   </div>
                   <div className="col-12">
                     <button

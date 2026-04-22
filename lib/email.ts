@@ -31,7 +31,7 @@ export function verificationEmailTemplate(name: string, token: string) {
   return `
     <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:20px;">
       <div style="text-align:center;margin-bottom:30px;">
-        <h1 style="color:#9f523a;font-size:28px;margin:0;">dstore.in</h1>
+        <h1 style="color:#9f523a;font-size:28px;margin:0;">saaviya.in</h1>
         <p style="color:#666;font-size:14px;">Your Fashion Destination</p>
       </div>
       <h2 style="color:#333;">Hi ${name},</h2>

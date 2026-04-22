@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 interface Testimonial {
   id: string;
@@ -11,113 +12,116 @@ interface Testimonial {
   review: string;
 }
 
-function StarRating({ rating }: { rating: number }) {
+function StarRating({ rating, size = 15 }: { rating: number; size?: number }) {
   return (
-    <div className="d-flex gap-1 mb-2">
+    <div style={{ display: "flex", gap: 2 }}>
       {[1, 2, 3, 4, 5].map((s) => (
         <i
           key={s}
           className={`bi ${s <= rating ? "bi-star-fill" : "bi-star"}`}
-          style={{ color: "#9f523a", fontSize: 16 }}
+          style={{ color: s <= rating ? "#f59e0b" : "#d1d5db", fontSize: size }}
         />
       ))}
     </div>
   );
 }
 
-function TestimonialCard({ t }: { t: Testimonial }) {
+function Avatar({ name, avatar, size = 48 }: { name: string; avatar?: string | null; size?: number }) {
+  if (avatar) {
+    return (
+      <Image
+        src={avatar}
+        alt={name}
+        width={size}
+        height={size}
+        style={{ borderRadius: "50%", objectFit: "cover", flexShrink: 0, border: "2px solid #f0ece8" }}
+      />
+    );
+  }
   return (
-    <div className="col-md-6 col-lg-4">
-      <style>{`
-        .testimonial-card-item {
-          background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-          border: 1px solid rgba(159, 82, 58, 0.1) !important;
-          border-radius: 12px;
-          padding: 1.5rem;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          height: 100%;
-          display: flex;
-          flex-direction: column;
-          animation: slideUp 0.6s ease-out;
-        }
-        @keyframes slideUp {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .testimonial-card-item:hover {
-          box-shadow: 0 8px 24px rgba(159, 82, 58, 0.15) !important;
-          border-color: rgba(159, 82, 58, 0.2) !important;
-          transform: translateY(-4px);
-        }
-        .testimonial-review {
-          color: #555;
-          line-height: 1.8;
-          font-size: 0.95rem;
-        }
-        .testimonial-author {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          margin-top: auto;
-        }
-        .testimonial-avatar {
-          width: 50px;
-          height: 50px;
-          border-radius: 50%;
-          flex-shrink: 0;
-          border: 2px solid #9f523a;
-        }
-        .testimonial-avatar-initial {
-          width: 50px;
-          height: 50px;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-weight: bold;
-          color: white;
-          background: linear-gradient(135deg, #9f523a, #7a3f2c);
-          font-size: 18px;
-          flex-shrink: 0;
-          border: 2px solid rgba(159, 82, 58, 0.3);
-        }
-        .testimonial-name {
-          font-weight: 700;
-          color: #1a1a1a;
-          margin-bottom: 2px;
-        }
-        .testimonial-location {
-          color: #9f523a;
-          font-size: 0.85rem;
-          font-weight: 500;
-        }
-      `}</style>
-      <div className="testimonial-card-item">
+    <div
+      style={{
+        width: size, height: size, borderRadius: "50%", flexShrink: 0,
+        background: "linear-gradient(135deg, #9f523a 0%, #7a3f2c 100%)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        color: "#fff", fontWeight: 800, fontSize: size * 0.38,
+      }}
+    >
+      {name.charAt(0).toUpperCase()}
+    </div>
+  );
+}
+
+function TestimonialCard({ t, delay = 0 }: { t: Testimonial; delay?: number }) {
+  return (
+    <div
+      className="t-card"
+      style={{
+        animationDelay: `${delay}s`,
+        background: "#fff",
+        borderRadius: 18,
+        padding: "1.75rem",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        position: "relative",
+        border: "1px solid #f0ece8",
+        overflow: "hidden",
+      }}
+    >
+      {/* watermark quote */}
+      <span style={{
+        position: "absolute", top: 8, right: 16,
+        fontSize: "7rem", lineHeight: 1,
+        color: "rgba(159,82,58,0.055)",
+        fontFamily: "Georgia,serif", fontWeight: 900,
+        userSelect: "none", pointerEvents: "none",
+      }}>
+        &ldquo;
+      </span>
+
+      <div style={{ marginBottom: "0.9rem" }}>
         <StarRating rating={t.rating} />
-        <p className="testimonial-review">
-          &ldquo;{t.review}&rdquo;
-        </p>
-        <div className="testimonial-author">
-          {t.avatar ? (
-            <Image
-              src={t.avatar}
-              alt={t.name}
-              width={50}
-              height={50}
-              className="testimonial-avatar object-fit-cover"
-            />
-          ) : (
-            <div className="testimonial-avatar-initial">
-              {t.name.charAt(0).toUpperCase()}
-            </div>
-          )}
-          <div>
-            <p className="testimonial-name mb-0">{t.name}</p>
-            <p className="testimonial-location mb-0">
-              <i className="bi bi-geo-alt-fill me-1" />
-              {t.location}
-            </p>
-          </div>
+      </div>
+
+      <p style={{
+        flex: 1, color: "#4b5563", lineHeight: 1.78,
+        fontSize: "0.925rem", margin: "0 0 1.4rem",
+        fontStyle: "italic", position: "relative", zIndex: 1,
+      }}>
+        &ldquo;{t.review}&rdquo;
+      </p>
+
+      <div style={{ height: 1, background: "linear-gradient(90deg,#f0ece8,transparent)", marginBottom: "1.1rem" }} />
+
+      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <Avatar name={t.name} avatar={t.avatar} size={42} />
+        <div>
+          <p style={{ margin: 0, fontWeight: 700, fontSize: "0.875rem", color: "#111", lineHeight: 1.3 }}>{t.name}</p>
+          <p style={{ margin: 0, fontSize: "0.75rem", color: "#9f523a", fontWeight: 500, display: "flex", alignItems: "center", gap: 3, marginTop: 2 }}>
+            <i className="bi bi-geo-alt-fill" style={{ fontSize: 10 }} />{t.location}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SkeletonCard() {
+  return (
+    <div style={{ background: "#fff", borderRadius: 18, padding: "1.75rem", border: "1px solid #f0ece8" }}>
+      <div style={{ display: "flex", gap: 3, marginBottom: 14 }}>
+        {[...Array(5)].map((_, i) => <div key={i} style={{ width: 15, height: 15, borderRadius: 3, background: "#f0ece8" }} />)}
+      </div>
+      {[100, 92, 78, 60].map((w, i) => (
+        <div key={i} style={{ height: 12, borderRadius: 6, background: "#f0ece8", width: `${w}%`, marginBottom: 9 }} />
+      ))}
+      <div style={{ height: 1, background: "#f0ece8", margin: "1.1rem 0" }} />
+      <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+        <div style={{ width: 42, height: 42, borderRadius: "50%", background: "#f0ece8", flexShrink: 0 }} />
+        <div style={{ flex: 1 }}>
+          <div style={{ height: 12, borderRadius: 6, background: "#f0ece8", width: "50%", marginBottom: 7 }} />
+          <div style={{ height: 10, borderRadius: 6, background: "#f0ece8", width: "32%" }} />
         </div>
       </div>
     </div>
@@ -131,9 +135,7 @@ export default function TestimonialsPage() {
   useEffect(() => {
     fetch("/api/testimonials")
       .then((r) => r.json())
-      .then((d) => {
-        if (d.success) setTestimonials(d.data);
-      })
+      .then((d) => { if (d.success) setTestimonials(d.data); })
       .finally(() => setLoading(false));
   }, []);
 
@@ -142,227 +144,304 @@ export default function TestimonialsPage() {
       ? (testimonials.reduce((s, t) => s + t.rating, 0) / testimonials.length).toFixed(1)
       : "5.0";
 
+  const [featured, ...rest] = testimonials;
+
+  const stats = [
+    { icon: "bi-people-fill",    value: "10,000+", label: "Happy Customers"   },
+    { icon: "bi-star-fill",      value: avg,        label: "Average Rating"    },
+    { icon: "bi-bag-check-fill", value: "50,000+", label: "Orders Delivered"  },
+    { icon: "bi-heart-fill",     value: "98%",      label: "Satisfaction Rate" },
+  ];
+
   return (
     <>
       <style>{`
-        .hero-testimonials {
-          background: linear-gradient(135deg, #9f523a 0%, #7a3f2c 100%);
-          position: relative;
-          overflow: hidden;
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to   { opacity: 1; transform: translateY(0); }
         }
-        .hero-testimonials::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-                      radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
-          pointer-events: none;
+        @keyframes pulse-dot {
+          0%,100% { transform: scale(1); opacity:1; }
+          50%      { transform: scale(0.6); opacity:0.4; }
         }
-        .hero-content {
-          position: relative;
-          z-index: 1;
+        @keyframes shimmer {
+          0%,100% { opacity:1; }
+          50%      { opacity:0.45; }
         }
-        .stats-bar {
-          background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-          border-top: 1px solid rgba(159, 82, 58, 0.1);
-          border-bottom: 1px solid rgba(159, 82, 58, 0.1);
+        .t-card {
+          animation: fadeUp 0.5s ease-out both;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+          transition: box-shadow 0.25s ease, transform 0.25s ease;
         }
-        .stat-item {
-          text-align: center;
-          padding: 1.5rem 1rem;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .stat-item:hover {
+        .t-card:hover {
           transform: translateY(-4px);
+          box-shadow: 0 12px 36px rgba(159,82,58,0.13), 0 2px 8px rgba(0,0,0,0.05);
         }
-        .stat-icon {
-          color: #9f523a;
-          font-size: 1.8rem;
-          margin-bottom: 0.5rem;
-          transition: transform 0.3s;
-        }
-        .stat-item:hover .stat-icon {
-          transform: scale(1.1);
-        }
-        .stat-value {
-          font-weight: 800;
-          font-size: 1.5rem;
-          color: #9f523a;
-          margin-bottom: 0.25rem;
-        }
-        .stat-label {
-          color: #666;
-          font-size: 0.9rem;
-          font-weight: 500;
-        }
-        .testimonials-section {
-          background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
-          padding: 5rem 0;
-        }
-        .cta-section {
-          background: linear-gradient(135deg, #9f523a 0%, #7a3f2c 100%);
-          position: relative;
-          overflow: hidden;
-        }
-        .cta-section::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-                      radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
-          pointer-events: none;
-        }
-        .cta-content {
-          position: relative;
-          z-index: 1;
-          text-align: center;
-          color: white;
-        }
-        .cta-title {
-          font-size: 2rem;
-          font-weight: 800;
-          margin-bottom: 1rem;
-          letter-spacing: -0.5px;
-        }
-        .cta-subtitle {
-          font-size: 1.1rem;
-          opacity: 0.9;
-          margin-bottom: 2rem;
-        }
-        .btn-cta {
-          background: white;
-          color: #9f523a;
-          border: none;
-          padding: 12px 32px;
-          border-radius: 8px;
-          font-weight: 700;
-          font-size: 1rem;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-        }
-        .btn-cta:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-        }
-        .rating-badge {
-          background: rgba(255, 255, 255, 0.15);
-          border: 1px solid rgba(255, 255, 255, 0.3);
-          border-radius: 50px;
-          padding: 8px 16px;
-          backdrop-filter: blur(10px);
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          animation: fadeIn 0.6s ease-out 0.3s both;
-        }
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
+        .skeleton-pulse > div { animation: shimmer 1.5s ease-in-out infinite; }
+        @media(max-width:575px) {
+          .stats-row { grid-template-columns: repeat(2,1fr) !important; }
         }
       `}</style>
 
-      {/* Hero */}
-      <div className="hero-testimonials py-5 text-white">
-        <div className="container hero-content">
-          <div className="text-center">
-            <i className="bi bi-chat-quote-fill" style={{ fontSize: "3.5rem", opacity: 0.9, marginBottom: "1rem", display: "block" }} />
-            <h1 className="fw-bold" style={{ fontSize: "2.5rem", marginBottom: "1rem", letterSpacing: "-0.5px" }}>
-              Customer Testimonials
+      <div style={{ background: "#faf8f6" }}>
+
+        {/* ─── HERO ─────────────────────────────────────────── */}
+        <section style={{
+          background: "#fff",
+          borderBottom: "1px solid #f0ece8",
+          padding: "5.5rem 0 4.5rem",
+          textAlign: "center",
+          position: "relative",
+          overflow: "hidden",
+        }}>
+          {/* dot-grid decoration */}
+          <div style={{
+            position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
+            backgroundImage: "radial-gradient(circle, rgba(159,82,58,0.13) 1.2px, transparent 1.2px)",
+            backgroundSize: "26px 26px", opacity: 0.5,
+          }} />
+          {/* warm blob */}
+          <div style={{
+            position: "absolute", top: -120, right: -100, width: 480, height: 480,
+            borderRadius: "50%", background: "rgba(159,82,58,0.05)",
+            filter: "blur(80px)", pointerEvents: "none", zIndex: 0,
+          }} />
+
+          <div className="container" style={{ position: "relative", zIndex: 1 }}>
+            {/* overline badge */}
+            <div style={{
+              display: "inline-flex", alignItems: "center", gap: 7,
+              background: "rgba(159,82,58,0.08)", color: "#9f523a",
+              fontSize: "0.7rem", fontWeight: 800, letterSpacing: "1.5px",
+              textTransform: "uppercase", padding: "5px 15px", borderRadius: 100,
+              marginBottom: "1.5rem",
+            }}>
+              <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#9f523a", animation: "pulse-dot 1.8s infinite" }} />
+              Verified Customer Reviews
+            </div>
+
+            <h1 style={{
+              fontSize: "clamp(2rem,5vw,3.4rem)", fontWeight: 800, color: "#111",
+              letterSpacing: "-0.6px", lineHeight: 1.15, marginBottom: "1rem",
+            }}>
+              What Our Customers<br />
+              <span style={{ color: "#9f523a" }}>Say About Us</span>
             </h1>
-            <p className="lead" style={{ fontSize: "1.1rem", opacity: 0.9, marginBottom: "2rem", maxWidth: "600px", margin: "0 auto 2rem" }}>
-              Real stories from our happy customers across India
+
+            <p style={{
+              color: "#6b7280", fontSize: "1.05rem", lineHeight: 1.75,
+              maxWidth: 500, margin: "0 auto 2.5rem",
+            }}>
+              Real experiences from real people across India — unfiltered, honest, and straight from the heart.
             </p>
-            {testimonials.length > 0 && (
-              <div className="rating-badge">
-                <div className="d-flex gap-1">
-                  {[1, 2, 3, 4, 5].map((s) => (
-                    <i key={s} className="bi bi-star-fill" style={{ color: "#fcd34d", fontSize: 16 }} />
-                  ))}
-                </div>
-                <span className="fw-bold">{avg}</span>
-                <span style={{ opacity: 0.8 }}>from {testimonials.length} reviews</span>
+
+            {/* star pill */}
+            {!loading && testimonials.length > 0 && (
+              <div style={{
+                display: "inline-flex", alignItems: "center", gap: 12,
+                background: "#fff", border: "1px solid #f0ece8",
+                borderRadius: 100, padding: "10px 22px",
+                boxShadow: "0 4px 16px rgba(0,0,0,0.07)",
+              }}>
+                {[1,2,3,4,5].map(s => (
+                  <i key={s} className="bi bi-star-fill" style={{ color: "#f59e0b", fontSize: 15 }} />
+                ))}
+                <span style={{ fontWeight: 800, fontSize: "1.05rem", color: "#111" }}>{avg} / 5</span>
+                <span style={{ color: "#aaa", fontSize: "0.82rem" }}>· {testimonials.length} reviews</span>
               </div>
             )}
           </div>
-        </div>
-      </div>
+        </section>
 
-      {/* Stats bar */}
-      <div className="stats-bar py-4">
-        <div className="container">
-          <div className="row g-0">
-            {[
-              { icon: "bi-people-fill", value: "10,000+", label: "Happy Customers" },
-              { icon: "bi-star-fill", value: avg, label: "Average Rating" },
-              { icon: "bi-bag-check-fill", value: "50,000+", label: "Orders Delivered" },
-              { icon: "bi-heart-fill", value: "98%", label: "Satisfaction Rate" },
-            ].map((s) => (
-              <div key={s.label} className="col-6 col-md-3">
-                <div className="stat-item">
-                  <i className={`bi ${s.icon} stat-icon d-block`} />
-                  <p className="stat-value mb-0">{s.value}</p>
-                  <p className="stat-label mb-0">{s.label}</p>
+        {/* ─── STATS STRIP ──────────────────────────────────── */}
+        <section style={{ background: "linear-gradient(135deg, #9f523a 0%, #7a3f2c 100%)" }}>
+          <div className="container">
+            <div className="stats-row" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)" }}>
+              {stats.map((s, i) => (
+                <div key={s.label} style={{
+                  textAlign: "center", padding: "1.8rem 1rem",
+                  borderRight: i < 3 ? "1px solid rgba(255,255,255,0.12)" : "none",
+                }}>
+                  <i className={`bi ${s.icon}`} style={{ color: "rgba(255,255,255,0.65)", fontSize: "1.25rem", display: "block", marginBottom: 6 }} />
+                  <p style={{ margin: 0, fontWeight: 800, fontSize: "1.55rem", color: "#fff", lineHeight: 1.1 }}>{s.value}</p>
+                  <p style={{ margin: 0, fontSize: "0.76rem", color: "rgba(255,255,255,0.65)", fontWeight: 500, marginTop: 5, letterSpacing: "0.3px" }}>{s.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ─── TESTIMONIALS ─────────────────────────────────── */}
+        <section style={{ padding: "5rem 0 5.5rem" }}>
+          <div className="container">
+
+            {loading ? (
+              <div className="skeleton-pulse">
+                {/* featured skeleton */}
+                <div style={{ background: "#fff", borderRadius: 20, padding: "2.5rem", marginBottom: "2.5rem", border: "1px solid #f0ece8", display: "flex", gap: "2rem", alignItems: "center" }}>
+                  <div style={{ width: 72, height: 72, borderRadius: "50%", background: "#f0ece8", flexShrink: 0 }} />
+                  <div style={{ flex: 1 }}>
+                    <div style={{ height: 14, background: "#f0ece8", borderRadius: 6, width: "30%", marginBottom: 12 }} />
+                    {[100, 90, 70].map((w, i) => (
+                      <div key={i} style={{ height: 12, background: "#f0ece8", borderRadius: 6, width: `${w}%`, marginBottom: 8 }} />
+                    ))}
+                  </div>
+                </div>
+                <div className="row g-4">
+                  {[...Array(5)].map((_, i) => (
+                    <div key={i} className="col-md-6 col-lg-4"><SkeletonCard /></div>
+                  ))}
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </div>
+            ) : testimonials.length === 0 ? (
+              <div style={{ textAlign: "center", padding: "5rem 0" }}>
+                <div style={{
+                  width: 80, height: 80, borderRadius: "50%",
+                  background: "rgba(159,82,58,0.08)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  margin: "0 auto 1.25rem",
+                }}>
+                  <i className="bi bi-chat-square-heart" style={{ fontSize: "2rem", color: "#9f523a" }} />
+                </div>
+                <p style={{ color: "#aaa", fontSize: "1rem" }}>No testimonials yet. Be the first to share your experience!</p>
+              </div>
+            ) : (
+              <>
+                {/* ── FEATURED ── */}
+                {featured && (
+                  <div style={{ marginBottom: "3rem" }}>
+                    <div style={{
+                      background: "linear-gradient(135deg, #9f523a 0%, #7a3f2c 100%)",
+                      borderRadius: 22, padding: "3rem 3.5rem",
+                      position: "relative", overflow: "hidden",
+                      display: "flex", gap: "3rem", alignItems: "flex-start",
+                      boxShadow: "0 16px 48px rgba(159,82,58,0.25)",
+                    }}>
+                      {/* giant quote */}
+                      <span style={{
+                        position: "absolute", bottom: -30, right: 30,
+                        fontSize: "16rem", lineHeight: 1,
+                        color: "rgba(255,255,255,0.06)",
+                        fontFamily: "Georgia,serif", fontWeight: 900,
+                        userSelect: "none", pointerEvents: "none",
+                      }}>&ldquo;</span>
 
-      {/* Testimonials grid */}
-      <section className="testimonials-section">
-        <div className="container">
-          {loading ? (
-            <div className="row g-4">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="col-md-6 col-lg-4">
-                  <div className="card border-0 shadow-sm p-4" style={{ background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)", borderRadius: "12px" }}>
-                    <div className="skeleton mb-3" style={{ height: 16, width: "40%" }} />
-                    <div className="skeleton mb-2" style={{ height: 14 }} />
-                    <div className="skeleton mb-2" style={{ height: 14 }} />
-                    <div className="skeleton mb-4" style={{ height: 14, width: "70%" }} />
-                    <div className="d-flex gap-3 align-items-center">
-                      <div className="skeleton rounded-circle" style={{ width: 50, height: 50 }} />
-                      <div className="flex-grow-1">
-                        <div className="skeleton mb-1" style={{ height: 14, width: "60%" }} />
-                        <div className="skeleton" style={{ height: 12, width: "40%" }} />
+                      {/* avatar col */}
+                      <div style={{ flexShrink: 0, textAlign: "center", minWidth: 80 }}>
+                        <Avatar name={featured.name} avatar={featured.avatar} size={76} />
+                        <div style={{ marginTop: 10 }}>
+                          <p style={{ margin: 0, color: "#fff", fontWeight: 700, fontSize: "0.9rem" }}>{featured.name}</p>
+                          <p style={{ margin: 0, color: "rgba(255,255,255,0.6)", fontSize: "0.75rem", display: "flex", alignItems: "center", justifyContent: "center", gap: 4, marginTop: 3 }}>
+                            <i className="bi bi-geo-alt-fill" style={{ fontSize: 10 }} />{featured.location}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* review col */}
+                      <div style={{ flex: 1, zIndex: 1 }}>
+                        <div style={{ marginBottom: "1rem" }}>
+                          <StarRating rating={featured.rating} size={17} />
+                        </div>
+                        <p style={{
+                          color: "#fff", fontSize: "1.2rem", lineHeight: 1.8,
+                          fontStyle: "italic", margin: 0, opacity: 0.95,
+                          fontWeight: 300,
+                        }}>
+                          &ldquo;{featured.review}&rdquo;
+                        </p>
+                        <div style={{
+                          marginTop: "1.5rem", display: "inline-flex", alignItems: "center", gap: 6,
+                          background: "rgba(255,255,255,0.12)", borderRadius: 100,
+                          padding: "4px 14px", fontSize: "0.74rem", color: "rgba(255,255,255,0.8)",
+                          fontWeight: 600, letterSpacing: "0.5px",
+                        }}>
+                          <i className="bi bi-patch-check-fill" style={{ color: "#fcd34d" }} />
+                          Featured Review
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          ) : testimonials.length === 0 ? (
-            <div className="text-center py-5">
-              <i className="bi bi-chat-square-text fs-1 text-muted d-block mb-3" />
-              <p className="text-muted">No testimonials yet. Be the first to share your experience!</p>
-            </div>
-          ) : (
-            <div className="row g-4">
-              {testimonials.map((t) => (
-                <TestimonialCard key={t.id} t={t} />
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
+                )}
 
-      {/* CTA */}
-      <div className="cta-section py-5">
-        <div className="container cta-content">
-          <h3 className="cta-title">Shop Now &amp; Experience the Difference</h3>
-          <p className="cta-subtitle">Join thousands of happy customers across India</p>
-          <a href="/products/all" className="btn btn-cta">
-            <i className="bi bi-bag me-2" />Explore Collection
-          </a>
-        </div>
+                {/* ── GRID ── */}
+                {rest.length > 0 && (
+                  <>
+                    <div style={{
+                      display: "flex", alignItems: "center", gap: 14,
+                      marginBottom: "2rem",
+                    }}>
+                      <p style={{ margin: 0, fontWeight: 700, fontSize: "1.1rem", color: "#111" }}>
+                        All Reviews
+                        <span style={{ fontWeight: 400, color: "#aaa", fontSize: "0.9rem", marginLeft: 8 }}>({rest.length})</span>
+                      </p>
+                      <div style={{ flex: 1, height: 1, background: "#f0ece8" }} />
+                    </div>
+
+                    <div className="row g-4">
+                      {rest.map((t, i) => (
+                        <div key={t.id} className="col-md-6 col-lg-4">
+                          <TestimonialCard t={t} delay={i * 0.055} />
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </>
+            )}
+
+          </div>
+        </section>
+
+        {/* ─── CTA ──────────────────────────────────────────── */}
+        <section style={{
+          background: "#fff",
+          borderTop: "1px solid #f0ece8",
+          padding: "5.5rem 0",
+          textAlign: "center",
+          position: "relative",
+          overflow: "hidden",
+        }}>
+          <div style={{
+            position: "absolute", inset: 0, pointerEvents: "none",
+            backgroundImage: "radial-gradient(circle, rgba(159,82,58,0.08) 1px, transparent 1px)",
+            backgroundSize: "24px 24px", opacity: 0.5,
+          }} />
+          <div className="container" style={{ maxWidth: 560, position: "relative", zIndex: 1 }}>
+            <div style={{
+              width: 64, height: 64, borderRadius: "50%",
+              background: "linear-gradient(135deg, rgba(159,82,58,0.12), rgba(159,82,58,0.06))",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              margin: "0 auto 1.5rem",
+              boxShadow: "0 0 0 8px rgba(159,82,58,0.05)",
+            }}>
+              <i className="bi bi-bag-heart-fill" style={{ color: "#9f523a", fontSize: "1.5rem" }} />
+            </div>
+
+            <h2 style={{ fontWeight: 800, fontSize: "1.9rem", color: "#111", marginBottom: "0.75rem", letterSpacing: "-0.3px" }}>
+              Ready to Join Them?
+            </h2>
+            <p style={{ color: "#6b7280", fontSize: "1rem", lineHeight: 1.75, marginBottom: "2rem" }}>
+              Thousands of happy customers across India choose Saaviya for quality, care, and a seamless shopping experience.
+            </p>
+
+            <Link
+              href="/products/all"
+              style={{
+                display: "inline-flex", alignItems: "center", gap: 9,
+                background: "linear-gradient(135deg, #9f523a, #7a3f2c)",
+                color: "#fff", padding: "14px 34px", borderRadius: 12,
+                fontWeight: 700, fontSize: "0.95rem",
+                textDecoration: "none", letterSpacing: "0.2px",
+                boxShadow: "0 6px 20px rgba(159,82,58,0.32)",
+                transition: "transform 0.2s, box-shadow 0.2s",
+              }}
+            >
+              <i className="bi bi-bag" />
+              Explore Collection
+            </Link>
+          </div>
+        </section>
+
       </div>
     </>
   );

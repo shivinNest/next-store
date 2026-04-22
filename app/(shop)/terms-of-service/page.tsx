@@ -4,7 +4,7 @@ export default function TermsOfServicePage() {
       <h1 className="fw-bold mb-1">Terms of Service</h1>
       <p className="text-muted small mb-4">Last updated: April 2025</p>
 
-      <p>By accessing or using <strong>dstore.in</strong>, you agree to be bound by these Terms of Service. Please read them carefully before making a purchase.</p>
+      <p>By accessing or using <strong>saaviya.in</strong>, you agree to be bound by these Terms of Service. Please read them carefully before making a purchase.</p>
 
       {[
         {
@@ -25,15 +25,15 @@ export default function TermsOfServicePage() {
         },
         {
           title: "5. Order Cancellation",
-          body: "Orders can be cancelled before they are shipped. Once shipped, cancellation is not possible. Please contact support@dstore.in immediately if you wish to cancel.",
+          body: "Orders can be cancelled before they are shipped. Once shipped, cancellation is not possible. Please contact support@saaviya.in immediately if you wish to cancel.",
         },
         {
           title: "6. Intellectual Property",
-          body: "All content on dstore.in including text, images, logos, and designs is the intellectual property of dstore.in and may not be reproduced without written permission.",
+          body: "All content on saaviya.in including text, images, logos, and designs is the intellectual property of saaviya.in and may not be reproduced without written permission.",
         },
         {
           title: "7. Limitation of Liability",
-          body: "dstore.in shall not be liable for any indirect, incidental, or consequential damages arising from the use of our website or products.",
+          body: "saaviya.in shall not be liable for any indirect, incidental, or consequential damages arising from the use of our website or products.",
         },
         {
           title: "8. Governing Law",
@@ -41,7 +41,7 @@ export default function TermsOfServicePage() {
         },
         {
           title: "9. Contact",
-          body: "For questions about these terms, contact us at support@dstore.in.",
+          body: "For questions about these terms, contact us at support@saaviya.in.",
         },
       ].map((s) => (
         <div key={s.title} className="mb-4">

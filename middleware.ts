@@ -38,21 +38,30 @@ async function verifyJwt(token: string): Promise<{ role?: string } | null> {
   }
 }
 
-const PUBLIC_PATHS = [
-  "/",
-  "/login",
-  "/register",
-  "/verify-email",
-  "/faq",
-  "/blog",
-];
-
 const AUTH_ONLY_PATHS = ["/account", "/checkout"];
 const ADMIN_PATHS = ["/admin"];
 const AUTH_REDIRECT_PATHS = ["/login", "/register"];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // ── Maintenance mode ──────────────────────────────────────────────────────
+  if (process.env.MAINTENANCE_MODE === "true") {
+    // Always allow: static assets, maintenance page itself, admin section
+    const isExempt =
+      pathname.startsWith("/_next") ||
+      pathname.startsWith("/uploads") ||
+      pathname.startsWith("/assets") ||
+      pathname.startsWith("/icons") ||
+      pathname.startsWith("/api/") ||
+      pathname.startsWith("/admin") ||
+      pathname === "/maintenance";
+
+    if (!isExempt) {
+      return NextResponse.redirect(new URL("/maintenance", request.url));
+    }
+  }
+  // ─────────────────────────────────────────────────────────────────────────
 
   // Allow static files, API routes for public data, uploads
   if (

@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
 
 interface User {
@@ -20,6 +20,10 @@ export default function Navbar() {
   const [user, setUser] = useState<User | null>(null);
   const [cartCount, setCartCount] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  const [showRecent, setShowRecent] = useState(false);
+  const searchWrapperRef = useRef<HTMLDivElement>(null);
+  const RECENT_SEARCHES_KEY = "saaviya_recent_searches";
   const router = useRouter();
   const pathname = usePathname();
 
@@ -50,6 +54,23 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
+    const stored = localStorage.getItem("saaviya_recent_searches");
+    if (stored) {
+      try { setRecentSearches(JSON.parse(stored)); } catch { /* ignore */ }
+    }
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (searchWrapperRef.current && !searchWrapperRef.current.contains(e.target as Node)) {
+        setShowRecent(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  useEffect(() => {
     fetchUser();
   }, [fetchUser, pathname]);
 
@@ -65,11 +86,34 @@ export default function Navbar() {
     router.refresh();
   };
 
+  const saveSearch = (query: string) => {
+    const updated = [query, ...recentSearches.filter((s) => s !== query)].slice(0, 5);
+    setRecentSearches(updated);
+    localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(updated));
+  };
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (searchQuery.trim()) {
-      router.push(`/products/all?search=${encodeURIComponent(searchQuery.trim())}`);
+    const query = searchQuery.trim();
+    if (query) {
+      saveSearch(query);
+      setShowRecent(false);
+      router.push(`/products/all?search=${encodeURIComponent(query)}`);
     }
+  };
+
+  const handleRecentClick = (term: string) => {
+    setSearchQuery(term);
+    saveSearch(term);
+    setShowRecent(false);
+    router.push(`/products/all?search=${encodeURIComponent(term)}`);
+  };
+
+  const removeRecentSearch = (e: React.MouseEvent, term: string) => {
+    e.stopPropagation();
+    const updated = recentSearches.filter((s) => s !== term);
+    setRecentSearches(updated);
+    localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(updated));
   };
 
   return (
@@ -239,21 +283,81 @@ export default function Navbar() {
 
         <div className="collapse navbar-collapse" id="navMenu">
           {/* Search */}
-          <form className="d-flex mx-auto my-2 my-lg-0 me-lg-3" style={{ maxWidth: 380, width: "100%" }} onSubmit={handleSearch}>
-            <div className="input-group">
-              <input
-                type="search"
-                className="form-control search-box"
-                placeholder="Search products..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                style={{ fontSize: "0.9rem", paddingRight: "0" }}
-              />
-              <button className="btn search-btn" type="submit" style={{ border: "none" }}>
-                <i className="bi bi-search" style={{ fontSize: "1rem" }} />
-              </button>
-            </div>
-          </form>
+          <div ref={searchWrapperRef} className="mx-auto my-2 my-lg-0 me-lg-3" style={{ maxWidth: 380, width: "100%", position: "relative" }}>
+            <form onSubmit={handleSearch}>
+              <div className="input-group">
+                <input
+                  type="search"
+                  className="form-control search-box"
+                  placeholder="Search products..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onFocus={() => recentSearches.length > 0 && setShowRecent(true)}
+                  style={{ fontSize: "0.9rem", paddingRight: "0" }}
+                  autoComplete="off"
+                />
+                <button className="btn search-btn" type="submit" style={{ border: "none" }}>
+                  <i className="bi bi-search" style={{ fontSize: "1rem" }} />
+                </button>
+              </div>
+            </form>
+            {showRecent && recentSearches.length > 0 && (
+              <div style={{
+                position: "absolute",
+                top: "calc(100% + 4px)",
+                left: 0,
+                right: 0,
+                background: "#fff",
+                border: "1px solid rgba(159, 82, 58, 0.15)",
+                borderRadius: 8,
+                boxShadow: "0 8px 24px rgba(0,0,0,0.10)",
+                zIndex: 9999,
+                overflow: "hidden",
+              }}>
+                <div style={{ padding: "8px 12px 4px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <span style={{ fontSize: "0.72rem", fontWeight: 700, color: "#9f523a", textTransform: "uppercase", letterSpacing: "0.5px" }}>Recent Searches</span>
+                  <button
+                    type="button"
+                    onClick={() => { setRecentSearches([]); localStorage.removeItem(RECENT_SEARCHES_KEY); setShowRecent(false); }}
+                    style={{ background: "none", border: "none", fontSize: "0.72rem", color: "#999", cursor: "pointer", padding: 0 }}
+                  >
+                    Clear all
+                  </button>
+                </div>
+                {recentSearches.map((term) => (
+                  <div
+                    key={term}
+                    onClick={() => handleRecentClick(term)}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      padding: "8px 12px",
+                      cursor: "pointer",
+                      fontSize: "0.875rem",
+                      color: "#333",
+                      transition: "background 0.15s",
+                      gap: 8,
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(159,82,58,0.06)")}
+                    onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                  >
+                    <span style={{ display: "flex", alignItems: "center", gap: 8, overflow: "hidden" }}>
+                      <i className="bi bi-clock-history" style={{ color: "#bbb", flexShrink: 0 }} />
+                      <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{term}</span>
+                    </span>
+                    <button
+                      type="button"
+                      onClick={(e) => removeRecentSearch(e, term)}
+                      style={{ background: "none", border: "none", color: "#ccc", cursor: "pointer", padding: "0 2px", lineHeight: 1, flexShrink: 0 }}
+                    >
+                      <i className="bi bi-x" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
 
           <ul className="navbar-nav ms-auto align-items-center gap-3">
             <li className="nav-item">

@@ -4,7 +4,7 @@ export default function RefundPolicyPage() {
       <h1 className="fw-bold mb-1">Refund &amp; Return Policy</h1>
       <p className="text-muted small mb-4">Last updated: April 2025</p>
 
-      <p>We want you to love every purchase from <strong>dstore.in</strong>. If you are not satisfied, here's how our return and refund process works.</p>
+      <p>We want you to love every purchase from <strong>saaviya.in</strong>. If you are not satisfied, here's how our return and refund process works.</p>
 
       {[
         {
@@ -19,7 +19,7 @@ export default function RefundPolicyPage() {
         {
           title: "How to Initiate a Return",
           items: [
-            "Email support@dstore.in with your order number and reason for return.",
+            "Email support@saaviya.in with your order number and reason for return.",
             "Our team will review and confirm eligibility within 24 hours.",
             "You will be asked to courier the item to our warehouse address.",
             "Return shipping charges (₹80–₹150) are borne by the customer unless the item is defective.",
@@ -37,7 +37,7 @@ export default function RefundPolicyPage() {
           title: "Damaged or Wrong Items",
           items: [
             "If you receive a damaged or wrong item, contact us within 48 hours of delivery.",
-            "Share photos of the item and packaging at support@dstore.in.",
+            "Share photos of the item and packaging at support@saaviya.in.",
             "We will arrange a free pickup and replacement or full refund.",
           ],
         },
@@ -52,7 +52,7 @@ export default function RefundPolicyPage() {
 
       <div className="alert alert-primary small mt-4">
         <i className="bi bi-info-circle me-2" />
-        For any return / refund queries, email <strong>support@dstore.in</strong> or call <strong>+91 98765 43210</strong> (Mon–Sat, 9AM–6PM).
+        For any return / refund queries, email <strong>support@saaviya.in</strong> or call <strong>+91 98765 43210</strong> (Mon–Sat, 9AM–6PM).
       </div>
     </div>
   );
