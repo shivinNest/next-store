@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   },
   description:
     "Shop the latest women's fashion at Saaviya. Dresses, tops, kurtas and more with free delivery above ₹999.",
-  keywords: ["women's clothing", "Indian fashion", "online shopping", "dstore"],
+  keywords: ["women's clothing", "Indian fashion", "online shopping", "saaviya", "dresses", "tops", "kurtas"],
   manifest: "/manifest.webmanifest",
   icons: {
     icon: [

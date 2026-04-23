@@ -9,7 +9,7 @@ export function errorResponse(message: string, status = 400) {
 }
 
 export function generateOrderNumber(): string {
-  const prefix = "DST";
+  const prefix = "SA";
   const timestamp = Date.now().toString(36).toUpperCase();
   const random = Math.random().toString(36).substring(2, 6).toUpperCase();
   return `${prefix}-${timestamp}-${random}`;
