@@ -36,10 +36,20 @@ export default function BlogListPage() {
 
         {/* Header */}
         <div className="text-center mb-5" style={{ maxWidth: 560, margin: "0 auto 56px" }}>
-          <p style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#9f523a", marginBottom: "12px" }}>
+          <span style={{
+            display: "inline-flex", alignItems: "center", gap: 8,
+            background: "rgba(159,82,58,0.08)",
+            border: "1px solid rgba(159,82,58,0.15)",
+            borderRadius: 100, padding: "6px 16px",
+            fontSize: "0.72rem", fontWeight: 700,
+            letterSpacing: "0.14em", textTransform: "uppercase",
+            color: "#9f523a", marginBottom: 20,
+            display: "inline-flex",
+          }}>
+            <i className="bi bi-journal-text" style={{ fontSize: "0.8rem" }} />
             Journal
-          </p>
-          <h1 style={{ fontSize: "clamp(1.8rem, 4vw, 2.6rem)", fontWeight: 700, color: "#111", letterSpacing: "-0.02em", lineHeight: 1.2, marginBottom: "16px" }}>
+          </span>
+          <h1 style={{ fontSize: "clamp(1.8rem, 4vw, 2.6rem)", fontWeight: 700, color: "#111", letterSpacing: "-0.02em", lineHeight: 1.2, marginBottom: "16px", display: "block" }}>
             Our Stories
           </h1>
           <p style={{ fontSize: "1rem", color: "#777", lineHeight: 1.7, margin: 0 }}>

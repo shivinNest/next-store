@@ -290,38 +290,103 @@ export default function HomePage() {
           overflow: hidden;
         }
         .promo-banner::before {
+          content: 'SALE';
+          position: absolute;
+          right: -20px;
+          top: 50%;
+          transform: translateY(-50%);
+          font-size: clamp(120px, 18vw, 220px);
+          font-weight: 900;
+          color: rgba(255, 255, 255, 0.06);
+          letter-spacing: -8px;
+          pointer-events: none;
+          line-height: 1;
+          user-select: none;
+        }
+        .promo-banner::after {
           content: '';
           position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-                      radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+          top: 0; left: 0; right: 0; bottom: 0;
+          background:
+            radial-gradient(ellipse 60% 80% at 10% 50%, rgba(255,255,255,0.09) 0%, transparent 60%),
+            radial-gradient(ellipse 40% 60% at 90% 20%, rgba(255,255,255,0.05) 0%, transparent 60%);
           pointer-events: none;
+        }
+        .promo-tag {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          background: rgba(255,255,255,0.15);
+          border: 1px solid rgba(255,255,255,0.25);
+          border-radius: 100px;
+          padding: 5px 14px;
+          font-size: 0.72rem;
+          font-weight: 700;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.9);
+        }
+        .promo-discount-badge {
+          background: rgba(255,255,255,0.12);
+          border: 2px solid rgba(255,255,255,0.25);
+          border-radius: 20px;
+          padding: 28px 36px;
+          text-align: center;
+          backdrop-filter: blur(4px);
+        }
+        @keyframes promo-pulse {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.04); }
+        }
+        .promo-discount-badge {
+          animation: promo-pulse 3s ease-in-out infinite;
         }
         .promo-content {
           position: relative;
           z-index: 1;
         }
-        .feature-card {
-          background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-          border: 1px solid rgba(159, 82, 58, 0.1);
-          border-radius: 12px;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        .trust-strip {
+          background: #fff;
+          border-top: 1px solid rgba(159,82,58,0.08);
+          border-bottom: 1px solid rgba(159,82,58,0.08);
         }
-        .feature-card:hover {
-          box-shadow: 0 8px 24px rgba(159, 82, 58, 0.12);
-          border-color: rgba(159, 82, 58, 0.2);
-          transform: translateY(-4px);
+        .trust-item {
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          padding: 24px 20px;
+          position: relative;
+          transition: background 0.2s;
         }
-        .feature-icon {
+        .trust-item:hover {
+          background: rgba(159,82,58,0.03);
+        }
+        .trust-item:not(:last-child)::after {
+          content: '';
+          position: absolute;
+          right: 0;
+          top: 20%;
+          height: 60%;
+          width: 1px;
+          background: rgba(159,82,58,0.1);
+        }
+        .trust-icon-wrap {
+          width: 44px;
+          height: 44px;
+          border-radius: 10px;
+          background: linear-gradient(135deg, rgba(159,82,58,0.1), rgba(159,82,58,0.06));
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
           color: #9f523a;
-          font-size: 2rem;
-          transition: transform 0.3s;
+          font-size: 1.2rem;
+          transition: all 0.25s;
         }
-        .feature-card:hover .feature-icon {
-          transform: scale(1.1);
+        .trust-item:hover .trust-icon-wrap {
+          background: linear-gradient(135deg, #9f523a, #7a3f2c);
+          color: #fff;
+          box-shadow: 0 4px 12px rgba(159,82,58,0.3);
         }
         .blog-card {
           background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
@@ -347,6 +412,96 @@ export default function HomePage() {
         }
         .bg-light {
           background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%) !important;
+        }
+        .about-section {
+          background: #fff;
+          position: relative;
+          overflow: hidden;
+        }
+        .about-section::before {
+          content: 'SAAVIYA';
+          position: absolute;
+          right: -20px;
+          top: 50%;
+          transform: translateY(-50%);
+          font-size: clamp(80px, 12vw, 160px);
+          font-weight: 900;
+          color: rgba(159, 82, 58, 0.04);
+          letter-spacing: -4px;
+          pointer-events: none;
+          line-height: 1;
+          user-select: none;
+        }
+        .about-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          background: rgba(159, 82, 58, 0.08);
+          border: 1px solid rgba(159, 82, 58, 0.15);
+          border-radius: 100px;
+          padding: 6px 16px;
+          font-size: 0.75rem;
+          font-weight: 700;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: #9f523a;
+        }
+        .about-pillar {
+          display: flex;
+          align-items: flex-start;
+          gap: 14px;
+          padding: 20px;
+          border-radius: 12px;
+          background: linear-gradient(135deg, #fdf9f7 0%, #f9f2ee 100%);
+          border: 1px solid rgba(159, 82, 58, 0.08);
+          transition: all 0.3s;
+        }
+        .about-pillar:hover {
+          border-color: rgba(159, 82, 58, 0.2);
+          box-shadow: 0 6px 20px rgba(159, 82, 58, 0.1);
+          transform: translateY(-2px);
+        }
+        .about-pillar-icon {
+          width: 42px;
+          height: 42px;
+          border-radius: 10px;
+          background: linear-gradient(135deg, #9f523a, #7a3f2c);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+          color: white;
+          font-size: 1.1rem;
+        }
+        .about-img-stack {
+          position: relative;
+        }
+        .about-img-main {
+          border-radius: 16px;
+          overflow: hidden;
+          box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+        }
+        .about-img-accent {
+          position: absolute;
+          bottom: -24px;
+          right: -24px;
+          width: 160px;
+          height: 160px;
+          border-radius: 12px;
+          overflow: hidden;
+          border: 4px solid white;
+          box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        }
+        .about-years-badge {
+          position: absolute;
+          top: 24px;
+          left: -20px;
+          background: linear-gradient(135deg, #9f523a, #7a3f2c);
+          color: white;
+          padding: 14px 20px;
+          border-radius: 12px;
+          text-align: center;
+          box-shadow: 0 8px 20px rgba(159, 82, 58, 0.35);
         }
         .product-card {
           background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
@@ -523,6 +678,134 @@ export default function HomePage() {
         </section>
       )}
 
+      {/* About Saaviya */}
+      <section className="about-section py-5 py-lg-6">
+        <div className="container py-2">
+          <div className="row align-items-center g-5">
+            {/* Text side */}
+            <div className="col-lg-6 order-2 order-lg-1">
+              <span className="about-badge mb-4 d-inline-flex">
+                <i className="bi bi-stars" />
+                Our Story
+              </span>
+              <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", fontWeight: 800, color: "#1a1a1a", lineHeight: 1.2, letterSpacing: "-0.03em", marginBottom: "1rem" }}>
+                Crafted for the
+                <span style={{ color: "#9f523a", display: "block" }}>modern Indian woman.</span>
+              </h2>
+              <p style={{ color: "#666", fontSize: "1rem", lineHeight: 1.8, marginBottom: "2rem", maxWidth: 480 }}>
+                Saaviya was born from a simple belief — every woman deserves to feel beautiful, confident, and effortlessly stylish. We curate ethnic and contemporary fashion that blends tradition with modern sensibility, delivered straight to your doorstep.
+              </p>
+              <div className="row g-3 mb-4">
+                {[
+                  { icon: "bi-gem", title: "Premium Quality", desc: "Handpicked fabrics & finishes that stand the test of time" },
+                  { icon: "bi-palette", title: "Thoughtful Design", desc: "Every piece is designed with the Indian woman in mind" },
+                  { icon: "bi-heart", title: "Made with Love", desc: "Small-batch collections crafted with care & attention" },
+                  { icon: "bi-truck", title: "Pan-India Delivery", desc: "Fast, reliable shipping to every corner of India" },
+                ].map((p) => (
+                  <div key={p.title} className="col-12 col-sm-6">
+                    <div className="about-pillar">
+                      <div className="about-pillar-icon">
+                        <i className={`bi ${p.icon}`} />
+                      </div>
+                      <div>
+                        <div style={{ fontWeight: 700, fontSize: "0.9rem", color: "#1a1a1a", marginBottom: 3 }}>{p.title}</div>
+                        <div style={{ fontSize: "0.8rem", color: "#888", lineHeight: 1.5 }}>{p.desc}</div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <Link
+                href="/about"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 8,
+                  background: "linear-gradient(135deg, #9f523a, #7a3f2c)",
+                  color: "#fff",
+                  padding: "13px 32px",
+                  borderRadius: 10,
+                  fontWeight: 700,
+                  fontSize: "0.9rem",
+                  textDecoration: "none",
+                  letterSpacing: "0.04em",
+                  boxShadow: "0 4px 16px rgba(159,82,58,0.3)",
+                  transition: "all 0.25s",
+                }}
+                onMouseEnter={e => {
+                  (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
+                  (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 24px rgba(159,82,58,0.45)";
+                }}
+                onMouseLeave={e => {
+                  (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
+                  (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 16px rgba(159,82,58,0.3)";
+                }}
+              >
+                Discover Our Story
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M3 8h10M9 4l4 4-4 4" />
+                </svg>
+              </Link>
+            </div>
+
+            {/* Visual side */}
+            <div className="col-lg-6 order-1 order-lg-2">
+              <div className="about-img-stack" style={{ paddingBottom: 48, paddingRight: 24 }}>
+                <div className="about-img-main" style={{ aspectRatio: "4/5", position: "relative" }}>
+                  <Image
+                    src="/assets/mahimayadav0-ethnic-4762352_1920.jpg"
+                    alt="Saaviya — Fashion that speaks for you"
+                    fill
+                    sizes="(max-width: 992px) 100vw, 50vw"
+                    style={{ objectFit: "cover", objectPosition: "center top" }}
+                    priority
+                  />
+                  {/* Subtle gradient overlay at bottom for badge readability */}
+                  <div style={{
+                    position: "absolute",
+                    inset: 0,
+                    background: "linear-gradient(180deg, transparent 55%, rgba(0,0,0,0.35) 100%)",
+                    borderRadius: "inherit",
+                  }} />
+                  <div style={{
+                    position: "absolute",
+                    bottom: 20,
+                    left: 20,
+                    color: "white",
+                  }}>
+                    <p style={{ fontWeight: 700, fontSize: "1rem", letterSpacing: "0.12em", textTransform: "uppercase", margin: 0, textShadow: "0 1px 6px rgba(0,0,0,0.4)" }}>Saaviya</p>
+                    <p style={{ fontSize: "0.78rem", letterSpacing: "0.06em", margin: 0, opacity: 0.85, textShadow: "0 1px 4px rgba(0,0,0,0.4)" }}>Fashion that speaks for you</p>
+                  </div>
+                </div>
+
+                {/* Accent box — brand value */}
+                <div style={{
+                  position: "absolute",
+                  bottom: 0,
+                  right: 0,
+                  background: "linear-gradient(135deg, #9f523a, #7a3f2c)",
+                  color: "white",
+                  padding: "18px 22px",
+                  borderRadius: 14,
+                  boxShadow: "0 8px 28px rgba(159,82,58,0.4)",
+                  minWidth: 140,
+                  border: "3px solid white",
+                }}>
+                  <div style={{ fontSize: "1.8rem", fontWeight: 800, lineHeight: 1, letterSpacing: "-1px" }}>500+</div>
+                  <div style={{ fontSize: "0.78rem", opacity: 0.85, marginTop: 4, lineHeight: 1.4 }}>Styles curated<br />every season</div>
+                </div>
+
+                {/* Floating badge */}
+                <div className="about-years-badge">
+                  <div style={{ fontSize: "1.5rem", fontWeight: 800, lineHeight: 1 }}>10K+</div>
+                  <div style={{ fontSize: "0.7rem", opacity: 0.85, marginTop: 4, lineHeight: 1.3 }}>Happy<br />Customers</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* New Products */}
       <ProductSection
         title="New Arrivals"
@@ -532,18 +815,55 @@ export default function HomePage() {
       />
 
       {/* Promo Banner Divider */}
-      <div className="promo-banner py-5 text-white">
+      <div className="promo-banner text-white" style={{ padding: "72px 0" }}>
         <div className="container promo-content">
-          <div className="text-center">
-            <h2 className="fw-bold mb-2" style={{ fontSize: "2rem", letterSpacing: "-0.5px" }}>
-              Summer Sale – Up to 50% Off
-            </h2>
-            <p className="mb-4" style={{ fontSize: "1.1rem", opacity: 0.9 }}>
-              Limited time offer on selected styles
-            </p>
-            <Link href="/products/all?offer=true" className="btn btn-light btn-lg px-5" style={{ fontWeight: 700, textTransform: "uppercase", letterSpacing: "1px" }}>
-              Shop Now
-            </Link>
+          <div className="row align-items-center g-4">
+            {/* Left: text */}
+            <div className="col-lg-8">
+              <span className="promo-tag mb-4 d-inline-flex">
+                <i className="bi bi-lightning-charge-fill" style={{ color: "#ffd700" }} />
+                Limited Time Offer
+              </span>
+              <h2 style={{ fontSize: "clamp(2rem, 5vw, 3.6rem)", fontWeight: 900, color: "#fff", lineHeight: 1.1, letterSpacing: "-0.03em", marginBottom: 16 }}>
+                Summer Sale
+                <span style={{ display: "block", color: "rgba(255,255,255,0.75)", fontSize: "60%", fontWeight: 700, letterSpacing: "0.02em", marginTop: 6 }}>Up to 50% off on selected styles</span>
+              </h2>
+              <p style={{ fontSize: "1rem", color: "rgba(255,255,255,0.72)", marginBottom: 32, lineHeight: 1.7, maxWidth: 480 }}>
+                Refresh your wardrobe this season with our biggest sale yet — handpicked kurtas, lehengas, and ethnic sets at unbeatable prices.
+              </p>
+              <div className="d-flex flex-wrap gap-3 align-items-center">
+                <Link
+                  href="/products/all?offer=true"
+                  style={{
+                    display: "inline-flex", alignItems: "center", gap: 8,
+                    background: "#fff", color: "#9f523a",
+                    padding: "14px 36px", borderRadius: 10,
+                    fontWeight: 800, fontSize: "0.95rem",
+                    textDecoration: "none", letterSpacing: "0.04em",
+                    textTransform: "uppercase",
+                    boxShadow: "0 6px 20px rgba(0,0,0,0.15)",
+                    transition: "all 0.25s",
+                  }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; (e.currentTarget as HTMLElement).style.boxShadow = "0 10px 30px rgba(0,0,0,0.25)"; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; (e.currentTarget as HTMLElement).style.boxShadow = "0 6px 20px rgba(0,0,0,0.15)"; }}
+                >
+                  Shop the Sale
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
+                </Link>
+                <span style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.6)", letterSpacing: "0.04em" }}>
+                  No code needed · Auto-applied at checkout
+                </span>
+              </div>
+            </div>
+            {/* Right: badge */}
+            <div className="col-lg-4 text-center">
+              <div className="promo-discount-badge d-inline-block">
+                <div style={{ fontSize: "clamp(3rem, 7vw, 5rem)", fontWeight: 900, color: "#fff", lineHeight: 1, letterSpacing: "-3px" }}>50%</div>
+                <div style={{ fontSize: "1.1rem", fontWeight: 800, color: "rgba(255,255,255,0.85)", letterSpacing: "0.12em", textTransform: "uppercase", marginTop: 4 }}>OFF</div>
+                <div style={{ width: 40, height: 2, background: "rgba(255,255,255,0.3)", borderRadius: 2, margin: "12px auto" }} />
+                <div style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.65)", letterSpacing: "0.1em", textTransform: "uppercase" }}>Selected Styles</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -577,27 +897,31 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* Features */}
-      <section className="py-5">
+      {/* Trust Strip */}
+      <div className="trust-strip">
         <div className="container">
-          <div className="row g-4">
+          <div className="row g-0">
             {[
-              { icon: "bi-truck", title: "Free Shipping", desc: "On orders above ₹999" },
-              { icon: "bi-shield-check", title: "Secure Payments", desc: "100% safe transactions" },
-              { icon: "bi-arrow-repeat", title: "Easy Returns", desc: "7-day return policy" },
-              { icon: "bi-headset", title: "24/7 Support", desc: "Dedicated customer care" },
+              { icon: "bi-truck",        title: "Free Shipping",    desc: "Orders above ₹999" },
+              { icon: "bi-shield-check", title: "Secure Payments",  desc: "100% safe & encrypted" },
+              { icon: "bi-arrow-repeat", title: "Easy Returns",     desc: "7-day hassle-free" },
+              { icon: "bi-headset",      title: "Customer Support", desc: "Mon–Sat, 9 AM – 6 PM" },
             ].map((f) => (
               <div key={f.title} className="col-6 col-md-3">
-                <div className="feature-card p-4 h-100 text-center">
-                  <i className={`bi ${f.icon} feature-icon d-block mb-3`} />
-                  <h6 className="fw-bold mb-2" style={{ color: "#1a1a1a" }}>{f.title}</h6>
-                  <p className="text-muted small mb-0">{f.desc}</p>
+                <div className="trust-item">
+                  <div className="trust-icon-wrap">
+                    <i className={`bi ${f.icon}`} />
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: 700, fontSize: "0.9rem", color: "#1a1a1a", lineHeight: 1.3 }}>{f.title}</div>
+                    <div style={{ fontSize: "0.78rem", color: "#999", marginTop: 2 }}>{f.desc}</div>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         </div>
-      </section>
+      </div>
 
       {/* Blog Preview */}
       {blogs.length > 0 && (
@@ -719,6 +1043,72 @@ export default function HomePage() {
           </div>
         </section>
       )}
+
+      {/* Instagram CTA */}
+      <section style={{
+        background: "linear-gradient(135deg, #833ab4 0%, #fd1d1d 50%, #fcb045 100%)",
+        padding: "72px 20px",
+        position: "relative",
+        overflow: "hidden",
+      }}>
+        {/* Background decoration */}
+        <div style={{
+          position: "absolute", inset: 0,
+          background: "radial-gradient(ellipse 60% 80% at 15% 50%, rgba(255,255,255,0.08) 0%, transparent 60%)",
+          pointerEvents: "none",
+        }} />
+        <div className="container position-relative text-center text-white" style={{ maxWidth: 600 }}>
+          {/* Instagram icon */}
+          <div style={{
+            width: 72, height: 72, borderRadius: 20,
+            background: "rgba(255,255,255,0.15)",
+            border: "2px solid rgba(255,255,255,0.3)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            margin: "0 auto 24px",
+            backdropFilter: "blur(4px)",
+            fontSize: "2rem",
+          }}>
+            <i className="bi bi-instagram" />
+          </div>
+          <span style={{
+            display: "inline-flex", alignItems: "center", gap: 6,
+            background: "rgba(255,255,255,0.15)",
+            border: "1px solid rgba(255,255,255,0.25)",
+            borderRadius: 100, padding: "5px 16px",
+            fontSize: "0.72rem", fontWeight: 700,
+            letterSpacing: "0.14em", textTransform: "uppercase",
+            marginBottom: 20,
+          }}>
+            @saaviya.in
+          </span>
+          <h2 style={{ fontSize: "clamp(1.6rem, 3.5vw, 2.6rem)", fontWeight: 800, lineHeight: 1.2, letterSpacing: "-0.02em", marginBottom: 14 }}>
+            Follow us on Instagram
+          </h2>
+          <p style={{ fontSize: "1rem", color: "rgba(255,255,255,0.8)", lineHeight: 1.75, marginBottom: 36, maxWidth: 460, margin: "0 auto 36px" }}>
+            Get daily style inspiration, new arrivals, behind-the-scenes peeks, and exclusive offers — straight to your feed.
+          </p>
+          <a
+            href="https://www.instagram.com/saaviya.in"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: "inline-flex", alignItems: "center", gap: 10,
+              background: "#fff",
+              color: "#c13584",
+              padding: "14px 36px", borderRadius: 10,
+              fontWeight: 800, fontSize: "0.95rem",
+              textDecoration: "none", letterSpacing: "0.02em",
+              boxShadow: "0 6px 24px rgba(0,0,0,0.2)",
+              transition: "all 0.25s",
+            }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; (e.currentTarget as HTMLElement).style.boxShadow = "0 10px 32px rgba(0,0,0,0.3)"; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; (e.currentTarget as HTMLElement).style.boxShadow = "0 6px 24px rgba(0,0,0,0.2)"; }}
+          >
+            <i className="bi bi-instagram" style={{ fontSize: "1.1rem" }} />
+            Follow @saaviya.in
+          </a>
+        </div>
+      </section>
 
             <section style={{ background: "#0d0d0d", padding: "80px 20px", textAlign: "center" }}>
               <div className="container" style={{ maxWidth: 560 }}>

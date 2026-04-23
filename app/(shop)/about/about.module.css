@@ -21,3 +21,137 @@
 .whyCard:hover {
   border-color: #9f523a;
 }
+
+/* ── Pillar cards (matching home About section) ── */
+.pillar {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 20px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #fdf9f7 0%, #f9f2ee 100%);
+  border: 1px solid rgba(159, 82, 58, 0.08);
+  transition: all 0.3s;
+  height: 100%;
+}
+
+.pillar:hover {
+  border-color: rgba(159, 82, 58, 0.22);
+  box-shadow: 0 6px 20px rgba(159, 82, 58, 0.1);
+  transform: translateY(-3px);
+}
+
+.pillarIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #9f523a, #7a3f2c);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: white;
+  font-size: 1.15rem;
+}
+
+/* ── Stats strip ── */
+.statStrip {
+  background: #fff;
+  border-top: 1px solid rgba(159, 82, 58, 0.08);
+  border-bottom: 1px solid rgba(159, 82, 58, 0.08);
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 16px;
+  position: relative;
+  text-align: center;
+}
+
+.statItem:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 20%;
+  height: 60%;
+  width: 1px;
+  background: rgba(159, 82, 58, 0.12);
+}
+
+.statNumber {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #9f523a;
+  line-height: 1;
+  letter-spacing: -1.5px;
+}
+
+.statSuffix {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #c87a5a;
+}
+
+.statLabel {
+  font-size: 0.82rem;
+  color: #777;
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+/* ── Story image stack (matching home) ── */
+.imgStack {
+  position: relative;
+}
+
+.imgMain {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+  aspect-ratio: 4 / 5;
+  position: relative;
+}
+
+.imgAccentBadge {
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  background: linear-gradient(135deg, #9f523a, #7a3f2c);
+  color: white;
+  padding: 16px 20px;
+  border-radius: 14px;
+  box-shadow: 0 8px 28px rgba(159, 82, 58, 0.4);
+  min-width: 138px;
+  border: 3px solid white;
+  text-align: center;
+}
+
+.imgFloatBadge {
+  position: absolute;
+  top: 24px;
+  left: -20px;
+  background: linear-gradient(135deg, #9f523a, #7a3f2c);
+  color: white;
+  padding: 14px 18px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(159, 82, 58, 0.35);
+  text-align: center;
+}
+
+/* ── Brand badge pill ── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(159, 82, 58, 0.08);
+  border: 1px solid rgba(159, 82, 58, 0.15);
+  border-radius: 100px;
+  padding: 6px 16px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #9f523a;
+}

@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
       return NextResponse.json(
-        { success: false, error: "Invalid credentials" },
+        { success: false, error: "User account does not exist with this email." },
         { status: 401 }
       );
     }
@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
     const valid = await comparePasswords(password, user.password);
     if (!valid) {
       return NextResponse.json(
-        { success: false, error: "Invalid credentials" },
+        { success: false, error: "Incorrect email or password" },
         { status: 401 }
       );
     }

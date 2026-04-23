@@ -37,37 +37,88 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Story — image left, text right */}
-      <section style={{ padding: "80px 0" }}>
+      {/* Story — image left with badges, text right */}
+      <section style={{ padding: "80px 0", background: "#fff" }}>
         <div className="container">
-          <div className="row g-0 align-items-stretch">
+          <div className="row g-5 align-items-center">
+            {/* Image stack */}
             <div className="col-lg-6">
-              <div style={{ position: "relative", height: "100%", minHeight: 420 }}>
-                <Image
-                  src="https://images.unsplash.com/photo-1581338834647-b0fb40704e21?w=900&h=700&fit=crop"
-                  alt="Saaviya atelier"
-                  fill
-                  style={{ objectFit: "cover", borderRadius: "12px 0 0 12px" }}
-                />
+              <div className={styles.imgStack} style={{ paddingBottom: 44, paddingRight: 24 }}>
+                <div className={styles.imgMain}>
+                  <Image
+                    src="/assets/mahimayadav0-ethnic-4762352_1920.jpg"
+                    alt="Saaviya — Fashion that speaks for you"
+                    fill
+                    sizes="(max-width: 992px) 100vw, 50vw"
+                    style={{ objectFit: "cover", objectPosition: "center top" }}
+                    priority
+                  />
+                  <div style={{
+                    position: "absolute", inset: 0,
+                    background: "linear-gradient(180deg, transparent 55%, rgba(0,0,0,0.38) 100%)",
+                    borderRadius: "inherit",
+                  }} />
+                  <div style={{ position: "absolute", bottom: 18, left: 18, color: "white" }}>
+                    <p style={{ fontWeight: 700, fontSize: "0.95rem", letterSpacing: "0.12em", textTransform: "uppercase", margin: 0, textShadow: "0 1px 6px rgba(0,0,0,0.4)" }}>Saaviya</p>
+                    <p style={{ fontSize: "0.78rem", letterSpacing: "0.06em", margin: 0, opacity: 0.85, textShadow: "0 1px 4px rgba(0,0,0,0.4)" }}>Fashion that speaks for you</p>
+                  </div>
+                </div>
+                {/* Bottom-right accent */}
+                <div className={styles.imgAccentBadge}>
+                  <div style={{ fontSize: "1.8rem", fontWeight: 800, lineHeight: 1, letterSpacing: "-1px" }}>500+</div>
+                  <div style={{ fontSize: "0.78rem", opacity: 0.85, marginTop: 4, lineHeight: 1.4 }}>Styles curated<br />every season</div>
+                </div>
+                {/* Top-left float badge */}
+                <div className={styles.imgFloatBadge}>
+                  <div style={{ fontSize: "1.5rem", fontWeight: 800, lineHeight: 1 }}>10K+</div>
+                  <div style={{ fontSize: "0.7rem", opacity: 0.85, marginTop: 4, lineHeight: 1.3 }}>Happy<br />Customers</div>
+                </div>
               </div>
             </div>
-            <div className="col-lg-6 d-flex align-items-center" style={{ background: "#faf9f7", borderRadius: "0 12px 12px 0", padding: "56px 52px" }}>
-              <div>
-                <p style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "#9f523a", marginBottom: 16 }}>Who We Are</p>
-                <h2 style={{ fontSize: "clamp(1.6rem, 3vw, 2.2rem)", fontWeight: 700, color: "#111", lineHeight: 1.25, letterSpacing: "-0.02em", marginBottom: 20 }}>
-                  Rooted in tradition,<br />designed for today.
-                </h2>
-                <p style={{ fontSize: "0.975rem", color: "#555", lineHeight: 1.8, marginBottom: 16 }}>
-                  Founded in 2024, Saaviya is a women's ethnic fashion brand curated for the contemporary Indian woman. We work with skilled artisans across India to bring you handcrafted pieces that honour tradition while embracing modern silhouettes.
-                </p>
-                <p style={{ fontSize: "0.975rem", color: "#555", lineHeight: 1.8, margin: 0 }}>
-                  From daily kurtas to celebration lehengas, every piece in our collection is chosen for its quality, craft, and timeless appeal.
-                </p>
-              </div>
+            {/* Text */}
+            <div className="col-lg-6">
+              <span className={`${styles.badge} mb-4 d-inline-flex`}>
+                <i className="bi bi-stars" />
+                Who We Are
+              </span>
+              <h2 style={{ fontSize: "clamp(1.6rem, 3vw, 2.2rem)", fontWeight: 800, color: "#111", lineHeight: 1.25, letterSpacing: "-0.02em", marginBottom: 20 }}>
+                Rooted in tradition,
+                <span style={{ color: "#9f523a", display: "block" }}>designed for today.</span>
+              </h2>
+              <p style={{ fontSize: "0.975rem", color: "#555", lineHeight: 1.8, marginBottom: 16 }}>
+                Founded in 2024, Saaviya is a women&apos;s ethnic fashion brand curated for the contemporary Indian woman. We work with skilled artisans across India to bring you handcrafted pieces that honour tradition while embracing modern silhouettes.
+              </p>
+              <p style={{ fontSize: "0.975rem", color: "#555", lineHeight: 1.8 }}>
+                From daily kurtas to celebration lehengas, every piece in our collection is chosen for its quality, craft, and timeless appeal.
+              </p>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Stats Strip */}
+      <div className={styles.statStrip}>
+        <div className="container">
+          <div className="row g-0">
+            {[
+              { number: "10", suffix: "K+", label: "Happy Customers" },
+              { number: "500", suffix: "+", label: "Styles Available" },
+              { number: "100", suffix: "%", label: "Authentic Products" },
+              { number: "7", suffix: "-Day", label: "Easy Returns" },
+            ].map((s) => (
+              <div key={s.label} className="col-6 col-md-3">
+                <div className={styles.statItem}>
+                  <div>
+                    <span className={styles.statNumber}>{s.number}</span>
+                    <span className={styles.statSuffix}>{s.suffix}</span>
+                  </div>
+                  <span className={styles.statLabel}>{s.label}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
 
       {/* Mission & Vision — two columns */}
       <section style={{ padding: "80px 0", background: "#fff" }}>
@@ -160,21 +211,86 @@ export default function AboutPage() {
           </div>
           <div className="row g-4">
             {[
-              ["Handpicked Selection", "Every product is individually curated — no generic bulk listings. Only pieces we genuinely stand behind."],
-              ["Artisan Partnerships", "We work directly with weavers and craftspeople across India, supporting livelihoods and preserving heritage."],
-              ["Fast & Reliable Shipping", "Orders dispatched within 24 hours with real-time tracking so you always know where your order is."],
-              ["Effortless Returns", "Changed your mind? Our 14-day hassle-free return policy has you covered."],
-              ["Secure Payments", "All transactions are encrypted and processed through trusted payment gateways."],
-              ["Real Customer Support", "Talk to a real person — not a bot. Our team is here Mon–Sat 9 AM to 6 PM."],
-            ].map(([title, desc], i) => (
-              <div key={i} className="col-sm-6 col-lg-4">
-                <div className={styles.whyCard}>
-                  <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "#111", marginBottom: 10 }}>{title}</h3>
-                  <p style={{ fontSize: "0.875rem", color: "#666", lineHeight: 1.75, margin: 0 }}>{desc}</p>
+              { icon: "bi-gem",          title: "Handpicked Selection",    desc: "Every product is individually curated — no generic bulk listings. Only pieces we genuinely stand behind." },
+              { icon: "bi-people",       title: "Artisan Partnerships",    desc: "We work directly with weavers and craftspeople across India, supporting livelihoods and preserving heritage." },
+              { icon: "bi-truck",        title: "Fast & Reliable Shipping", desc: "Orders dispatched within 24 hours with real-time tracking so you always know where your order is." },
+              { icon: "bi-arrow-repeat", title: "Effortless Returns",      desc: "Changed your mind? Our 7-day hassle-free return policy has you covered." },
+              { icon: "bi-shield-check", title: "Secure Payments",         desc: "All transactions are encrypted and processed through trusted payment gateways." },
+              { icon: "bi-headset",      title: "Real Customer Support",   desc: "Talk to a real person — not a bot. Our team is here Mon–Sat 9 AM to 6 PM." },
+            ].map((item) => (
+              <div key={item.title} className="col-sm-6 col-lg-4">
+                <div className={styles.pillar}>
+                  <div className={styles.pillarIcon}>
+                    <i className={`bi ${item.icon}`} />
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: 700, fontSize: "0.95rem", color: "#1a1a1a", marginBottom: 4 }}>{item.title}</div>
+                    <div style={{ fontSize: "0.85rem", color: "#777", lineHeight: 1.65 }}>{item.desc}</div>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Instagram CTA */}
+      <section style={{
+        background: "linear-gradient(135deg, #833ab4 0%, #fd1d1d 50%, #fcb045 100%)",
+        padding: "72px 20px",
+        position: "relative",
+        overflow: "hidden",
+      }}>
+        <div style={{
+          position: "absolute", inset: 0,
+          background: "radial-gradient(ellipse 60% 80% at 15% 50%, rgba(255,255,255,0.08) 0%, transparent 60%)",
+          pointerEvents: "none",
+        }} />
+        <div className="container position-relative text-center text-white" style={{ maxWidth: 600 }}>
+          <div style={{
+            width: 72, height: 72, borderRadius: 20,
+            background: "rgba(255,255,255,0.15)",
+            border: "2px solid rgba(255,255,255,0.3)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            margin: "0 auto 24px",
+            backdropFilter: "blur(4px)",
+            fontSize: "2rem",
+          }}>
+            <i className="bi bi-instagram" />
+          </div>
+          <span style={{
+            display: "inline-flex", alignItems: "center", gap: 6,
+            background: "rgba(255,255,255,0.15)",
+            border: "1px solid rgba(255,255,255,0.25)",
+            borderRadius: 100, padding: "5px 16px",
+            fontSize: "0.72rem", fontWeight: 700,
+            letterSpacing: "0.14em", textTransform: "uppercase",
+            marginBottom: 20,
+          }}>
+            @saaviya.in
+          </span>
+          <h2 style={{ fontSize: "clamp(1.6rem, 3.5vw, 2.6rem)", fontWeight: 800, lineHeight: 1.2, letterSpacing: "-0.02em", marginBottom: 14 }}>
+            Follow us on Instagram
+          </h2>
+          <p style={{ fontSize: "1rem", color: "rgba(255,255,255,0.8)", lineHeight: 1.75, margin: "0 auto 36px", maxWidth: 460 }}>
+            Get daily style inspiration, new arrivals, behind-the-scenes peeks, and exclusive offers — straight to your feed.
+          </p>
+          <a
+            href="https://www.instagram.com/saaviya.in"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: "inline-flex", alignItems: "center", gap: 10,
+              background: "#fff", color: "#c13584",
+              padding: "14px 36px", borderRadius: 10,
+              fontWeight: 800, fontSize: "0.95rem",
+              textDecoration: "none", letterSpacing: "0.02em",
+              boxShadow: "0 6px 24px rgba(0,0,0,0.2)",
+            }}
+          >
+            <i className="bi bi-instagram" style={{ fontSize: "1.1rem" }} />
+            Follow @saaviya.in
+          </a>
         </div>
       </section>
 

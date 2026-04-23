@@ -133,7 +133,7 @@ export default function Footer() {
             &copy; {year} Saaviya. All rights reserved.
           </p>
           <p style={{ fontSize: "0.78rem", color: "#444", margin: 0 }}>
-            Crafted in India
+            Crafted in India &hearts;
           </p>
         </div>
       </div>
