@@ -64,7 +64,8 @@ async function main() {
     {
       name: "Pink Floral Anarkali Kurta",
       slug: "pink-floral-anarkali-kurta",
-      description: "Elegant floral printed Anarkali kurta with fine embroidery. Perfect for festive occasions.",
+      shortDescription: "Elegant floral Anarkali kurta with fine embroidery — perfect for festive occasions.",
+      description: "<p>Elegant floral printed Anarkali kurta with fine embroidery. Perfect for festive occasions.</p><ul><li>Fabric: Cotton Blend</li><li>Fit: Regular</li><li>Care: Machine wash cold</li></ul>",
       price: 1299,
       comparePrice: 1999,
       categoryId: categories["kurtas"],
@@ -88,7 +89,8 @@ async function main() {
     {
       name: "Blue Embroidered Straight Kurta",
       slug: "blue-embroidered-straight-kurta",
-      description: "Classic straight-cut kurta with delicate embroidery on neckline. Versatile for work and casual wear.",
+      shortDescription: "Classic straight-cut kurta with delicate neckline embroidery — versatile for work and casual wear.",
+      description: "<p>Classic straight-cut kurta with delicate embroidery on neckline. Versatile for work and casual wear.</p><ul><li>Fabric: Cotton</li><li>Fit: Straight</li><li>Care: Hand wash recommended</li></ul>",
       price: 899,
       comparePrice: 1499,
       categoryId: categories["kurtas"],
@@ -112,7 +114,8 @@ async function main() {
     {
       name: "Maxi Floral Dress",
       slug: "maxi-floral-dress",
-      description: "Flowing maxi dress with vibrant floral print. Ideal for summer outings.",
+      shortDescription: "Flowing maxi dress with vibrant floral print — ideal for summer outings and beach trips.",
+      description: "<p>Flowing maxi dress with vibrant floral print. Ideal for summer outings.</p><ul><li>Fabric: Chiffon</li><li>Length: Full length</li><li>Care: Gentle machine wash</li></ul>",
       price: 1599,
       comparePrice: 2299,
       categoryId: categories["dresses"],
@@ -135,7 +138,8 @@ async function main() {
     {
       name: "Red Lehenga Choli",
       slug: "red-lehenga-choli",
-      description: "Stunning red bridal lehenga with intricate zari work. Comes with matching dupatta.",
+      shortDescription: "Stunning red bridal lehenga with intricate zari work — comes with matching dupatta.",
+      description: "<p>Stunning red bridal lehenga with intricate zari work. Comes with matching dupatta.</p><ul><li>Fabric: Silk Blend</li><li>Includes: Lehenga, Choli &amp; Dupatta</li><li>Occasion: Bridal / Wedding</li><li>Care: Dry clean only</li></ul>",
       price: 4999,
       comparePrice: 7999,
       categoryId: categories["lehengas"],
@@ -158,7 +162,8 @@ async function main() {
     {
       name: "Crop Top - Tie Dye",
       slug: "crop-top-tie-dye",
-      description: "Trending tie-dye crop top for casual wear. Perfect with high-waist jeans.",
+      shortDescription: "Trending tie-dye crop top for casual wear — pairs perfectly with high-waist jeans.",
+      description: "<p>Trending tie-dye crop top for casual wear. Perfect with high-waist jeans.</p><ul><li>Fabric: Cotton</li><li>Style: Cropped</li><li>Care: Machine wash cold, tumble dry low</li></ul>",
       price: 499,
       comparePrice: 799,
       categoryId: categories["tops"],
@@ -181,7 +186,8 @@ async function main() {
     {
       name: "Printed Saree with Blouse",
       slug: "printed-saree-with-blouse",
-      description: "Graceful printed saree with ready-to-wear blouse. A timeless choice for every occasion.",
+      shortDescription: "Graceful printed saree with ready-to-wear blouse — a timeless choice for every occasion.",
+      description: "<p>Graceful printed saree with ready-to-wear blouse. A timeless choice for every occasion.</p><ul><li>Fabric: Georgette</li><li>Length: 5.5 metres</li><li>Includes: Saree &amp; Blouse piece</li><li>Care: Dry clean recommended</li></ul>",
       price: 2199,
       comparePrice: 3499,
       categoryId: categories["sarees"],
@@ -204,7 +210,8 @@ async function main() {
     {
       name: "Ethnic Palazzo Set",
       slug: "ethnic-palazzo-set",
-      description: "Comfortable ethnic palazzo suit with dupatta. Perfect for casual and semi-formal occasions.",
+      shortDescription: "Comfortable ethnic palazzo suit with dupatta — perfect for casual and semi-formal occasions.",
+      description: "<p>Comfortable ethnic palazzo suit with dupatta. Perfect for casual and semi-formal occasions.</p><ul><li>Fabric: Rayon</li><li>Includes: Kurta, Palazzo &amp; Dupatta</li><li>Fit: Relaxed</li><li>Care: Machine wash cold</li></ul>",
       price: 1099,
       comparePrice: 1699,
       categoryId: categories["ethnic-sets"],
@@ -228,7 +235,8 @@ async function main() {
     {
       name: "Off-Shoulder Midi Dress",
       slug: "off-shoulder-midi-dress",
-      description: "Elegant off-shoulder midi dress with flared skirt. Great for parties and date nights.",
+      shortDescription: "Elegant off-shoulder midi dress with flared skirt — great for parties and date nights.",
+      description: "<p>Elegant off-shoulder midi dress with flared skirt. Great for parties and date nights.</p><ul><li>Fabric: Crepe</li><li>Length: Midi</li><li>Style: Off-shoulder</li><li>Care: Hand wash or dry clean</li></ul>",
       price: 1399,
       comparePrice: 1999,
       categoryId: categories["dresses"],

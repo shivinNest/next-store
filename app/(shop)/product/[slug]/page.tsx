@@ -14,6 +14,7 @@ interface Product {
   id: string;
   name: string;
   slug: string;
+  shortDescription?: string | null;
   description: string;
   price: string | number;
   comparePrice?: string | number | null;
@@ -273,30 +274,107 @@ export default function ProductDetailPage() {
           color: #20c997;
         }
         .btn-add-to-cart {
-          background: linear-gradient(135deg, #9f523a, #7a3f2c);
+          background: linear-gradient(135deg, #9f523a 0%, #7a3f2c 100%);
           color: white;
           border: none;
-          padding: 12px 24px;
-          border-radius: 8px;
+          padding: 0 28px;
+          height: 54px;
+          width: 100%;
+          border-radius: 10px;
           font-weight: 700;
-          transition: all 0.3s;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
+          font-size: 1rem;
+          letter-spacing: 0.4px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+          cursor: pointer;
+          transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+          box-shadow: 0 2px 8px rgba(159, 82, 58, 0.25);
         }
         .btn-add-to-cart:hover:not(:disabled) {
-          box-shadow: 0 8px 20px rgba(159, 82, 58, 0.4);
-          transform: translateY(-2px);
+          box-shadow: 0 8px 24px rgba(159, 82, 58, 0.45);
+          transform: translateY(-1px);
+          background: linear-gradient(135deg, #b05e44 0%, #8b4832 100%);
         }
-        .btn-wishlist-btn {
-          border: 2px solid #e0e0e0;
-          background: white;
-          border-radius: 8px;
-          transition: all 0.3s;
+        .btn-add-to-cart:active:not(:disabled) {
+          transform: translateY(0);
+          box-shadow: 0 2px 8px rgba(159, 82, 58, 0.25);
         }
-        .btn-wishlist-btn:hover:not(:disabled) {
+        .btn-add-to-cart:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+        .btn-whatsapp {
+          background: #25D366;
+          color: #fff;
+          border: none;
+          padding: 0 28px;
+          height: 54px;
+          width: 100%;
+          border-radius: 10px;
+          font-weight: 700;
+          font-size: 1rem;
+          letter-spacing: 0.4px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+          cursor: pointer;
+          transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+          box-shadow: 0 2px 8px rgba(37, 211, 102, 0.25);
+        }
+        .btn-whatsapp:hover {
+          background: #20bd5a;
+          box-shadow: 0 8px 24px rgba(37, 211, 102, 0.4);
+          transform: translateY(-1px);
+        }
+        .btn-whatsapp:active {
+          transform: translateY(0);
+        }
+        .btn-wishlist-action {
+          height: 48px;
+          width: 100%;
+          background: transparent;
+          border: 1.5px solid #e0e0e0;
+          border-radius: 10px;
+          font-weight: 600;
+          font-size: 0.9rem;
+          color: #666;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          cursor: pointer;
+          transition: all 0.25s ease;
+        }
+        .btn-wishlist-action:hover:not(:disabled) {
           border-color: #9f523a;
           color: #9f523a;
-          background: rgba(159, 82, 58, 0.05);
+          background: rgba(159, 82, 58, 0.04);
+        }
+        .btn-wishlist-action.active {
+          border-color: #dc3545;
+          color: #dc3545;
+          background: rgba(220, 53, 69, 0.04);
+        }
+        .btn-wishlist-action:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+        .cta-divider {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          margin: 4px 0;
+          color: #ccc;
+          font-size: 0.75rem;
+        }
+        .cta-divider::before, .cta-divider::after {
+          content: '';
+          flex: 1;
+          height: 1px;
+          background: #e8e8e8;
         }
         .product-tags {
           margin-top: 2rem;
@@ -405,7 +483,14 @@ export default function ProductDetailPage() {
               {product.category.name}
             </Link>
           )}
-          <h1 className="h2 fw-bold mt-2 mb-2" style={{ lineHeight: 1.2 }}>{product.name}</h1>
+          <h1 className="h2 fw-bold mt-2 mb-1" style={{ lineHeight: 1.2 }}>{product.name}</h1>
+
+          {/* Short description / tagline */}
+          {product.shortDescription && (
+            <p className="mb-3" style={{ color: "#666", fontSize: "1rem", lineHeight: 1.6, fontStyle: "italic" }}>
+              {product.shortDescription}
+            </p>
+          )}
 
           {/* Price */}
           <div className="d-flex align-items-center gap-3 mb-3 flex-wrap">
@@ -490,16 +575,19 @@ export default function ProductDetailPage() {
 
           {/* Description */}
           {product.description && (
-            <p className="mb-4" style={{ 
-              color: "#555",
-              lineHeight: "1.8",
-              padding: "1rem",
-              background: "rgba(159, 82, 58, 0.02)",
-              borderLeft: "4px solid #9f523a",
-              borderRadius: "6px"
-            }}>
-              {product.description}
-            </p>
+            <div
+              className="mb-4"
+              style={{
+                color: "#444",
+                lineHeight: "1.8",
+                padding: "1rem",
+                background: "rgba(159, 82, 58, 0.02)",
+                borderLeft: "4px solid #9f523a",
+                borderRadius: "6px",
+                fontSize: "0.92rem",
+              }}
+              dangerouslySetInnerHTML={{ __html: product.description }}
+            />
           )}
 
           {/* Size selector */}
@@ -556,76 +644,60 @@ export default function ProductDetailPage() {
           </div>
 
           {/* Actions */}
-          <div className="d-flex gap-2 flex-wrap mb-3">
+          <div className="d-flex flex-column gap-2 mb-3" style={{ maxWidth: "520px" }}>
             <button
-              className="btn-add-to-cart flex-grow-1"
+              className="btn-add-to-cart"
               onClick={handleAddToCart}
               disabled={adding || isOutOfStock}
-              style={{ minWidth: "200px", opacity: isOutOfStock ? 0.5 : 1 }}
             >
               {isOutOfStock ? (
-                <><i className="bi bi-slash-circle me-2" />Out of Stock</>
+                <><i className="bi bi-slash-circle" />Out of Stock</>
               ) : adding ? (
-                <><span className="spinner-border spinner-border-sm me-2" style={{ borderWidth: "2px" }} />Adding...</>
+                <><span className="spinner-border spinner-border-sm" style={{ borderWidth: "2px" }} />Adding to Cart...</>
               ) : addedToCart ? (
-                <><i className="bi bi-check2 me-2" />Added!</>
+                <><i className="bi bi-check2-circle" />Added to Cart!</>
               ) : (
-                <><i className="bi bi-bag-plus me-2" />Add to Cart</>
+                <><i className="bi bi-bag-plus" />Add to Cart</>
               )}
             </button>
+
+            <div className="cta-divider">or</div>
+
+            <button className="btn-whatsapp" onClick={handleWhatsApp}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0 }}>
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+              Buy via WhatsApp
+            </button>
+
             <button
-              className="btn btn-lg btn-wishlist-btn"
+              className={`btn-wishlist-action${inWishlist ? " active" : ""}`}
               onClick={handleWishlist}
               disabled={wishlistLoading}
-              title="Add to Wishlist"
-              style={{ padding: "12px 24px" }}
             >
-              <i className={`bi ${inWishlist ? "bi-heart-fill text-danger" : "bi-heart"}`} />
+              <i className={`bi ${inWishlist ? "bi-heart-fill" : "bi-heart"}`} />
+              {inWishlist ? "Saved to Wishlist" : "Add to Wishlist"}
             </button>
+
+            {addedToCart && (
+              <div style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+                padding: "12px 16px",
+                background: "rgba(32, 201, 151, 0.08)",
+                border: "1px solid rgba(32, 201, 151, 0.25)",
+                borderRadius: "10px",
+                animation: "fadeInUp 0.3s ease",
+              }}>
+                <i className="bi bi-check-circle-fill" style={{ color: "#20c997", fontSize: "1.1rem" }} />
+                <span style={{ fontSize: "0.9rem", fontWeight: 600, color: "#1a1a1a" }}>Added to cart!</span>
+                <Link href="/cart" className="ms-auto text-decoration-none fw-semibold" style={{ fontSize: "0.85rem", color: "#20c997", whiteSpace: "nowrap" }}>
+                  View Cart →
+                </Link>
+              </div>
+            )}
           </div>
-
-          {/* WhatsApp buy button */}
-          <button
-            onClick={handleWhatsApp}
-            style={{
-              width: "100%",
-              padding: "12px 24px",
-              background: "#25D366",
-              color: "#fff",
-              border: "none",
-              borderRadius: "8px",
-              fontWeight: 700,
-              fontSize: "0.95rem",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "10px",
-              cursor: "pointer",
-              transition: "opacity 0.2s",
-              marginBottom: "12px",
-            }}
-            onMouseEnter={e => (e.currentTarget.style.opacity = "0.88")}
-            onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-            </svg>
-            Buy via WhatsApp
-          </button>
-
-          {addedToCart && (
-            <div className="alert alert-success d-flex align-items-center gap-2 py-2 mb-3">
-              <i className="bi bi-bag-check-fill" />
-              <span>Added to cart!</span>
-              <Link href="/cart" className="ms-auto text-decoration-none small fw-semibold" style={{ color: "#20c997" }}>
-                View Cart →
-              </Link>
-            </div>
-          )}
-
-          {error && !selectedSize && (
-            <div className="alert alert-danger py-2 small mb-3">{error}</div>
-          )}
 
           {/* Tags */}
           {product.tags && product.tags.length > 0 && (

@@ -37,6 +37,7 @@ export async function PUT(
     const formData = await req.formData();
 
     const name = formData.get("name") as string;
+    const shortDescription = formData.get("shortDescription") as string;
     const description = formData.get("description") as string;
     const price = parseFloat(formData.get("price") as string);
     const comparePrice = formData.get("comparePrice")
@@ -80,6 +81,7 @@ export async function PUT(
       data: {
         name,
         slug,
+        shortDescription,
         description,
         price,
         comparePrice,
