@@ -140,7 +140,7 @@ export default function ProductDetailPage() {
     product.sizes.length > 0 && product.sizes.every((s) => s.stock === 0);
 
   const handleWhatsApp = () => {
-    const phone = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "919876543210";
+    const phone = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "919400146232";
     const text = encodeURIComponent(
       `Hi! I'm interested in buying: ${product!.name}\nPrice: ₹${Number(product!.price).toLocaleString("en-IN")}\nSize: ${selectedSize || "(please help me select)"}\nLink: ${window.location.href}`
     );
