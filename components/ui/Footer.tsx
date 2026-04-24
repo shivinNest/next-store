@@ -20,7 +20,7 @@ export default function Footer() {
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: "6px", fontSize: "0.8rem", color: "#555" }}>
               <span>support@saaviya.in</span>
-              <span>+91 98765 43210</span>
+              <span>+91 94001 46232</span>
               <span>Mon – Sat &nbsp;·&nbsp; 9 AM – 6 PM IST</span>
             </div>
           </div>

@@ -1,6 +1,37 @@
 "use client";
 import { useEffect, useState, useCallback, useRef } from "react";
+import dynamic from "next/dynamic";
 import Image from "next/image";
+import "react-quill-new/dist/quill.snow.css";
+
+const ReactQuill = dynamic(() => import("react-quill-new"), {
+  ssr: false,
+  loading: () => <div style={{ height: 240, background: "#f8f9fa", borderRadius: 6, border: "1px solid #dee2e6" }} />,
+}) as React.ComponentType<{
+  value: string;
+  onChange: (v: string) => void;
+  theme: string;
+  modules: object;
+  formats: string[];
+  placeholder?: string;
+  style?: React.CSSProperties;
+}>;
+
+const QUILL_MODULES = {
+  toolbar: [
+    [{ header: [1, 2, 3, false] }],
+    ["bold", "italic", "underline", "strike"],
+    [{ list: "ordered" }, { list: "bullet" }],
+    ["blockquote", "link"],
+    [{ color: [] }],
+    ["clean"],
+  ],
+};
+
+const QUILL_FORMATS = [
+  "header", "bold", "italic", "underline", "strike",
+  "list", "blockquote", "link", "color",
+];
 
 interface Blog {
   id: string;
@@ -133,15 +164,28 @@ export default function AdminBlogsPage() {
                   />
                 </div>
                 <div className="col-12">
-                  <label className="form-label small fw-semibold">Content * (HTML supported)</label>
-                  <textarea
-                    className="form-control"
-                    rows={8}
-                    value={form.content}
-                    onChange={(e) => setForm({ ...form, content: e.target.value })}
-                    required
-                    placeholder="Blog content..."
-                  />
+                  <label className="form-label small fw-semibold">Content *</label>
+                  <div style={{ background: "#fff", borderRadius: 6 }}>
+                    <ReactQuill
+                      theme="snow"
+                      value={form.content}
+                      onChange={(v) => setForm({ ...form, content: v })}
+                      modules={QUILL_MODULES}
+                      formats={QUILL_FORMATS}
+                      placeholder="Write your story here..."
+                      style={{ minHeight: 280 }}
+                    />
+                  </div>
+                  {/* Hidden required-field guard */}
+                  {!form.content.replace(/<[^>]*>/g, "").trim() && (
+                    <input
+                      tabIndex={-1}
+                      required
+                      value=""
+                      onChange={() => {}}
+                      style={{ opacity: 0, height: 0, position: "absolute" }}
+                    />
+                  )}
                 </div>
                 <div className="col-md-6">
                   <label className="form-label small fw-semibold">Tags (comma-separated)</label>

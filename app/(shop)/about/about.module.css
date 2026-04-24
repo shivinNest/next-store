@@ -1,15 +1,79 @@
 .valueCard {
   background: #fff;
-  border-radius: 12px;
-  padding: 36px 28px;
+  border-radius: 16px;
+  padding: 36px 28px 32px;
   height: 100%;
   border: 1px solid #ece9e4;
-  transition: box-shadow 0.2s, transform 0.2s;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.3s, transform 0.3s, border-color 0.3s;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
 .valueCard:hover {
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
-  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
+  transform: translateY(-6px);
+  border-color: transparent;
+}
+
+.valueIconWrap {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+  flex-shrink: 0;
+  transition: transform 0.3s;
+}
+
+.valueCard:hover .valueIconWrap {
+  transform: scale(1.08);
+}
+
+.valueNum {
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #bbb;
+  margin-bottom: 10px;
+}
+
+.valueTitle {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #111;
+  margin-bottom: 12px;
+  letter-spacing: -0.02em;
+}
+
+.valueText {
+  font-size: 0.875rem;
+  color: #666;
+  line-height: 1.75;
+  margin: 0;
+  flex: 1;
+}
+
+.valueBar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: 0 0 16px 16px;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s ease;
+}
+
+.valueCard:hover .valueBar {
+  transform: scaleX(1);
 }
 
 .whyCard {

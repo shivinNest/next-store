@@ -52,7 +52,7 @@ export default function RefundPolicyPage() {
 
       <div className="alert alert-primary small mt-4">
         <i className="bi bi-info-circle me-2" />
-        For any return / refund queries, email <strong>support@saaviya.in</strong> or call <strong>+91 98765 43210</strong> (Mon–Sat, 9AM–6PM).
+        For any return / refund queries, email <strong>support@saaviya.in</strong> or call <strong>+91 94001 46232</strong> (Mon–Sat, 9AM–6PM).
       </div>
     </div>
   );

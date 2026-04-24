@@ -41,9 +41,38 @@ export default function BlogDetailPage() {
     return (
       <div className="bg-light py-5">
         <div className="container">
-          <div className="skeleton mb-4" style={{ height: 360, borderRadius: "0.375rem" }} />
-          <div className="skeleton mb-3" style={{ height: 32, width: "70%" }} />
-          <div className="skeleton" style={{ height: 200 }} />
+          <div style={{ maxWidth: 800, margin: "0 auto" }}>
+            {/* Breadcrumb */}
+            <div className="d-flex gap-2 mb-4">
+              <div className="skeleton" style={{ height: 16, width: 40, borderRadius: 4 }} />
+              <div className="skeleton" style={{ height: 16, width: 10, borderRadius: 4 }} />
+              <div className="skeleton" style={{ height: 16, width: 60, borderRadius: 4 }} />
+              <div className="skeleton" style={{ height: 16, width: 10, borderRadius: 4 }} />
+              <div className="skeleton" style={{ height: 16, width: 160, borderRadius: 4 }} />
+            </div>
+            {/* Tags */}
+            <div className="d-flex gap-2 mb-4">
+              <div className="skeleton" style={{ height: 22, width: 70, borderRadius: 100 }} />
+              <div className="skeleton" style={{ height: 22, width: 90, borderRadius: 100 }} />
+            </div>
+            {/* Title */}
+            <div className="skeleton mb-2" style={{ height: 40, width: "85%", borderRadius: 6 }} />
+            <div className="skeleton mb-4" style={{ height: 40, width: "60%", borderRadius: 6 }} />
+            {/* Meta row */}
+            <div className="d-flex align-items-center gap-3 mb-4 pb-3" style={{ borderBottom: "1px solid #dee2e6" }}>
+              <div className="skeleton rounded-circle" style={{ width: 40, height: 40, flexShrink: 0 }} />
+              <div>
+                <div className="skeleton mb-1" style={{ height: 14, width: 120, borderRadius: 4 }} />
+                <div className="skeleton" style={{ height: 13, width: 80, borderRadius: 4 }} />
+              </div>
+            </div>
+            {/* Hero image */}
+            <div className="skeleton mb-4" style={{ height: 420, borderRadius: 8 }} />
+            {/* Content lines */}
+            {[100, 95, 88, 100, 72, 90, 80, 100, 65].map((w, i) => (
+              <div key={i} className="skeleton mb-2" style={{ height: 16, width: `${w}%`, borderRadius: 4 }} />
+            ))}
+          </div>
         </div>
       </div>
     );

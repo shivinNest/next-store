@@ -15,7 +15,7 @@ const CONTACT_DETAILS = [
   {
     icon: "bi-telephone-fill",
     title: "Call Us",
-    lines: ["+91 98765 43210", "+91 98765 43211"],
+    lines: ["+91 94001 46232", "+91 98765 43211"],
   },
   {
     icon: "bi-clock-fill",
@@ -410,7 +410,7 @@ export default function ContactPage() {
                       <input
                         type="tel"
                         className={`form-control ${fieldErrors.phone ? "is-invalid" : ""}`}
-                        placeholder="98765 43210"
+                        placeholder="94001 46232"
                         value={form.phone}
                         onChange={(e) => setForm({ ...form, phone: e.target.value })}
                         maxLength={10}

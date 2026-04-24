@@ -58,7 +58,6 @@ function emailLayout(logoUrl: string, content: string) {
         <!-- Footer -->
         <tr>
           <td style="background:#faf9f7;border-top:1px solid #ece9e4;border-radius:0 0 12px 12px;padding:24px 40px;text-align:center;">
-            <p style="margin:0 0 8px;font-size:13px;color:#9f523a;font-weight:700;letter-spacing:0.08em;">SAAVIYA.IN</p>
             <p style="margin:0 0 12px;font-size:12px;color:#999;line-height:1.6;">Fashion that speaks for you</p>
             <p style="margin:0;font-size:11px;color:#bbb;">
               © ${new Date().getFullYear()} Saaviya. All rights reserved.<br />

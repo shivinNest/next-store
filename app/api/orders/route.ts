@@ -77,7 +77,9 @@ export async function POST(req: NextRequest) {
       (sum, item) => sum + Number(item.product.price) * item.quantity,
       0
     );
-    const shippingCharge = subtotal >= 999 ? 0 : 99;
+    const shippingFee = parseInt(process.env.SHIPPING_CHARGE || "50", 10);
+    const freeThreshold = parseInt(process.env.FREE_SHIPPING_THRESHOLD || "999", 10);
+    const shippingCharge = subtotal >= freeThreshold ? 0 : shippingFee;
     const total = subtotal + shippingCharge;
 
     // Create order

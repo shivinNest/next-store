@@ -30,8 +30,8 @@ CLOUDINARY_CLOUD_NAME="your-cloud-name"
 CLOUDINARY_API_KEY="your-api-key"
 CLOUDINARY_API_SECRET="your-api-secret"
 
-# WhatsApp (include country code, no + or spaces, e.g. 919876543210 for India)
-NEXT_PUBLIC_WHATSAPP_NUMBER="919876543210"
+# WhatsApp (include country code, no + or spaces, e.g. 919400146232 for India)
+NEXT_PUBLIC_WHATSAPP_NUMBER="919400146232"
 
 # Maintenance mode — set to "true" to show the maintenance page to all visitors
 # Admins can still access /admin while maintenance mode is active
@@ -39,3 +39,9 @@ MAINTENANCE_MODE="false"
 
 # Admin notification email — contact form submissions are sent here
 ADMIN_EMAIL="admin@saaviya.in"
+
+# Shipping charge in INR — applied when order subtotal is below FREE_SHIPPING_THRESHOLD
+SHIPPING_CHARGE="50"
+NEXT_PUBLIC_SHIPPING_CHARGE="50"
+FREE_SHIPPING_THRESHOLD="999"
+NEXT_PUBLIC_FREE_SHIPPING_THRESHOLD="999"

@@ -114,7 +114,9 @@ export default function CheckoutPage() {
     (s, i) => s + Number(i.product.price) * i.quantity,
     0
   );
-  const shipping = subtotal >= 999 ? 0 : 99;
+  const shippingFee = parseInt(process.env.NEXT_PUBLIC_SHIPPING_CHARGE || "50", 10);
+  const freeThreshold = parseInt(process.env.NEXT_PUBLIC_FREE_SHIPPING_THRESHOLD || "999", 10);
+  const shipping = subtotal >= freeThreshold ? 0 : shippingFee;
   const total = subtotal + shipping;
 
   if (loading) {

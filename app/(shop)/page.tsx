@@ -223,52 +223,95 @@ export default function HomePage() {
         }
         .hero-slide {
           position: relative;
-          height: 520px;
+          height: clamp(480px, 70vh, 680px);
           overflow: hidden;
         }
         .hero-slide-content {
           padding-left: 80px;
           padding-right: 80px;
         }
+        @media (max-width: 768px) {
+          .hero-slide-content { padding-left: 24px; padding-right: 24px; }
+        }
         .hero-slide::before {
           content: '';
           position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.2));
+          top: 0; left: 0; right: 0; bottom: 0;
+          background: linear-gradient(105deg,
+            rgba(0,0,0,0.62) 0%,
+            rgba(0,0,0,0.38) 45%,
+            rgba(0,0,0,0.08) 100%);
           z-index: 1;
         }
+        .hero-slide-inner {
+          position: absolute;
+          inset: 0;
+          background-size: cover;
+          background-position: center;
+          transform: scale(1.06);
+          transition: transform 6s ease;
+        }
+        .carousel-item.active .hero-slide-inner {
+          transform: scale(1);
+        }
+        .carousel-indicators {
+          bottom: 24px;
+          gap: 8px;
+          margin: 0;
+        }
         .carousel-indicators [data-bs-target] {
-          background-color: rgba(255, 255, 255, 0.5);
-          border-radius: 4px;
+          width: 28px;
+          height: 3px;
+          border-radius: 2px;
+          background-color: rgba(255, 255, 255, 0.4);
+          border: none;
+          margin: 0;
+          transition: all 0.3s;
         }
         .carousel-indicators .active {
           background-color: white;
-        }
-        .carousel-control-prev-icon,
-        .carousel-control-next-icon {
-          filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+          width: 44px;
         }
         .carousel-control-prev,
         .carousel-control-next {
-          width: 50px;
+          width: 48px;
+          height: 48px;
+          background: rgba(255,255,255,0.15);
+          border: 1.5px solid rgba(255,255,255,0.3);
+          border-radius: 50%;
           top: 50%;
           transform: translateY(-50%);
-          z-index: 10;
-          opacity: 0.7;
-          transition: opacity 0.3s;
+          backdrop-filter: blur(6px);
+          opacity: 0;
+          transition: opacity 0.3s, background 0.2s;
         }
+        .carousel:hover .carousel-control-prev,
+        .carousel:hover .carousel-control-next { opacity: 1; }
         .carousel-control-prev:hover,
-        .carousel-control-next:hover {
-          opacity: 1;
+        .carousel-control-next:hover { background: rgba(255,255,255,0.28); }
+        .carousel-control-prev { left: 20px; }
+        .carousel-control-next { right: 20px; }
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+          width: 18px;
+          height: 18px;
+          filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
         }
-        .carousel-control-prev {
-          left: 20px;
-        }
-        .carousel-control-next {
-          right: 20px;
+        .hero-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 7px;
+          background: rgba(255,255,255,0.15);
+          border: 1px solid rgba(255,255,255,0.3);
+          border-radius: 100px;
+          padding: 6px 16px;
+          font-size: 0.72rem;
+          font-weight: 700;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.92);
+          backdrop-filter: blur(4px);
+          margin-bottom: 20px;
         }
         .banner-img-wrap {
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -285,9 +328,21 @@ export default function HomePage() {
           backdrop-filter: blur(4px);
         }
         .promo-banner {
-          background: linear-gradient(135deg, #9f523a 0%, #7a3f2c 100%);
           position: relative;
           overflow: hidden;
+          background-color: #7a3f2c;
+        }
+        .promo-banner-bg {
+          position: absolute;
+          inset: 0;
+          background-image: url('/assets/mahimayadav0-ethnic-4762352_1920.jpg');
+          background-size: cover;
+          background-position: center 20%;
+          transform: scale(1.04);
+          transition: transform 8s ease;
+        }
+        .promo-banner:hover .promo-banner-bg {
+          transform: scale(1);
         }
         .promo-banner::before {
           content: 'SALE';
@@ -302,14 +357,15 @@ export default function HomePage() {
           pointer-events: none;
           line-height: 1;
           user-select: none;
+          z-index: 2;
         }
         .promo-banner::after {
           content: '';
           position: absolute;
           top: 0; left: 0; right: 0; bottom: 0;
           background:
-            radial-gradient(ellipse 60% 80% at 10% 50%, rgba(255,255,255,0.09) 0%, transparent 60%),
-            radial-gradient(ellipse 40% 60% at 90% 20%, rgba(255,255,255,0.05) 0%, transparent 60%);
+            linear-gradient(100deg, rgba(122,63,44,0.92) 0%, rgba(122,63,44,0.75) 55%, rgba(80,30,15,0.55) 100%);
+          z-index: 1;
           pointer-events: none;
         }
         .promo-tag {
@@ -570,27 +626,61 @@ export default function HomePage() {
               <div className="carousel-inner">
                 {heroData.slides.map((slide, i) => (
                   <div key={slide.id} className={`carousel-item ${i === 0 ? "active" : ""}`}>
-                    <div
-                      className="hero-slide d-flex align-items-center"
-                      style={{
-                        backgroundImage: `url(${slide.image})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                      }}
-                    >
+                    <div className="hero-slide d-flex align-items-center">
+                      {/* Ken-Burns background */}
+                      <div
+                        className="hero-slide-inner"
+                        style={{ backgroundImage: `url(${slide.image})` }}
+                      />
                       <div className="container hero-slide-content" style={{ position: "relative", zIndex: 2 }}>
-                        <div className="col-md-6 text-white">
-                          <h1 className="display-5 fw-bold" style={{ fontSize: "2.5rem", marginBottom: "1rem", letterSpacing: "-0.5px" }}>
+                        <div className="col-lg-6 col-md-8 text-white">
+                          <div className="hero-badge">
+                            <i className="bi bi-stars" />
+                            New Collection
+                          </div>
+                          <h1 style={{
+                            fontSize: "clamp(1.8rem, 4.5vw, 3.4rem)",
+                            fontWeight: 900,
+                            lineHeight: 1.12,
+                            letterSpacing: "-0.03em",
+                            marginBottom: 16,
+                            textShadow: "0 2px 16px rgba(0,0,0,0.3)",
+                          }}>
                             {slide.title}
                           </h1>
                           {slide.subtitle && (
-                            <p className="lead" style={{ fontSize: "1.1rem", marginBottom: "1.5rem", opacity: 0.9 }}>
+                            <p style={{
+                              fontSize: "clamp(0.95rem, 1.8vw, 1.15rem)",
+                              lineHeight: 1.7,
+                              marginBottom: 32,
+                              opacity: 0.88,
+                              maxWidth: 420,
+                              textShadow: "0 1px 6px rgba(0,0,0,0.25)",
+                            }}>
                               {slide.subtitle}
                             </p>
                           )}
                           {slide.link && (
-                            <Link href={slide.link} className="btn btn-light btn-lg mt-3 px-5" style={{ fontWeight: 700, textTransform: "uppercase", letterSpacing: "1px" }}>
+                            <Link
+                              href={slide.link}
+                              style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: 8,
+                                background: "#fff",
+                                color: "#9f523a",
+                                padding: "14px 36px",
+                                borderRadius: 10,
+                                fontWeight: 800,
+                                fontSize: "0.9rem",
+                                textDecoration: "none",
+                                letterSpacing: "0.04em",
+                                textTransform: "uppercase",
+                                boxShadow: "0 6px 24px rgba(0,0,0,0.2)",
+                              }}
+                            >
                               Explore
+                              <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
                             </Link>
                           )}
                         </div>
@@ -816,7 +906,8 @@ export default function HomePage() {
 
       {/* Promo Banner Divider */}
       <div className="promo-banner text-white" style={{ padding: "72px 0" }}>
-        <div className="container promo-content">
+        <div className="promo-banner-bg" />
+        <div className="container promo-content" style={{ position: "relative", zIndex: 2 }}>
           <div className="row align-items-center g-4">
             {/* Left: text */}
             <div className="col-lg-8">
@@ -1045,7 +1136,7 @@ export default function HomePage() {
       )}
 
       {/* Instagram CTA */}
-      <section style={{
+      <section className="d-none" style={{
         background: "linear-gradient(135deg, #833ab4 0%, #fd1d1d 50%, #fcb045 100%)",
         padding: "72px 20px",
         position: "relative",
@@ -1114,13 +1205,14 @@ export default function HomePage() {
               <div className="container" style={{ maxWidth: 560 }}>
                 <p style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "#9f523a", marginBottom: 16 }}>Join Us</p>
                 <h2 style={{ fontSize: "clamp(1.6rem,3vw,2.4rem)", fontWeight: 700, color: "#fff", lineHeight: 1.2, letterSpacing: "-0.02em", marginBottom: 16 }}>
-                  Become part of the Saaviya community.
+                  Become part of the Saaviya imstagram community.
                 </h2>
                 <p style={{ fontSize: "1rem", color: "#777", marginBottom: 36, lineHeight: 1.7 }}>
                   Thousands of women across India trust Saaviya for their most important moments. We&apos;d love to be part of yours.
                 </p>
                 <Link href="/products/all" style={{
-                  display: "inline-block",
+                  display: "inline-flex",
+                  alignItems: "center", gap: 10,
                   background: "#9f523a",
                   color: "#fff",
                   padding: "14px 44px",
@@ -1129,9 +1221,9 @@ export default function HomePage() {
                   fontSize: "0.9rem",
                   textDecoration: "none",
                   letterSpacing: "0.05em",
-                  textTransform: "uppercase",
                 }}>
-                  Explore Collection
+                <i className="bi bi-instagram" style={{ fontSize: "1.1rem" }} />
+                   Follow @saaviya.in
                 </Link>
               </div>
             </section>
