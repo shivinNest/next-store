@@ -10,6 +10,17 @@ interface ProductSize {
   stock: number;
 }
 
+interface RelatedProduct {
+  id: string;
+  name: string;
+  slug: string;
+  price: string | number;
+  comparePrice?: string | number | null;
+  images: string[];
+  category?: { name: string; slug: string };
+  sizes: ProductSize[];
+}
+
 interface Product {
   id: string;
   name: string;
@@ -35,6 +46,7 @@ export default function ProductDetailPage() {
 
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
+  const [relatedProducts, setRelatedProducts] = useState<RelatedProduct[]>([]);
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
@@ -56,6 +68,12 @@ export default function ProductDetailPage() {
       })
       .catch(() => router.replace("/products/all"))
       .finally(() => setLoading(false));
+
+    // Fetch related products in parallel
+    fetch(`/api/products/${slug}/related`)
+      .then((r) => r.json())
+      .then((d) => { if (d.success) setRelatedProducts(d.data); })
+      .catch(() => {});
   }, [slug, router]);
 
   const handleAddToCart = async () => {
@@ -110,15 +128,59 @@ export default function ProductDetailPage() {
 
   if (loading) {
     return (
-      <div className="container py-5">
-        <div className="row g-4">
-          <div className="col-md-5">
-            <div className="skeleton" style={{ height: 500, borderRadius: 8 }} />
+      <div className="container py-4 py-md-5">
+        {/* Breadcrumb */}
+        <div className="d-flex gap-2 mb-4">
+          <div className="skeleton" style={{ height: 14, width: 36, borderRadius: 4 }} />
+          <div className="skeleton" style={{ height: 14, width: 10, borderRadius: 4 }} />
+          <div className="skeleton" style={{ height: 14, width: 70, borderRadius: 4 }} />
+          <div className="skeleton" style={{ height: 14, width: 10, borderRadius: 4 }} />
+          <div className="skeleton" style={{ height: 14, width: 140, borderRadius: 4 }} />
+        </div>
+        <div className="row g-5">
+          {/* Left: image + thumbnails */}
+          <div className="col-lg-5">
+            <div className="skeleton mb-3" style={{ height: 480, borderRadius: 12 }} />
+            <div className="d-flex gap-2">
+              {[1,2,3].map(n => <div key={n} className="skeleton" style={{ width: 70, height: 90, borderRadius: 8 }} />)}
+            </div>
           </div>
-          <div className="col-md-7">
-            <div className="skeleton mb-3" style={{ height: 32, width: "70%" }} />
-            <div className="skeleton mb-2" style={{ height: 24, width: "30%" }} />
-            <div className="skeleton" style={{ height: 100 }} />
+          {/* Right: details */}
+          <div className="col-lg-7">
+            {/* Category */}
+            <div className="skeleton mb-2" style={{ height: 12, width: 80, borderRadius: 4 }} />
+            {/* Title */}
+            <div className="skeleton mb-2" style={{ height: 34, width: "80%", borderRadius: 6 }} />
+            <div className="skeleton mb-4" style={{ height: 34, width: "55%", borderRadius: 6 }} />
+            {/* Price row */}
+            <div className="d-flex gap-3 align-items-center mb-4">
+              <div className="skeleton" style={{ height: 38, width: 110, borderRadius: 6 }} />
+              <div className="skeleton" style={{ height: 22, width: 70, borderRadius: 6 }} />
+              <div className="skeleton" style={{ height: 26, width: 60, borderRadius: 6 }} />
+            </div>
+            {/* Description */}
+            <div className="skeleton mb-1" style={{ height: 14, width: "100%", borderRadius: 4 }} />
+            <div className="skeleton mb-1" style={{ height: 14, width: "94%", borderRadius: 4 }} />
+            <div className="skeleton mb-4" style={{ height: 14, width: "80%", borderRadius: 4 }} />
+            {/* Size label + buttons */}
+            <div className="skeleton mb-3" style={{ height: 13, width: 80, borderRadius: 4 }} />
+            <div className="d-flex gap-2 mb-4">
+              {["S","M","L","XL","XXL"].map(s => <div key={s} className="skeleton" style={{ width: 48, height: 40, borderRadius: 8 }} />)}
+            </div>
+            {/* Qty */}
+            <div className="skeleton mb-2" style={{ height: 13, width: 70, borderRadius: 4 }} />
+            <div className="skeleton mb-4" style={{ height: 42, width: 130, borderRadius: 8 }} />
+            {/* Shipping note */}
+            <div className="skeleton mb-4" style={{ height: 50, borderRadius: 8 }} />
+            {/* Action buttons */}
+            <div className="d-flex flex-column gap-2" style={{ maxWidth: 480 }}>
+              <div className="skeleton" style={{ height: 54, borderRadius: 10 }} />
+              <div className="d-flex gap-2">
+                <div className="skeleton" style={{ flex: 1, height: 50, borderRadius: 10 }} />
+                <div className="skeleton" style={{ width: 50, height: 50, borderRadius: 10 }} />
+              </div>
+              <div className="skeleton" style={{ height: 54, borderRadius: 10 }} />
+            </div>
           </div>
         </div>
       </div>
@@ -712,6 +774,108 @@ export default function ProductDetailPage() {
           )}
         </div>
       </div>
+
+      {/* Related Products */}
+      {relatedProducts.length > 0 && (
+        <section style={{ marginTop: 64, paddingTop: 48, borderTop: "1px solid #f0ede9" }}>
+          <div className="d-flex align-items-center justify-content-between mb-4">
+            <div>
+              <p style={{ fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#9f523a", marginBottom: 4 }}>
+                You may also like
+              </p>
+              <h2 style={{ fontSize: "clamp(1.2rem, 2vw, 1.6rem)", fontWeight: 800, color: "#111", margin: 0, letterSpacing: "-0.02em" }}>
+                Related Products
+              </h2>
+            </div>
+            {product.category && (
+              <Link
+                href={`/products/${product.category.slug}`}
+                style={{ fontSize: "0.85rem", fontWeight: 600, color: "#9f523a", textDecoration: "none", display: "flex", alignItems: "center", gap: 6, whiteSpace: "nowrap" }}
+              >
+                View all <i className="bi bi-arrow-right" />
+              </Link>
+            )}
+          </div>
+          <div className="row g-3">
+            {relatedProducts.slice(0, 4).map((rp) => {
+              const rpDiscount =
+                rp.comparePrice && Number(rp.comparePrice) > Number(rp.price)
+                  ? Math.round(((Number(rp.comparePrice) - Number(rp.price)) / Number(rp.comparePrice)) * 100)
+                  : null;
+              const rpOutOfStock = rp.sizes.length > 0 && rp.sizes.every((s) => s.stock === 0);
+              return (
+                <div key={rp.id} className="col-6 col-lg-3">
+                  <Link href={`/product/${rp.slug}`} style={{ textDecoration: "none", display: "block" }}>
+                    <div style={{
+                      borderRadius: 12,
+                      overflow: "hidden",
+                      border: "1px solid #f0ede9",
+                      background: "#fff",
+                      transition: "box-shadow 0.25s, transform 0.25s",
+                    }}
+                      onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = "0 10px 32px rgba(0,0,0,0.1)"; (e.currentTarget as HTMLDivElement).style.transform = "translateY(-4px)"; }}
+                      onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = ""; (e.currentTarget as HTMLDivElement).style.transform = ""; }}
+                    >
+                      {/* Image */}
+                      <div style={{ position: "relative", aspectRatio: "3/4", background: "#f8f5f2", overflow: "hidden" }}>
+                        {rp.images[0] ? (
+                          <Image
+                            src={rp.images[0]}
+                            alt={rp.name}
+                            fill
+                            style={{ objectFit: "cover", transition: "transform 0.4s" }}
+                            sizes="(max-width: 768px) 50vw, 25vw"
+                          />
+                        ) : (
+                          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}>
+                            <i className="bi bi-image text-muted" style={{ fontSize: "2rem" }} />
+                          </div>
+                        )}
+                        {rpDiscount && (
+                          <span style={{
+                            position: "absolute", top: 10, left: 10,
+                            background: "linear-gradient(135deg, #9f523a, #7a3f2c)",
+                            color: "#fff", fontSize: "0.72rem", fontWeight: 700,
+                            padding: "3px 8px", borderRadius: 6,
+                          }}>
+                            -{rpDiscount}%
+                          </span>
+                        )}
+                        {rpOutOfStock && (
+                          <div style={{ position: "absolute", inset: 0, background: "rgba(255,255,255,0.6)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                            <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "#666", background: "#fff", padding: "4px 10px", borderRadius: 6 }}>Out of Stock</span>
+                          </div>
+                        )}
+                      </div>
+                      {/* Info */}
+                      <div style={{ padding: "14px 14px 16px" }}>
+                        {rp.category && (
+                          <p style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#9f523a", marginBottom: 4 }}>
+                            {rp.category.name}
+                          </p>
+                        )}
+                        <p style={{ fontSize: "0.88rem", fontWeight: 600, color: "#1a1a1a", marginBottom: 8, lineHeight: 1.35, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+                          {rp.name}
+                        </p>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                          <span style={{ fontSize: "0.95rem", fontWeight: 800, color: "#9f523a" }}>
+                            ₹{Number(rp.price).toLocaleString("en-IN")}
+                          </span>
+                          {rp.comparePrice && Number(rp.comparePrice) > Number(rp.price) && (
+                            <s style={{ fontSize: "0.78rem", color: "#bbb" }}>
+                              ₹{Number(rp.comparePrice).toLocaleString("en-IN")}
+                            </s>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      )}
     </div>
   );
 }
