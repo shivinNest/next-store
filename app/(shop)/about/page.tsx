@@ -363,8 +363,9 @@ export default function AboutPage() {
           <p style={{ fontSize: "1rem", color: "#777", marginBottom: 36, lineHeight: 1.7 }}>
             Thousands of women across India trust Saaviya for their most important moments. We&apos;d love to be part of yours.
           </p>
-          <Link href="/products/all" style={{
+          <a href="https://www.instagram.com/saa.viya" target="_blank" rel="noopener noreferrer" style={{
             display: "inline-flex",
+            alignItems: "center",
             background: "#9f523a",
             color: "#fff",
             padding: "14px 44px",
@@ -376,7 +377,7 @@ export default function AboutPage() {
           }}>
             <i className="bi bi-instagram" style={{ marginRight: 8 }} />
             Follow Us on Instagram
-          </Link>
+          </a>
         </div>
       </section>
     </div>

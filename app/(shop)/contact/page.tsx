@@ -339,7 +339,7 @@ export default function ContactPage() {
               <h6>Follow Us</h6>
               <div className="social-buttons">
                 {[
-                  { icon: "bi-instagram", label: "Instagram" },
+                  { icon: "bi-instagram", label: "Instagram", href: "https://www.instagram.com/saa.viya" },
                   { icon: "bi-facebook", label: "Facebook" },
                   { icon: "bi-twitter-x", label: "Twitter" },
                   { icon: "bi-youtube", label: "YouTube" },
@@ -347,7 +347,9 @@ export default function ContactPage() {
                 ].map((s) => (
                   <a
                     key={s.label}
-                    href="#"
+                    href={s.href ?? "#"}
+                    target={s.href ? "_blank" : undefined}
+                    rel={s.href ? "noopener noreferrer" : undefined}
                     className="social-btn"
                     aria-label={s.label}
                     title={s.label}

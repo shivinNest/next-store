@@ -1179,7 +1179,7 @@ export default function HomePage() {
             Get daily style inspiration, new arrivals, behind-the-scenes peeks, and exclusive offers — straight to your feed.
           </p>
           <a
-            href="https://www.instagram.com/saaviya.in"
+            href="https://www.instagram.com/saa.viya"
             target="_blank"
             rel="noopener noreferrer"
             style={{
@@ -1196,7 +1196,7 @@ export default function HomePage() {
             onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; (e.currentTarget as HTMLElement).style.boxShadow = "0 6px 24px rgba(0,0,0,0.2)"; }}
           >
             <i className="bi bi-instagram" style={{ fontSize: "1.1rem" }} />
-            Follow @saaviya.in
+            Follow @saa.viya
           </a>
         </div>
       </section>
@@ -1205,12 +1205,12 @@ export default function HomePage() {
               <div className="container" style={{ maxWidth: 560 }}>
                 <p style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "#9f523a", marginBottom: 16 }}>Join Us</p>
                 <h2 style={{ fontSize: "clamp(1.6rem,3vw,2.4rem)", fontWeight: 700, color: "#fff", lineHeight: 1.2, letterSpacing: "-0.02em", marginBottom: 16 }}>
-                  Become part of the Saaviya imstagram community.
+                  Follow us on Instagram.
                 </h2>
                 <p style={{ fontSize: "1rem", color: "#777", marginBottom: 36, lineHeight: 1.7 }}>
                   Thousands of women across India trust Saaviya for their most important moments. We&apos;d love to be part of yours.
                 </p>
-                <Link href="/products/all" style={{
+                <a href="https://www.instagram.com/saa.viya" target="_blank" rel="noopener noreferrer" style={{
                   display: "inline-flex",
                   alignItems: "center", gap: 10,
                   background: "#9f523a",
@@ -1222,9 +1222,9 @@ export default function HomePage() {
                   textDecoration: "none",
                   letterSpacing: "0.05em",
                 }}>
-                <i className="bi bi-instagram" style={{ fontSize: "1.1rem" }} />
-                   Follow @saaviya.in
-                </Link>
+                  <i className="bi bi-instagram" style={{ fontSize: "1.1rem" }} />
+                  Follow @saa.viya
+                </a>
               </div>
             </section>
     </>

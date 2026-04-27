@@ -324,17 +324,7 @@ export default function ProductDetailPage() {
           min-width: 40px;
           text-align: center;
         }
-        .shipping-box {
-          background: rgba(32, 201, 151, 0.05);
-          border: 1px solid rgba(32, 201, 151, 0.2);
-          border-left: 4px solid #20c997;
-          padding: 1rem;
-          border-radius: 8px;
-          color: #333;
-        }
-        .shipping-box i {
-          color: #20c997;
-        }
+
         .btn-add-to-cart {
           background: linear-gradient(135deg, #9f523a 0%, #7a3f2c 100%);
           color: white;
@@ -699,12 +689,6 @@ export default function ProductDetailPage() {
             </div>
           </div>
 
-          {/* Shipping note */}
-          <div className="shipping-box mb-4">
-            <i className="bi bi-truck me-2" />
-            <span>Free delivery on orders above ₹999</span>
-          </div>
-
           {/* Actions */}
           <div className="d-flex flex-column gap-2 mb-3" style={{ maxWidth: "520px" }}>
             <button
@@ -759,6 +743,24 @@ export default function ProductDetailPage() {
                 </Link>
               </div>
             )}
+          </div>
+
+          {/* Trust strip */}
+          <div style={{ display: "flex", gap: 0, borderTop: "1px solid #f0ede9", borderBottom: "1px solid #f0ede9", padding: "14px 0", marginBottom: 24 }}>
+            {[
+              { icon: "bi-truck",           text: "Free delivery above ₹999" },
+              { icon: "bi-arrow-return-left", text: "7-day returns" },
+              { icon: "bi-shield-check",    text: "Secure checkout" },
+            ].map((item, i, arr) => (
+              <div key={item.icon} style={{
+                flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 5,
+                padding: "4px 8px",
+                borderRight: i < arr.length - 1 ? "1px solid #f0ede9" : "none",
+              }}>
+                <i className={`bi ${item.icon}`} style={{ fontSize: "1.05rem", color: "#9f523a" }} />
+                <span style={{ fontSize: "0.68rem", fontWeight: 600, color: "#666", textAlign: "center", lineHeight: 1.35 }}>{item.text}</span>
+              </div>
+            ))}
           </div>
 
           {/* Tags */}
