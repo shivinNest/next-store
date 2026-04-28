@@ -96,7 +96,7 @@ export default function NotFound() {
             <i className="bi bi-house" />
             Back to Home
           </Link>
-          <Link href="/products/all" style={{
+          <Link href="/products" style={{
             display: "inline-flex", alignItems: "center", gap: 8,
             background: "#fff",
             color: "#9f523a",
@@ -118,7 +118,7 @@ export default function NotFound() {
           </p>
           <div style={{ display: "flex", gap: 20, justifyContent: "center", flexWrap: "wrap" }}>
             {[
-              { label: "New Arrivals", href: "/products/all?sort=newest" },
+              { label: "New Arrivals", href: "/products?sort=newest" },
               { label: "About Us",    href: "/about" },
               { label: "Contact",     href: "/contact" },
               { label: "FAQs",        href: "/faq" },

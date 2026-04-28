@@ -51,7 +51,7 @@ export default function WishlistPage() {
         <div style={{ textAlign: "center", padding: "64px 20px", background: "#fff", border: "1px solid #ece9e4", borderRadius: 12 }}>
           <p style={{ fontSize: "2.4rem", marginBottom: 12 }}>&#10084;</p>
           <p style={{ fontWeight: 600, color: "#555", marginBottom: 20, fontSize: "0.975rem" }}>Your wishlist is empty</p>
-          <Link href="/products/all" style={{ background: "#9f523a", color: "#fff", padding: "11px 28px", borderRadius: 8, textDecoration: "none", fontWeight: 700, fontSize: "0.875rem" }}>
+          <Link href="/products" style={{ background: "#9f523a", color: "#fff", padding: "11px 28px", borderRadius: 8, textDecoration: "none", fontWeight: 700, fontSize: "0.875rem" }}>
             Browse Products
           </Link>
         </div>

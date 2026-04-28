@@ -281,7 +281,7 @@ export default function AboutPage() {
           }}>
             tells a story.
           </h2>
-          <Link href="/products/all" style={{
+          <Link href="/products" style={{
             display: "inline-flex",
             alignItems: "center",
             gap: 10,

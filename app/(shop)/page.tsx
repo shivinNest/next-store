@@ -600,7 +600,7 @@ export default function HomePage() {
                 <p className="lead" style={{ fontSize: "1.2rem", marginBottom: "2rem", opacity: 0.9 }}>
                   Shop the latest trends in women&apos;s fashion
                 </p>
-                <Link href="/products/all" className="btn btn-light btn-lg mt-3 px-5" style={{ fontWeight: 700, textTransform: "uppercase", letterSpacing: "1px" }}>
+                <Link href="/products" className="btn btn-light btn-lg mt-3 px-5" style={{ fontWeight: 700, textTransform: "uppercase", letterSpacing: "1px" }}>
                   Shop Now
                 </Link>
               </div>
@@ -901,7 +901,7 @@ export default function HomePage() {
         title="New Arrivals"
         products={newProducts}
         loading={loading}
-        viewAllLink="/products/all"
+        viewAllLink="/products"
       />
 
       {/* Promo Banner Divider */}
@@ -924,7 +924,7 @@ export default function HomePage() {
               </p>
               <div className="d-flex flex-wrap gap-3 align-items-center">
                 <Link
-                  href="/products/all?offer=true"
+                  href="/products?offer=true"
                   style={{
                     display: "inline-flex", alignItems: "center", gap: 8,
                     background: "#fff", color: "#9f523a",
@@ -965,7 +965,7 @@ export default function HomePage() {
           title="Trending Now"
           products={trendingProducts}
           loading={loading}
-          viewAllLink="/products/all?trending=true"
+          viewAllLink="/products?trending=true"
         />
       )}
 
@@ -975,7 +975,7 @@ export default function HomePage() {
           <div className="container">
             <div className="d-flex justify-content-between align-items-center mb-4">
               <h2 className="section-title mb-0">Special Offers</h2>
-              <Link href="/products/all?offer=true" className="btn btn-outline-primary btn-sm px-4">
+              <Link href="/products?offer=true" className="btn btn-outline-primary btn-sm px-4">
                 View All
               </Link>
             </div>

@@ -125,7 +125,7 @@ export default function CartPage() {
         <i className="bi bi-bag display-1 text-muted" />
         <h2 className="mt-3 mb-2">Your cart is empty</h2>
         <p className="text-muted">Add some products to your cart to get started!</p>
-        <Link href="/products/all" className="btn btn-primary btn-lg mt-3 px-5">
+        <Link href="/products" className="btn btn-primary btn-lg mt-3 px-5">
           Shop Now
         </Link>
       </div>
@@ -300,7 +300,7 @@ export default function CartPage() {
                   Proceed to Checkout
                 </Link>
                 <Link
-                  href="/products/all"
+                  href="/products"
                   className="btn btn-outline-secondary w-100 mt-2"
                 >
                   Continue Shopping

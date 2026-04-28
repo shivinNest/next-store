@@ -57,10 +57,10 @@ export default function Footer() {
             </p>
             <ul className="list-unstyled" style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
               {[
-                ["New Arrivals", "/products/all?sort=newest"],
-                ["Trending", "/products/all?trending=true"],
-                ["On Sale", "/products/all?offer=true"],
-                ["All Products", "/products/all"],
+                ["New Arrivals", "/products?sort=newest"],
+                ["Trending", "/products?trending=true"],
+                ["On Sale", "/products?offer=true"],
+                ["All Products", "/products"],
                 ["Stories", "/stories"],
                 ["FAQ", "/faq"],
               ].map(([label, href]) => (

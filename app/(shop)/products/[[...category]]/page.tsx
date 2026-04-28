@@ -158,7 +158,7 @@ export default function ProductsPage() {
   const params = useParams();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const categorySlug = params.category as string;
+  const categorySlug = (Array.isArray(params.category) ? params.category[0] : params.category as string) || "all";
 
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -409,7 +409,7 @@ export default function ProductsPage() {
               <ul className="list-unstyled mb-0">
                 <li>
                   <Link
-                    href="/products/all"
+                    href="/products"
                     className={`category-link ${categorySlug === "all" ? "active" : ""}`}
                   >
                     All Products
@@ -497,7 +497,7 @@ export default function ProductsPage() {
               <i className="bi bi-bag-x" style={{ fontSize: "3rem", color: "#9f523a" }} />
               <h5 className="mt-3" style={{ color: "#666", fontWeight: 600 }}>No products found</h5>
               <p style={{ color: "#999", fontSize: "0.95rem" }}>Try adjusting your filters or search terms</p>
-              <Link href="/products/all" className="btn btn-primary mt-3" style={{
+              <Link href="/products" className="btn btn-primary mt-3" style={{
                 background: "linear-gradient(135deg, #9f523a, #7a3f2c)",
                 border: "none",
                 padding: "10px 24px",

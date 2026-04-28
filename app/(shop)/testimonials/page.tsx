@@ -425,7 +425,7 @@ export default function TestimonialsPage() {
             </p>
 
             <Link
-              href="/products/all"
+              href="/products"
               style={{
                 display: "inline-flex", alignItems: "center", gap: 9,
                 background: "linear-gradient(135deg, #9f523a, #7a3f2c)",

@@ -98,7 +98,7 @@ export default function Navbar() {
     if (query) {
       saveSearch(query);
       setShowRecent(false);
-      router.push(`/products/all?search=${encodeURIComponent(query)}`);
+      router.push(`/products?search=${encodeURIComponent(query)}`);
     }
   };
 
@@ -106,7 +106,7 @@ export default function Navbar() {
     setSearchQuery(term);
     saveSearch(term);
     setShowRecent(false);
-    router.push(`/products/all?search=${encodeURIComponent(term)}`);
+    router.push(`/products?search=${encodeURIComponent(term)}`);
   };
 
   const removeRecentSearch = (e: React.MouseEvent, term: string) => {
@@ -361,7 +361,7 @@ export default function Navbar() {
 
           <ul className="navbar-nav ms-auto align-items-center gap-3">
             <li className="nav-item">
-              <Link className="nav-link" href="/products/all">
+              <Link className="nav-link" href="/products">
                 Shop
               </Link>
             </li>

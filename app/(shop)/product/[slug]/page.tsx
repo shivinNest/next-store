@@ -63,10 +63,10 @@ export default function ProductDetailPage() {
         if (d.success) {
           setProduct(d.data);
         } else {
-          router.replace("/products/all");
+          router.replace("/products");
         }
       })
-      .catch(() => router.replace("/products/all"))
+      .catch(() => router.replace("/products"))
       .finally(() => setLoading(false));
 
     // Fetch related products in parallel
@@ -216,19 +216,42 @@ export default function ProductDetailPage() {
           from { opacity: 0; transform: translateY(10px); }
           to { opacity: 1; transform: translateY(0); }
         }
-        .breadcrumb {
-          background: rgba(159, 82, 58, 0.03);
-          border: 1px solid rgba(159, 82, 58, 0.08);
-          padding: 12px 16px;
-          border-radius: 8px;
+        .bc-nav {
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 0;
+          list-style: none;
+          padding: 0;
+          margin: 0;
         }
-        .breadcrumb-item a {
-          color: #9f523a;
+        .bc-item {
+          display: flex;
+          align-items: center;
+          font-size: 0.78rem;
+          font-weight: 500;
+          letter-spacing: 0.01em;
+        }
+        .bc-item a {
+          color: #b07a66;
           text-decoration: none;
-          transition: color 0.3s;
+          transition: color 0.15s;
         }
-        .breadcrumb-item a:hover {
+        .bc-item a:hover {
           color: #7a3f2c;
+        }
+        .bc-sep {
+          margin: 0 7px;
+          color: #d4c4bb;
+          font-size: 0.65rem;
+        }
+        .bc-active {
+          color: #2d1a12;
+          font-weight: 600;
+          max-width: 220px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
         .product-img-container {
           background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
@@ -453,16 +476,18 @@ export default function ProductDetailPage() {
 
       {/* Breadcrumb */}
       <nav aria-label="breadcrumb" className="mb-4">
-        <ol className="breadcrumb mb-0">
-          <li className="breadcrumb-item"><Link href="/">Home</Link></li>
+        <ol className="bc-nav">
+          <li className="bc-item"><Link href="/">Home</Link></li>
           {product.category && (
-            <li className="breadcrumb-item">
-              <Link href={`/products/${product.category.slug}`}>{product.category.name}</Link>
-            </li>
+            <>
+              <li className="bc-item"><span className="bc-sep">&#8250;</span></li>
+              <li className="bc-item">
+                <Link href={`/products/${product.category.slug}`}>{product.category.name}</Link>
+              </li>
+            </>
           )}
-          <li className="breadcrumb-item active text-truncate" style={{ maxWidth: 200 }}>
-            {product.name}
-          </li>
+          <li className="bc-item"><span className="bc-sep">&#8250;</span></li>
+          <li className="bc-item"><span className="bc-active">{product.name}</span></li>
         </ol>
       </nav>
 

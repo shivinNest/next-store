@@ -1,16 +1,22 @@
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 
-type Props = { params: Promise<{ category: string }> };
+type Props = { params: Promise<{ category?: string[] }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { category } = await params;
+  const slug = Array.isArray(category) ? category[0] : undefined;
+
+  if (!slug || slug === "all") {
+    return { title: "All Products" };
+  }
+
   const cat = await prisma.category.findUnique({
-    where: { slug: category },
+    where: { slug },
     select: { name: true, description: true },
   });
   if (!cat) {
-    const label = category.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+    const label = slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
     return { title: label };
   }
   return {
