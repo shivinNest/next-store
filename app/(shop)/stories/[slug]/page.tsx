@@ -87,13 +87,42 @@ export default function BlogDetailPage() {
           max-width: 800px;
           margin: 0 auto;
         }
-        .breadcrumb-link {
-          color: #9f523a;
-          text-decoration: none;
+        .bc-nav {
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 0;
+          list-style: none;
+          padding: 0;
+          margin: 0;
         }
-        .breadcrumb-link:hover {
+        .bc-item {
+          display: flex;
+          align-items: center;
+          font-size: 0.78rem;
+          font-weight: 500;
+          letter-spacing: 0.01em;
+        }
+        .bc-item a {
+          color: #b07a66;
+          text-decoration: none;
+          transition: color 0.15s;
+        }
+        .bc-item a:hover {
           color: #7a3f2c;
-          text-decoration: underline;
+        }
+        .bc-sep {
+          margin: 0 7px;
+          color: #d4c4bb;
+          font-size: 0.65rem;
+        }
+        .bc-active {
+          color: #2d1a12;
+          font-weight: 600;
+          max-width: 300px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
         .badge-tag {
           background-color: #f0f0f0 !important;
@@ -199,16 +228,12 @@ export default function BlogDetailPage() {
         <article className="blog-detail-container">
           {/* Breadcrumb */}
           <nav aria-label="breadcrumb" className="mb-4">
-            <ol className="breadcrumb">
-              <li className="breadcrumb-item">
-                <Link href="/" className="breadcrumb-link">Home</Link>
-              </li>
-              <li className="breadcrumb-item">
-                <Link href="/stories" className="breadcrumb-link">Stories</Link>
-              </li>
-              <li className="breadcrumb-item active text-truncate" style={{ maxWidth: 300 }}>
-                {blog.title}
-              </li>
+            <ol className="bc-nav">
+              <li className="bc-item"><Link href="/">Home</Link></li>
+              <li className="bc-item"><span className="bc-sep">&#8250;</span></li>
+              <li className="bc-item"><Link href="/stories">Stories</Link></li>
+              <li className="bc-item"><span className="bc-sep">&#8250;</span></li>
+              <li className="bc-item"><span className="bc-active">{blog.title}</span></li>
             </ol>
           </nav>
 

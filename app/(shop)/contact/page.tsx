@@ -15,7 +15,7 @@ const CONTACT_DETAILS = [
   {
     icon: "bi-telephone-fill",
     title: "Call Us",
-    lines: ["+91 94001 46232", "+91 98765 43211"],
+    lines: ["+91 94001 46232"],
   },
   {
     icon: "bi-clock-fill",
