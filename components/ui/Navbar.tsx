@@ -71,6 +71,14 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
+    const navMenu = document.getElementById("navMenu");
+    if (navMenu?.classList.contains("show")) {
+      const toggler = document.querySelector(".navbar-toggler") as HTMLButtonElement;
+      toggler?.click();
+    }
+  }, [pathname]);
+
+  useEffect(() => {
     fetchUser();
   }, [fetchUser, pathname]);
 
@@ -265,7 +273,7 @@ export default function Navbar() {
             width={130}
             height={50}
             priority
-            style={{ width: 'auto', height: 'auto' }}
+            style={{ width: '160px', height: 'auto' }}
           />
         </Link>
 

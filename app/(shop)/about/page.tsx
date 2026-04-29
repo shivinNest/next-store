@@ -114,41 +114,7 @@ export default function AboutPage() {
       </section>
 
       {/* Stats Strip */}
-      <section style={{ background: "linear-gradient(135deg, #1a0c08 0%, #2d1510 100%)", padding: "60px 0", position: "relative", overflow: "hidden" }}>
-        {/* Ghost brand watermark */}
-        <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
-          <span style={{ fontSize: "clamp(6rem, 20vw, 16rem)", fontWeight: 900, color: "rgba(255,255,255,0.025)", letterSpacing: "-0.06em", lineHeight: 1, whiteSpace: "nowrap" }}>SAAVIYA</span>
-        </div>
-        <div className="container position-relative">
-          <div className="row g-0">
-            {[
-              { number: "10", suffix: "K+", label: "Happy Customers",    icon: "bi-people-fill" },
-              { number: "500", suffix: "+",  label: "Styles Available",  icon: "bi-bag-heart-fill" },
-              { number: "100", suffix: "%",  label: "Authentic Products", icon: "bi-patch-check-fill" },
-              { number: "7",   suffix: "-Day", label: "Easy Returns",    icon: "bi-arrow-repeat" },
-            ].map((s, i) => (
-              <div key={s.label} className="col-6 col-md-3">
-                <div style={{
-                  textAlign: "center",
-                  padding: "28px 16px",
-                  borderRight: i < 3 ? "1px solid rgba(255,255,255,0.07)" : "none",
-                  borderBottom: i < 2 ? "1px solid rgba(255,255,255,0.07)" : "none",
-                }}>
-                  <div style={{ fontSize: "1.4rem", color: "#c87a5a", marginBottom: 12, opacity: 0.9 }}>
-                    <i className={`bi ${s.icon}`} />
-                  </div>
-                  <div style={{ lineHeight: 1 }}>
-                    <span style={{ fontSize: "clamp(2rem,4vw,2.8rem)", fontWeight: 900, color: "#fff", letterSpacing: "-2px" }}>{s.number}</span>
-                    <span style={{ fontSize: "clamp(1rem,2vw,1.4rem)", fontWeight: 700, color: "#c87a5a", letterSpacing: "-1px" }}>{s.suffix}</span>
-                  </div>
-                  <div style={{ fontSize: "0.78rem", color: "rgba(255,255,255,0.45)", marginTop: 8, fontWeight: 500, letterSpacing: "0.08em", textTransform: "uppercase" }}>{s.label}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
+   
       {/* Mission & Vision */}
       <section style={{ padding: "96px 0", background: "#fff" }}>
         <div className="container">
@@ -349,6 +315,51 @@ export default function AboutPage() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Founder */}
+      <section style={{ padding: "96px 0", background: "#faf9f7" }}>
+        <div className="container">
+          <div className="text-center" style={{ maxWidth: 520, margin: "0 auto 60px" }}>
+            <span className={`${styles.badge} mb-3 d-inline-flex`}>
+              <i className="bi bi-person-heart" />
+              Meet the Founder
+            </span>
+            <h2 style={{ fontSize: "clamp(1.7rem, 3vw, 2.3rem)", fontWeight: 800, color: "#111", lineHeight: 1.2, letterSpacing: "-0.03em", margin: 0 }}>The person behind Saaviya</h2>
+          </div>
+          <div className="row g-5 align-items-center justify-content-center">
+            {/* Founder image */}
+            <div className="col-lg-4 col-md-5 col-10 mx-auto">
+              <div className={styles.founderImgWrap}>
+                <Image
+                  src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&h=720&fit=crop&crop=face"
+                  alt="Sneha Satheesan — Founder, Saaviya"
+                  fill
+                  sizes="(max-width: 768px) 80vw, 33vw"
+                  style={{ objectFit: "cover", objectPosition: "center top" }}
+                />
+                <div className={styles.founderImgOverlay} />
+              </div>
+            </div>
+            {/* Founder text */}
+            <div className="col-lg-6 col-md-7">
+              <p style={{ fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#9f523a", marginBottom: 14 }}>Founder &amp; Creative Director</p>
+              <h3 style={{ fontSize: "clamp(1.8rem, 3vw, 2.6rem)", fontWeight: 800, color: "#111", lineHeight: 1.15, letterSpacing: "-0.03em", marginBottom: 20 }}>
+                Sneha Satheesan
+              </h3>
+              <p style={{ fontSize: "0.975rem", color: "#555", lineHeight: 1.85, marginBottom: 16 }}>
+                Placeholder — replace with your story. Talk about what inspired you to start Saaviya, your background, your passion for Indian fashion and craftsmanship, and what drives you every day.
+              </p>
+              <p style={{ fontSize: "0.975rem", color: "#555", lineHeight: 1.85, marginBottom: 28 }}>
+                Placeholder — continue your story here. Share your vision for Saaviya, what you believe in, and what you hope customers feel when they wear your pieces.
+              </p>
+              <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                <div style={{ width: 48, height: 1.5, background: "#9f523a", borderRadius: 2 }} />
+                <span style={{ fontSize: "0.88rem", fontWeight: 600, color: "#9f523a", fontStyle: "italic", letterSpacing: "0.02em" }}>Sneha Satheesan</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
