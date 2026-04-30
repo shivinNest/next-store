@@ -4,10 +4,18 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 
+const FROM_MESSAGES: Record<string, { icon: string; text: string }> = {
+  cart: { icon: "bi-bag-plus", text: "Please sign in to add items to your cart." },
+  wishlist: { icon: "bi-heart", text: "Please sign in to save items to your wishlist." },
+  checkout: { icon: "bi-lock", text: "Please sign in to continue to checkout." },
+};
+
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") || "/";
+  const fromKey = searchParams.get("from") ?? "";
+  const fromMsg = FROM_MESSAGES[fromKey] ?? null;
 
   const [form, setForm] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
@@ -66,6 +74,14 @@ function LoginForm() {
 
   return (
     <div className="w-100" style={{ maxWidth: 550 }}>
+      {/* Auth action notice */}
+      {fromMsg && (
+        <div className="login-from-notice">
+          <i className={`bi ${fromMsg.icon}`} />
+          {fromMsg.text}
+        </div>
+      )}
+
       {/* Back to store */}
       <div className="text-center mb-3">
         <Link href="/" className="text-decoration-none d-inline-flex align-items-center gap-1" style={{ fontSize: "0.8rem", color: "#9f523a", fontWeight: 600 }}>
@@ -267,6 +283,28 @@ export default function LoginPage() {
 }
 
 const authStyles = `
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .login-from-notice {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #fff8f5;
+    border: 1.5px solid rgba(159,82,58,0.25);
+    color: #9f523a;
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 18px;
+    animation: slideDown 0.35s cubic-bezier(0.16,1,0.3,1) both;
+  }
+  .login-from-notice .bi {
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
   .auth-label {
     display: block;
     font-size: 0.78rem;

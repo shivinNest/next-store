@@ -90,7 +90,7 @@ export default function ProductDetailPage() {
         body: JSON.stringify({ productId: product!.id, size: selectedSize, quantity }),
       });
       if (res.status === 401) {
-        router.push("/login?redirect=" + encodeURIComponent(window.location.pathname));
+        router.push("/login?redirect=" + encodeURIComponent(window.location.pathname) + "&from=cart");
         return;
       }
       const data = await res.json();
@@ -119,7 +119,7 @@ export default function ProductDetailPage() {
           body: JSON.stringify({ productId: product!.id }),
         });
         if (res.ok) setInWishlist(true);
-        if (res.status === 401) router.push("/login");
+        if (res.status === 401) router.push("/login?redirect=" + encodeURIComponent(window.location.pathname) + "&from=wishlist");
       }
     } finally {
       setWishlistLoading(false);

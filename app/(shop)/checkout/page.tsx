@@ -46,7 +46,7 @@ export default function CheckoutPage() {
       ]);
 
       if (cartRes.status === 401) {
-        router.push("/login?redirect=/checkout");
+        router.push("/login?redirect=/checkout&from=checkout");
         return;
       }
 

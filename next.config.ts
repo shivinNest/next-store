@@ -32,7 +32,7 @@ const nextConfig: NextConfig = {
           value: "saaviya.in",
         },
       ],
-      destination: "https://saaviya.in/:path*",
+      destination: "https://www.saaviya.in/:path*",
       permanent: true,
     },
   ],
