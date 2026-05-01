@@ -34,6 +34,7 @@ export async function POST(req: NextRequest) {
 
     const addressId = formData.get("addressId") as string;
     const screenshotFile = formData.get("paymentScreenshot") as File | null;
+    const couponCode = (formData.get("couponCode") as string | null)?.trim().toUpperCase() || null;
 
     if (!addressId) {
       return NextResponse.json(
@@ -80,7 +81,34 @@ export async function POST(req: NextRequest) {
     const shippingFee = parseInt(process.env.SHIPPING_CHARGE || "50", 10);
     const freeThreshold = parseInt(process.env.FREE_SHIPPING_THRESHOLD || "999", 10);
     const shippingCharge = subtotal >= freeThreshold ? 0 : shippingFee;
-    const total = subtotal + shippingCharge;
+
+    // Validate coupon if provided
+    let couponDiscount = 0;
+    let appliedCoupon = null;
+    if (couponCode) {
+      appliedCoupon = await prisma.coupon.findUnique({
+        where: { code: couponCode },
+        include: { usages: { where: { userId: user.id } } },
+      });
+
+      if (
+        appliedCoupon &&
+        appliedCoupon.isActive &&
+        (!appliedCoupon.expiresAt || appliedCoupon.expiresAt >= new Date()) &&
+        (appliedCoupon.maxUses === null || appliedCoupon.usedCount < appliedCoupon.maxUses) &&
+        appliedCoupon.usages.length < appliedCoupon.maxUsesPerUser &&
+        (!appliedCoupon.minOrderAmount || subtotal >= Number(appliedCoupon.minOrderAmount))
+      ) {
+        couponDiscount =
+          appliedCoupon.discountType === "PERCENTAGE"
+            ? Math.round((subtotal * Number(appliedCoupon.discountValue)) / 100)
+            : Math.min(Number(appliedCoupon.discountValue), subtotal);
+      } else {
+        appliedCoupon = null; // invalid — ignore silently, order proceeds without discount
+      }
+    }
+
+    const total = subtotal + shippingCharge - couponDiscount;
 
     // Create order
     const order = await prisma.order.create({
@@ -90,6 +118,8 @@ export async function POST(req: NextRequest) {
         addressId,
         subtotal,
         shippingCharge,
+        couponCode: appliedCoupon ? appliedCoupon.code : null,
+        couponDiscount,
         total,
         paymentScreenshot: screenshotUrl,
         items: {
@@ -106,6 +136,19 @@ export async function POST(req: NextRequest) {
       include: { items: true, address: true },
     });
 
+    // Record coupon usage and increment counter
+    if (appliedCoupon) {
+      await prisma.$transaction([
+        prisma.couponUsage.create({
+          data: { couponId: appliedCoupon.id, userId: user.id, orderId: order.id },
+        }),
+        prisma.coupon.update({
+          where: { id: appliedCoupon.id },
+          data: { usedCount: { increment: 1 } },
+        }),
+      ]);
+    }
+
     // Clear cart
     await prisma.cartItem.deleteMany({ where: { userId: user.id } });
 
@@ -114,11 +157,31 @@ export async function POST(req: NextRequest) {
     if (fullUser) {
       sendEmail({
         to: fullUser.email,
-        subject: `Order #${order.orderNumber} received - saaviya.in`,
+        subject: `Order #${order.orderNumber} confirmed - Saaviya`,
         html: orderConfirmationTemplate(
           fullUser.name,
           order.orderNumber,
-          total.toFixed(2)
+          subtotal.toFixed(2),
+          shippingCharge.toFixed(2),
+          appliedCoupon ? appliedCoupon.code : null,
+          couponDiscount.toFixed(2),
+          total.toFixed(2),
+          order.items.map((i) => ({
+            name: i.name,
+            image: i.image,
+            size: i.size,
+            quantity: i.quantity,
+            price: Number(i.price),
+          })),
+          {
+            name: address.name,
+            phone: address.phone,
+            line1: address.line1,
+            line2: address.line2,
+            city: address.city,
+            state: address.state,
+            pincode: address.pincode,
+          }
         ),
       }).catch(console.error);
     }

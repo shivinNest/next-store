@@ -55,6 +55,8 @@ export default function ProductDetailPage() {
   const [wishlistLoading, setWishlistLoading] = useState(false);
   const [inWishlist, setInWishlist] = useState(false);
   const [error, setError] = useState("");
+  const [sizeChartOpen, setSizeChartOpen] = useState(false);
+  const [sizeChartTab, setSizeChartTab] = useState<"chart" | "measure">("chart");
 
   useEffect(() => {
     fetch(`/api/products/${slug}`)
@@ -472,6 +474,156 @@ export default function ProductDetailPage() {
           background: rgba(159, 82, 58, 0.15);
           border-color: rgba(159, 82, 58, 0.3);
         }
+        /* ── Size Chart Trigger ── */
+        .size-chart-trigger {
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          background: none;
+          border: 1.5px solid rgba(159,82,58,0.35);
+          color: #9f523a;
+          border-radius: 20px;
+          padding: 4px 13px;
+          font-size: 0.75rem;
+          font-weight: 700;
+          letter-spacing: 0.02em;
+          cursor: pointer;
+          transition: background 0.18s, border-color 0.18s;
+        }
+        .size-chart-trigger:hover {
+          background: rgba(159,82,58,0.07);
+          border-color: #9f523a;
+        }
+        /* ── Size Chart Drawer ── */
+        @keyframes scSlideIn {
+          from { transform: translateX(100%); }
+          to   { transform: translateX(0); }
+        }
+        @keyframes scFadeIn {
+          from { opacity: 0; }
+          to   { opacity: 1; }
+        }
+        .sc-overlay {
+          position: fixed;
+          inset: 0;
+          background: rgba(0,0,0,0.45);
+          z-index: 1050;
+          animation: scFadeIn 0.25s ease both;
+        }
+        .sc-drawer {
+          position: fixed;
+          top: 0;
+          right: 0;
+          height: 100%;
+          width: min(480px, 100vw);
+          background: #fff;
+          z-index: 1051;
+          display: flex;
+          flex-direction: column;
+          animation: scSlideIn 0.32s cubic-bezier(0.16,1,0.3,1) both;
+          box-shadow: -8px 0 40px rgba(0,0,0,0.18);
+        }
+        .sc-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 20px 24px 0;
+          border-bottom: 1px solid #f0ebe6;
+          padding-bottom: 0;
+        }
+        .sc-title {
+          font-size: 1rem;
+          font-weight: 800;
+          color: #1a1a1a;
+          letter-spacing: -0.01em;
+          margin: 0;
+        }
+        .sc-close {
+          width: 34px;
+          height: 34px;
+          border-radius: 50%;
+          border: 1.5px solid #e8e0da;
+          background: #faf8f6;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.1rem;
+          color: #666;
+          transition: background 0.15s;
+          flex-shrink: 0;
+        }
+        .sc-close:hover { background: #f0ebe6; color: #333; }
+        .sc-tabs {
+          display: flex;
+          gap: 0;
+          padding: 16px 24px 0;
+          border-bottom: 1px solid #f0ebe6;
+        }
+        .sc-tab {
+          flex: 1;
+          background: none;
+          border: none;
+          border-bottom: 2.5px solid transparent;
+          padding: 10px 6px 12px;
+          font-size: 0.83rem;
+          font-weight: 700;
+          color: #aaa;
+          cursor: pointer;
+          letter-spacing: 0.02em;
+          transition: color 0.15s, border-color 0.15s;
+          text-align: center;
+        }
+        .sc-tab.active {
+          color: #9f523a;
+          border-bottom-color: #9f523a;
+        }
+        .sc-body {
+          flex: 1;
+          overflow-y: auto;
+          padding: 24px;
+        }
+        /* Size chart table */
+        .sc-table {
+          width: 100%;
+          border-collapse: collapse;
+          font-size: 0.85rem;
+        }
+        .sc-table th {
+          background: #faf4f1;
+          color: #9f523a;
+          font-weight: 700;
+          font-size: 0.74rem;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+          padding: 10px 14px;
+          border: 1px solid #f0ebe6;
+          text-align: center;
+        }
+        .sc-table td {
+          padding: 10px 14px;
+          border: 1px solid #f0ebe6;
+          text-align: center;
+          color: #333;
+          font-weight: 500;
+        }
+        .sc-table tr:hover td { background: #fdf9f7; }
+        .sc-table td:first-child {
+          font-weight: 800;
+          color: #9f523a;
+          background: #fdf9f7;
+        }
+        .sc-unit-note {
+          font-size: 0.74rem;
+          color: #aaa;
+          margin-top: 10px;
+          text-align: right;
+        }
+        .sc-measure-img {
+          width: 100%;
+          border-radius: 10px;
+          border: 1px solid #f0ebe6;
+        }
       `}</style>
 
       {/* Breadcrumb */}
@@ -669,9 +821,19 @@ export default function ProductDetailPage() {
 
           {/* Size selector */}
           <div className="mb-4">
-            <h6 className="fw-bold mb-2" style={{ fontSize: "0.9rem", textTransform: "uppercase", letterSpacing: "1px", color: "#1a1a1a" }}>
-              Select Size
-            </h6>
+            <div className="d-flex align-items-center gap-3 mb-2">
+              <h6 className="fw-bold mb-0" style={{ fontSize: "0.9rem", textTransform: "uppercase", letterSpacing: "1px", color: "#1a1a1a" }}>
+                Select Size
+              </h6>
+              <button
+                type="button"
+                className="size-chart-trigger"
+                onClick={() => { setSizeChartOpen(true); setSizeChartTab("chart"); }}
+              >
+                <i className="bi bi-rulers" />
+                Size Chart
+              </button>
+            </div>
             <div className="d-flex gap-2 flex-wrap mb-2">
               {product.sizes.map((s) => (
                 <button
@@ -902,6 +1064,114 @@ export default function ProductDetailPage() {
             })}
           </div>
         </section>
+      )}
+
+      {/* ── Size Chart Drawer ── */}
+      {sizeChartOpen && (
+        <>
+          <div className="sc-overlay" onClick={() => setSizeChartOpen(false)} />
+          <div className="sc-drawer" role="dialog" aria-modal="true" aria-label="Size Chart">
+            {/* Header */}
+            <div className="sc-header">
+              <p className="sc-title">Size Guide</p>
+              <button className="sc-close" onClick={() => setSizeChartOpen(false)} aria-label="Close">
+                <i className="bi bi-x-lg" />
+              </button>
+            </div>
+
+            {/* Tabs */}
+            <div className="sc-tabs">
+              <button
+                className={`sc-tab${sizeChartTab === "chart" ? " active" : ""}`}
+                onClick={() => setSizeChartTab("chart")}
+              >
+                <i className="bi bi-table me-1" />Size Chart
+              </button>
+              <button
+                className={`sc-tab${sizeChartTab === "measure" ? " active" : ""}`}
+                onClick={() => setSizeChartTab("measure")}
+              >
+                <i className="bi bi-arrows-angle-expand me-1" />How to Measure
+              </button>
+            </div>
+
+            {/* Body */}
+            <div className="sc-body">
+              {sizeChartTab === "chart" && (
+                <>
+                  <p style={{ fontSize: "0.78rem", color: "#999", marginBottom: 16 }}>
+                    All measurements are in <strong>inches</strong>. Select the size that best matches your measurements.
+                  </p>
+                  <table className="sc-table">
+                    <thead>
+                      <tr>
+                        <th>Size</th>
+                        <th>Chest</th>
+                        <th>Waist</th>
+                        <th>Hip</th>
+                        <th>Length</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>S</td><td>34–36</td><td>26–28</td><td>36–38</td><td>40</td></tr>
+                      <tr><td>M</td><td>37–39</td><td>29–31</td><td>39–41</td><td>41</td></tr>
+                      <tr><td>L</td><td>40–42</td><td>32–34</td><td>42–44</td><td>42</td></tr>
+                      <tr><td>XL</td><td>43–45</td><td>35–37</td><td>45–47</td><td>43</td></tr>
+                      <tr><td>XXL</td><td>46–48</td><td>38–40</td><td>48–50</td><td>44</td></tr>
+                    </tbody>
+                  </table>
+                  <p className="sc-unit-note">* Measurements may vary ±1 inch</p>
+
+                  <div style={{ marginTop: 20, padding: "14px 16px", background: "#fdf9f7", borderRadius: 10, border: "1px solid #f0ebe6" }}>
+                    <p style={{ fontSize: "0.78rem", fontWeight: 700, color: "#9f523a", marginBottom: 6 }}>
+                      <i className="bi bi-lightbulb me-1" />Fit Tips
+                    </p>
+                    <ul style={{ fontSize: "0.78rem", color: "#666", margin: 0, paddingLeft: 18, lineHeight: 1.7 }}>
+                      <li>If between sizes, size up for a comfortable fit.</li>
+                      <li>Measurements are of the garment, not the body.</li>
+                      <li>Check the &quot;How to Measure&quot; tab for guidance.</li>
+                    </ul>
+                  </div>
+                </>
+              )}
+
+              {sizeChartTab === "measure" && (
+                <>
+                  <p style={{ fontSize: "0.78rem", color: "#999", marginBottom: 16 }}>
+                    Follow the guide below for accurate body measurements.
+                  </p>
+                  <Image
+                    src="/assets/Topwear22309612024.jpg"
+                    alt="How to measure"
+                    width={480}
+                    height={640}
+                    className="sc-measure-img"
+                    style={{ width: "100%", height: "auto" }}
+                  />
+
+                  <div style={{ marginTop: 20 }}>
+                    {[
+                      { label: "Chest", icon: "bi-arrows-expand", desc: "Measure around the fullest part of your chest, keeping the tape horizontal." },
+                      { label: "Waist", icon: "bi-arrows-collapse-vertical", desc: "Measure around your natural waistline, the narrowest part of your torso." },
+                      { label: "Hip", icon: "bi-arrows-expand", desc: "Measure around the fullest part of your hips, about 8 inches below your waist." },
+                      { label: "Length", icon: "bi-arrow-down", desc: "Measure from the highest point of the shoulder down to the desired hem." },
+                    ].map((m) => (
+                      <div key={m.label} style={{ display: "flex", gap: 12, marginBottom: 14 }}>
+                        <div style={{ width: 34, height: 34, borderRadius: "50%", background: "rgba(159,82,58,0.08)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                          <i className={`bi ${m.icon}`} style={{ color: "#9f523a", fontSize: "0.9rem" }} />
+                        </div>
+                        <div>
+                          <p style={{ fontSize: "0.8rem", fontWeight: 700, color: "#222", marginBottom: 2 }}>{m.label}</p>
+                          <p style={{ fontSize: "0.75rem", color: "#888", margin: 0, lineHeight: 1.5 }}>{m.desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        </>
       )}
     </div>
   );

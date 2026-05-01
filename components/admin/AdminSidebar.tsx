@@ -10,6 +10,7 @@ const navLinks = [
   { href: "/admin/banners", icon: "bi-image", label: "Banners" },
   { href: "/admin/testimonials", icon: "bi-chat-quote", label: "Testimonials" },
   { href: "/admin/orders", icon: "bi-clipboard-check", label: "Orders" },
+  { href: "/admin/coupons", icon: "bi-ticket-perforated", label: "Coupons" },
   { href: "/admin/users", icon: "bi-people", label: "Users" },
   { href: "/admin/blogs", icon: "bi-journal-text", label: "Stories" },
 ];

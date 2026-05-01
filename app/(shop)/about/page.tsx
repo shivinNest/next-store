@@ -87,7 +87,7 @@ export default function AboutPage() {
                 <span style={{ color: "#9f523a", display: "block" }}>designed for today.</span>
               </h2>
               <p style={{ fontSize: "0.975rem", color: "#555", lineHeight: 1.8, marginBottom: 16 }}>
-                Founded in 2024, Saaviya is a women&apos;s ethnic fashion brand curated for the contemporary Indian woman. We work with skilled artisans across India to bring you handcrafted pieces that honour tradition while embracing modern silhouettes.
+                Founded in 2026, Saaviya is a women&apos;s ethnic fashion brand curated for the contemporary Indian woman. We work with skilled artisans across India to bring you handcrafted pieces that honour tradition while embracing modern silhouettes.
               </p>
               <p style={{ fontSize: "0.975rem", color: "#555", lineHeight: 1.8, marginBottom: 16 }}>
                 From daily kurtas to celebration lehengas, every piece in our collection is chosen for its quality, craft, and timeless appeal.
@@ -335,7 +335,7 @@ export default function AboutPage() {
               <div className={styles.founderImgWrap}>
                 <Image
                   src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&h=720&fit=crop&crop=face"
-                  alt="Sneha Satheesan — Founder, Saaviya"
+                  alt="Snaha Satheesan — Founder, Saaviya"
                   fill
                   sizes="(max-width: 768px) 80vw, 33vw"
                   style={{ objectFit: "cover", objectPosition: "center top" }}
@@ -345,19 +345,19 @@ export default function AboutPage() {
             </div>
             {/* Founder text */}
             <div className="col-lg-6 col-md-7">
-              <p style={{ fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#9f523a", marginBottom: 14 }}>Founder &amp; Creative Director</p>
+              <p style={{ fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#9f523a", marginBottom: 14 }}>Founder, Saaviya</p>
               <h3 style={{ fontSize: "clamp(1.8rem, 3vw, 2.6rem)", fontWeight: 800, color: "#111", lineHeight: 1.15, letterSpacing: "-0.03em", marginBottom: 20 }}>
-                Sneha Satheesan
+                Snaha Satheesan
               </h3>
               <p style={{ fontSize: "0.975rem", color: "#555", lineHeight: 1.85, marginBottom: 16 }}>
-                Placeholder — replace with your story. Talk about what inspired you to start Saaviya, your background, your passion for Indian fashion and craftsmanship, and what drives you every day.
+                Snaha Satheesan is a passionate fashion enthusiast who has been deeply involved in the world of style and ethnic wear since 2020. With years of hands-on experience understanding what modern Indian women truly want to wear, she turned her passion into purpose.
               </p>
               <p style={{ fontSize: "0.975rem", color: "#555", lineHeight: 1.85, marginBottom: 28 }}>
-                Placeholder — continue your story here. Share your vision for Saaviya, what you believe in, and what you hope customers feel when they wear your pieces.
+                In 2026, she founded Saaviya — a brand built on the belief that every woman deserves fashion that is authentic, beautiful, and made for her. From carefully curated kurtas to celebration-ready lehengas, Saaviya reflects Snaha&apos;s vision of fashion that honours Indian craft while speaking to the contemporary woman.
               </p>
               <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
                 <div style={{ width: 48, height: 1.5, background: "#9f523a", borderRadius: 2 }} />
-                <span style={{ fontSize: "0.88rem", fontWeight: 600, color: "#9f523a", fontStyle: "italic", letterSpacing: "0.02em" }}>Sneha Satheesan</span>
+                <span style={{ fontSize: "0.88rem", fontWeight: 600, color: "#9f523a", fontStyle: "italic", letterSpacing: "0.02em" }}>Snaha Satheesan</span>
               </div>
             </div>
           </div>

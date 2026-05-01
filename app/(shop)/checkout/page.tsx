@@ -37,6 +37,12 @@ export default function CheckoutPage() {
   const [step, setStep] = useState<1 | 2 | 3>(1); // 1=address, 2=payment, 3=success
   const [orderNumber, setOrderNumber] = useState("");
   const [error, setError] = useState("");
+  const [couponCode, setCouponCode] = useState("");
+  const [couponApplied, setCouponApplied] = useState<{
+    code: string; discountAmount: number; description: string | null; discountType: string; discountValue: number;
+  } | null>(null);
+  const [couponError, setCouponError] = useState("");
+  const [couponLoading, setCouponLoading] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -77,6 +83,36 @@ export default function CheckoutPage() {
     }
   };
 
+  const handleApplyCoupon = async () => {
+    if (!couponCode.trim()) return;
+    setCouponLoading(true);
+    setCouponError("");
+    try {
+      const res = await fetch("/api/coupons/validate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: couponCode.trim(), subtotal }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setCouponApplied(data.data);
+      } else {
+        setCouponError(data.error || "Invalid coupon");
+        setCouponApplied(null);
+      }
+    } catch {
+      setCouponError("Failed to apply coupon");
+    } finally {
+      setCouponLoading(false);
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    setCouponApplied(null);
+    setCouponCode("");
+    setCouponError("");
+  };
+
   const handlePlaceOrder = async () => {
     if (!selectedAddress) {
       setError("Please select a delivery address");
@@ -93,6 +129,9 @@ export default function CheckoutPage() {
     const formData = new FormData();
     formData.append("addressId", selectedAddress);
     formData.append("paymentScreenshot", screenshot);
+    if (couponApplied) {
+      formData.append("couponCode", couponApplied.code);
+    }
 
     try {
       const res = await fetch("/api/orders", { method: "POST", body: formData });
@@ -117,7 +156,8 @@ export default function CheckoutPage() {
   const shippingFee = parseInt(process.env.NEXT_PUBLIC_SHIPPING_CHARGE || "50", 10);
   const freeThreshold = parseInt(process.env.NEXT_PUBLIC_FREE_SHIPPING_THRESHOLD || "999", 10);
   const shipping = subtotal >= freeThreshold ? 0 : shippingFee;
-  const total = subtotal + shipping;
+  const couponDiscount = couponApplied?.discountAmount ?? 0;
+  const total = subtotal + shipping - couponDiscount;
 
   if (loading) {
     return (
@@ -127,107 +167,7 @@ export default function CheckoutPage() {
     );
   }
 
-  if (step === 3) {
-    return (
-      <div style={{ background: "linear-gradient(135deg, #9f523a 0%, #7a3f2c 100%)", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
-        <div className="container">
-          <div style={{ maxWidth: "500px", margin: "0 auto", background: "white", borderRadius: "16px", padding: "60px 40px", textAlign: "center", boxShadow: "0 20px 60px rgba(0, 0, 0, 0.3)" }}>
-            <div style={{ display: "flex", justifyContent: "center", marginBottom: "30px" }}>
-              <div
-                style={{
-                  width: 100,
-                  height: 100,
-                  borderRadius: "50%",
-                  background: "linear-gradient(135deg, #20c997 0%, #17a2b8 100%)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  animation: "scaleIn 0.6s ease-out",
-                  boxShadow: "0 10px 30px rgba(32, 201, 151, 0.3)"
-                }}
-              >
-                <i className="bi bi-check2" style={{ fontSize: "2.5rem", color: "white", fontWeight: "bold" }} />
-              </div>
-            </div>
-            
-            <h2 style={{ color: "#9f523a", fontSize: "2rem", fontWeight: "700", marginBottom: "15px" }}>
-              Order Placed!
-            </h2>
-            
-            <p style={{ color: "#666", fontSize: "1rem", lineHeight: "1.6", marginBottom: "10px" }}>
-              Your order <strong style={{ color: "#9f523a" }}>#{orderNumber}</strong> has been successfully created.
-            </p>
-            
-            <div style={{ background: "#f8f9fa", padding: "20px", borderRadius: "10px", margin: "25px 0", border: "1px solid rgba(159, 82, 58, 0.1)" }}>
-              <p style={{ color: "#555", marginBottom: "5px" }}>Order Status</p>
-              <p style={{ color: "#9f523a", fontSize: "1.1rem", fontWeight: "600" }}>Pending Payment Verification</p>
-              <p style={{ color: "#999", fontSize: "0.9rem", marginBottom: "0" }}>We'll notify you once payment is verified</p>
-            </div>
 
-            <div style={{ display: "flex", gap: "15px", marginTop: "35px", flexDirection: "column" }}>
-              <Link
-                href="/account/orders"
-                style={{
-                  display: "inline-block",
-                  background: "linear-gradient(135deg, #9f523a 0%, #7a3f2c 100%)",
-                  color: "white",
-                  padding: "12px 30px",
-                  borderRadius: "8px",
-                  textDecoration: "none",
-                  fontWeight: "600",
-                  transition: "all 0.3s ease",
-                }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
-                  (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 20px rgba(159, 82, 58, 0.3)";
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
-                  (e.currentTarget as HTMLElement).style.boxShadow = "none";
-                }}
-              >
-                <i className="bi bi-bag-check me-2" />View Your Orders
-              </Link>
-              <Link
-                href="/"
-                style={{
-                  display: "inline-block",
-                  background: "transparent",
-                  color: "#9f523a",
-                  padding: "12px 30px",
-                  borderRadius: "8px",
-                  textDecoration: "none",
-                  fontWeight: "600",
-                  border: "2px solid #9f523a",
-                  transition: "all 0.3s ease",
-                }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.background = "rgba(159, 82, 58, 0.05)";
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.background = "transparent";
-                }}
-              >
-                <i className="bi bi-arrow-left me-2" />Continue Shopping
-              </Link>
-            </div>
-          </div>
-        </div>
-        <style>{`
-          @keyframes scaleIn {
-            from {
-              transform: scale(0);
-              opacity: 0;
-            }
-            to {
-              transform: scale(1);
-              opacity: 1;
-            }
-          }
-        `}</style>
-      </div>
-    );
-  }
 
   return (
     <div style={{ background: "#fafafa", minHeight: "100vh", paddingTop: "40px", paddingBottom: "60px" }}>
@@ -252,6 +192,7 @@ export default function CheckoutPage() {
           {[
             { n: 1, label: "Address", icon: "geo-alt" },
             { n: 2, label: "Payment", icon: "credit-card" },
+            { n: 3, label: "Order Placed", icon: "bag-check" },
           ].map(({ n, label, icon }, idx) => (
             <div key={n} style={{ display: "flex", alignItems: "center", gap: "12px", flex: 1 }}>
               <div
@@ -259,7 +200,9 @@ export default function CheckoutPage() {
                   width: 50,
                   height: 50,
                   borderRadius: "50%",
-                  background: step >= n ? "linear-gradient(135deg, #9f523a 0%, #7a3f2c 100%)" : "#e9ecef",
+                  background: step === 3 && n === 3
+                    ? "linear-gradient(135deg, #20c997 0%, #17a2b8 100%)"
+                    : step >= n ? "linear-gradient(135deg, #9f523a 0%, #7a3f2c 100%)" : "#e9ecef",
                   color: step >= n ? "white" : "#999",
                   display: "flex",
                   alignItems: "center",
@@ -268,25 +211,25 @@ export default function CheckoutPage() {
                   fontSize: "1.1rem",
                   flexShrink: 0,
                   transition: "all 0.3s ease",
-                  cursor: "pointer",
+                  cursor: n < step && step < 3 ? "pointer" : "default",
                   boxShadow: step >= n ? "0 4px 12px rgba(159, 82, 58, 0.3)" : "none"
                 }}
-                onClick={() => n < step && setStep(n as 1 | 2)}
+                onClick={() => n < step && step < 3 && setStep(n as 1 | 2)}
                 title={label}
               >
-                <i className={`bi bi-${icon}`} />
+                {step >= n && n < 3 ? <i className="bi bi-check2" /> : step === 3 && n === 3 ? <i className="bi bi-check2" /> : <i className={`bi bi-${icon}`} />}
               </div>
               <div style={{ display: "flex", flexDirection: "column" }}>
                 <span style={{ fontSize: "0.85rem", color: "#999" }}>Step {n}</span>
-                <span style={{ fontWeight: "600", color: step >= n ? "#9f523a" : "#999" }}>{label}</span>
+                <span style={{ fontWeight: "600", color: step >= n ? (n === 3 && step === 3 ? "#20c997" : "#9f523a") : "#999" }}>{label}</span>
               </div>
-              {idx < 1 && (
+              {idx < 2 && (
                 <div style={{
                   flex: 1,
                   height: "2px",
                   background: step > n ? "linear-gradient(90deg, #9f523a, #7a3f2c)" : "#e9ecef",
                   transition: "all 0.3s ease",
-                  minWidth: "30px"
+                  minWidth: "20px"
                 }} />
               )}
             </div>
@@ -295,7 +238,59 @@ export default function CheckoutPage() {
 
         <div className="row g-4">
           {/* Main Content */}
-          <div className="col-lg-7">{step === 1 && (
+          <div className="col-lg-7">{step === 3 ? (
+            <div style={{
+              background: "white",
+              borderRadius: "12px",
+              padding: "48px 40px",
+              boxShadow: "0 4px 15px rgba(0, 0, 0, 0.08)",
+              border: "1px solid rgba(32,201,151,0.2)",
+              textAlign: "center",
+              animation: "slideIn 0.4s ease-out"
+            }}>
+              <div style={{ display: "flex", justifyContent: "center", marginBottom: "24px" }}>
+                <div style={{
+                  width: 90,
+                  height: 90,
+                  borderRadius: "50%",
+                  background: "linear-gradient(135deg, #20c997 0%, #17a2b8 100%)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  animation: "scaleIn 0.5s cubic-bezier(0.16,1,0.3,1) both",
+                  boxShadow: "0 8px 24px rgba(32,201,151,0.35)"
+                }}>
+                  <i className="bi bi-check2" style={{ fontSize: "2.2rem", color: "white" }} />
+                </div>
+              </div>
+
+              <h2 style={{ color: "#1a1a1a", fontSize: "1.6rem", fontWeight: "800", marginBottom: "8px" }}>Order Placed!</h2>
+              <p style={{ color: "#666", fontSize: "0.95rem", marginBottom: "24px" }}>
+                Your order <strong style={{ color: "#9f523a" }}>#{orderNumber}</strong> has been successfully created.
+              </p>
+
+              <div style={{ background: "#f8f9fa", padding: "18px 20px", borderRadius: "10px", marginBottom: "28px", border: "1px solid rgba(159,82,58,0.1)", textAlign: "left" }}>
+                <p style={{ fontSize: "0.78rem", fontWeight: 700, color: "#999", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 6 }}>Order Status</p>
+                <p style={{ color: "#9f523a", fontSize: "1rem", fontWeight: "700", marginBottom: 4 }}>Pending Payment Verification</p>
+                <p style={{ color: "#999", fontSize: "0.85rem", marginBottom: 0 }}>We&apos;ll notify you once your payment is verified.</p>
+              </div>
+
+              <div style={{ display: "flex", gap: "12px", flexDirection: "column" }}>
+                <Link
+                  href="/account/orders"
+                  style={{ display: "block", background: "linear-gradient(135deg, #9f523a 0%, #7a3f2c 100%)", color: "white", padding: "13px 24px", borderRadius: "8px", textDecoration: "none", fontWeight: "700", fontSize: "0.95rem" }}
+                >
+                  <i className="bi bi-bag-check me-2" />View Your Orders
+                </Link>
+                <Link
+                  href="/"
+                  style={{ display: "block", background: "transparent", color: "#9f523a", padding: "12px 24px", borderRadius: "8px", textDecoration: "none", fontWeight: "700", fontSize: "0.95rem", border: "2px solid #9f523a" }}
+                >
+                  <i className="bi bi-arrow-left me-2" />Continue Shopping
+                </Link>
+              </div>
+            </div>
+          ) : step === 1 && (
             <div style={{
               background: "white",
               borderRadius: "12px",
@@ -533,12 +528,17 @@ export default function CheckoutPage() {
                   alignItems: "center",
                   justifyContent: "center",
                   margin: "0 auto 25px",
-                  boxShadow: "0 4px 12px rgba(159, 82, 58, 0.1)"
+                  boxShadow: "0 4px 12px rgba(159, 82, 58, 0.1)",
+                  overflow: "hidden",
+                  padding: "6px"
                 }}>
-                  <div style={{ textAlign: "center" }}>
-                    <i className="bi bi-qr-code" style={{ fontSize: "3rem", color: "#9f523a", display: "block", marginBottom: "10px" }} />
-                    <p style={{ color: "#999", fontSize: "0.9rem", marginBottom: "0" }}>UPI QR</p>
-                  </div>
+                  <Image
+                    src="/assets/qr22309612024.png"
+                    alt="UPI QR Code"
+                    width={208}
+                    height={208}
+                    style={{ objectFit: "contain", borderRadius: "8px" }}
+                  />
                 </div>
 
                 <p style={{ color: "#666", marginBottom: "15px" }}>
@@ -555,8 +555,7 @@ export default function CheckoutPage() {
                   fontSize: "1.1rem"
                 }}>
                   Pay ₹{total.toLocaleString("en-IN")}
-                </div>
-              </div>
+                </div>              </div>
 
               {/* Screenshot Upload */}
               <div style={{ marginBottom: "25px" }}>
@@ -708,7 +707,7 @@ export default function CheckoutPage() {
           </div>
 
           {/* Order Summary Sidebar */}
-          <div className="col-lg-5">
+          {step < 3 && <div className="col-lg-5">
             <div style={{
               background: "white",
               borderRadius: "12px",
@@ -769,16 +768,73 @@ export default function CheckoutPage() {
               </div>
 
               <div style={{ borderTop: "2px solid #f0f0f0", paddingTop: "20px" }}>
+                {/* Coupon Input */}
+                <div style={{ marginBottom: "18px" }}>
+                  {couponApplied ? (
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "rgba(32,201,151,0.08)", border: "1px solid rgba(32,201,151,0.3)", borderRadius: "8px", padding: "10px 14px" }}>
+                      <div>
+                        <p style={{ margin: 0, fontWeight: 700, fontSize: "0.85rem", color: "#15803d" }}>
+                          <i className="bi bi-check-circle-fill me-2" />
+                          {couponApplied.code}
+                        </p>
+                        <p style={{ margin: 0, fontSize: "0.75rem", color: "#555" }}>
+                          {couponApplied.discountType === "PERCENTAGE"
+                            ? `${couponApplied.discountValue}% off`
+                            : `₹${couponApplied.discountValue} off`}
+                          {couponApplied.description ? ` · ${couponApplied.description}` : ""}
+                        </p>
+                      </div>
+                      <button
+                        onClick={handleRemoveCoupon}
+                        style={{ background: "none", border: "none", color: "#b91c1c", cursor: "pointer", fontWeight: 700, fontSize: "0.8rem" }}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      <div style={{ display: "flex", gap: "8px" }}>
+                        <input
+                          type="text"
+                          placeholder="Coupon code"
+                          value={couponCode}
+                          onChange={(e) => { setCouponCode(e.target.value.toUpperCase()); setCouponError(""); }}
+                          onKeyDown={(e) => e.key === "Enter" && handleApplyCoupon()}
+                          style={{ flex: 1, border: "1.5px solid #e5e0da", borderRadius: "8px", padding: "9px 12px", fontSize: "0.85rem", outline: "none", fontFamily: "monospace", letterSpacing: "0.05em" }}
+                        />
+                        <button
+                          onClick={handleApplyCoupon}
+                          disabled={couponLoading || !couponCode.trim()}
+                          style={{ background: "#9f523a", color: "#fff", border: "none", borderRadius: "8px", padding: "9px 16px", fontWeight: 700, fontSize: "0.82rem", cursor: couponLoading || !couponCode.trim() ? "not-allowed" : "pointer", opacity: couponLoading || !couponCode.trim() ? 0.65 : 1 }}
+                        >
+                          {couponLoading ? "…" : "Apply"}
+                        </button>
+                      </div>
+                      {couponError && (
+                        <p style={{ margin: "6px 0 0", fontSize: "0.75rem", color: "#b91c1c" }}>
+                          <i className="bi bi-exclamation-circle me-1" />{couponError}
+                        </p>
+                      )}
+                    </>
+                  )}
+                </div>
+
                 <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "12px", color: "#666", fontSize: "0.95rem" }}>
                   <span>Subtotal</span>
                   <span>₹{subtotal.toLocaleString("en-IN")}</span>
                 </div>
-                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "15px", color: "#666", fontSize: "0.95rem" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "12px", color: "#666", fontSize: "0.95rem" }}>
                   <span>Shipping</span>
                   <span style={{ color: shipping === 0 ? "#20c997" : "#333", fontWeight: shipping === 0 ? "600" : "400" }}>
                     {shipping === 0 ? "FREE" : `₹${shipping}`}
                   </span>
                 </div>
+                {couponApplied && (
+                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "12px", color: "#15803d", fontSize: "0.95rem", fontWeight: 600 }}>
+                    <span><i className="bi bi-tag me-1" />Coupon ({couponApplied.code})</span>
+                    <span>−₹{couponDiscount.toLocaleString("en-IN")}</span>
+                  </div>
+                )}
 
                 <div style={{
                   display: "flex",
@@ -809,29 +865,22 @@ export default function CheckoutPage() {
                 <strong>Secure Payment</strong> - Your payment information is encrypted
               </div>
             </div>
-          </div>
+          </div>}
         </div>
       </div>
 
       <style>{`
         @keyframes slideIn {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+          from { opacity: 0; transform: translateY(20px); }
+          to   { opacity: 1; transform: translateY(0); }
         }
-        
+        @keyframes scaleIn {
+          from { transform: scale(0); opacity: 0; }
+          to   { transform: scale(1); opacity: 1; }
+        }
         @keyframes spin {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(360deg);
-          }
+          from { transform: rotate(0deg); }
+          to   { transform: rotate(360deg); }
         }
       `}</style>
     </div>
