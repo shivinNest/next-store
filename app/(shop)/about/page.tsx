@@ -335,7 +335,7 @@ export default function AboutPage() {
               <div className={styles.founderImgWrap}>
                 <Image
                   src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&h=720&fit=crop&crop=face"
-                  alt="Snaha Satheesan — Founder, Saaviya"
+                  alt="Sneha Satheesan — Founder, Saaviya"
                   fill
                   sizes="(max-width: 768px) 80vw, 33vw"
                   style={{ objectFit: "cover", objectPosition: "center top" }}
@@ -347,17 +347,17 @@ export default function AboutPage() {
             <div className="col-lg-6 col-md-7">
               <p style={{ fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#9f523a", marginBottom: 14 }}>Founder, Saaviya</p>
               <h3 style={{ fontSize: "clamp(1.8rem, 3vw, 2.6rem)", fontWeight: 800, color: "#111", lineHeight: 1.15, letterSpacing: "-0.03em", marginBottom: 20 }}>
-                Snaha Satheesan
+                Sneha Satheesan
               </h3>
               <p style={{ fontSize: "0.975rem", color: "#555", lineHeight: 1.85, marginBottom: 16 }}>
-                Snaha Satheesan is a passionate fashion enthusiast who has been deeply involved in the world of style and ethnic wear since 2020. With years of hands-on experience understanding what modern Indian women truly want to wear, she turned her passion into purpose.
+                Sneha Satheesan is a passionate fashion enthusiast who has been deeply involved in the world of style and ethnic wear since 2020. With years of hands-on experience understanding what modern Indian women truly want to wear, she turned her passion into purpose.
               </p>
               <p style={{ fontSize: "0.975rem", color: "#555", lineHeight: 1.85, marginBottom: 28 }}>
-                In 2026, she founded Saaviya — a brand built on the belief that every woman deserves fashion that is authentic, beautiful, and made for her. From carefully curated kurtas to celebration-ready lehengas, Saaviya reflects Snaha&apos;s vision of fashion that honours Indian craft while speaking to the contemporary woman.
+                In 2026, she founded Saaviya — a brand built on the belief that every woman deserves fashion that is authentic, beautiful, and made for her. From carefully curated kurtas to celebration-ready lehengas, Saaviya reflects Sneha&apos;s vision of fashion that honours Indian craft while speaking to the contemporary woman.
               </p>
               <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
                 <div style={{ width: 48, height: 1.5, background: "#9f523a", borderRadius: 2 }} />
-                <span style={{ fontSize: "0.88rem", fontWeight: 600, color: "#9f523a", fontStyle: "italic", letterSpacing: "0.02em" }}>Snaha Satheesan</span>
+                <span style={{ fontSize: "0.88rem", fontWeight: 600, color: "#9f523a", fontStyle: "italic", letterSpacing: "0.02em" }}>Sneha Satheesan</span>
               </div>
             </div>
           </div>

@@ -44,7 +44,6 @@ export default function BlogListPage() {
             fontSize: "0.72rem", fontWeight: 700,
             letterSpacing: "0.14em", textTransform: "uppercase",
             color: "#9f523a", marginBottom: 20,
-            display: "inline-flex",
           }}>
             <i className="bi bi-journal-text" style={{ fontSize: "0.8rem" }} />
             Journal

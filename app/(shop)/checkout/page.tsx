@@ -542,7 +542,7 @@ export default function CheckoutPage() {
                 </div>
 
                 <p style={{ color: "#666", marginBottom: "15px" }}>
-                  <strong>UPI ID:</strong> <span style={{ fontFamily: "monospace", color: "#9f523a" }}>payments@saaviya.in</span>
+                  <strong>UPI ID:</strong> <span style={{ fontFamily: "monospace", color: "#9f523a" }}>snehasatheesan91-1@okicici</span>
                 </p>
 
                 <div style={{
