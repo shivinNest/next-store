@@ -1,6 +1,5 @@
 "use client";
-export const dynamic = "force-dynamic";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
@@ -155,7 +154,7 @@ function ProductCard({ product }: { product: Product }) {
   );
 }
 
-export default function ProductsPage() {
+function ProductsPageContent() {
   const params = useParams();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -624,6 +623,14 @@ export default function ProductsPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense>
+      <ProductsPageContent />
+    </Suspense>
   );
 }
 
