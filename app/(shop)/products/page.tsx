@@ -1,4 +1,5 @@
 "use client";
+export const dynamic = "force-dynamic";
 import { useEffect, useState, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -51,7 +52,7 @@ function ProductCard({ product }: { product: Product }) {
 
   return (
     <div className="col-6 col-md-4 col-lg-3">
-      <Link href={`/product/${product.slug}`} className="text-decoration-none text-dark">
+      <Link href={`/products/${product.slug}`} className="text-decoration-none text-dark">
         <div className="product-card card h-100" style={{
           background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)",
           border: "1px solid rgba(159, 82, 58, 0.1)",
@@ -476,7 +477,7 @@ export default function ProductsPage() {
                 {categories.map((c) => (
                   <li key={c.id}>
                     <Link
-                      href={`/products/${c.slug}`}
+                      href={`/products/categories/${c.slug}`}
                       className={`category-link ${categorySlug === c.slug ? "active" : ""}`}
                     >
                       {c.name}
@@ -625,3 +626,4 @@ export default function ProductsPage() {
     </div>
   );
 }
+

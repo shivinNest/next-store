@@ -79,13 +79,13 @@ export default function WishlistPage() {
                     </button>
                   </div>
                   <div style={{ padding: "12px 14px 14px", flex: 1, display: "flex", flexDirection: "column" }}>
-                    <Link href={`/product/${p.slug}`} style={{ textDecoration: "none" }}>
+                    <Link href={`/products/${p.slug}`} style={{ textDecoration: "none" }}>
                       <p style={{ fontSize: "0.85rem", fontWeight: 600, color: "#111", marginBottom: 4, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name}</p>
                       <p style={{ fontSize: "0.875rem", fontWeight: 700, color: "#9f523a", margin: 0 }}>
                         &#8377;{Number(p.price).toLocaleString("en-IN")}
                       </p>
                     </Link>
-                    <Link href={`/product/${p.slug}`} style={{ display: "block", marginTop: 10, background: "#9f523a", color: "#fff", textAlign: "center", padding: "8px", borderRadius: 7, textDecoration: "none", fontSize: "0.8rem", fontWeight: 700 }}>
+                    <Link href={`/products/${p.slug}`} style={{ display: "block", marginTop: 10, background: "#9f523a", color: "#fff", textAlign: "center", padding: "8px", borderRadius: 7, textDecoration: "none", fontSize: "0.8rem", fontWeight: 700 }}>
                       View Product
                     </Link>
                   </div>

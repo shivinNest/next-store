@@ -212,7 +212,7 @@ export default function CartPage() {
                     style={{ opacity: removingIds.has(item.id) ? 0.4 : 1, transition: "opacity 0.2s" }}
                   >
                     {/* Image */}
-                    <Link href={`/product/${item.product.slug}`}>
+                    <Link href={`/products/${item.product.slug}`}>
                       <div
                         className="rounded overflow-hidden flex-shrink-0"
                         style={{ width: 88, height: 112, position: "relative" }}
@@ -235,7 +235,7 @@ export default function CartPage() {
                     {/* Info */}
                     <div className="flex-grow-1">
                       <Link
-                        href={`/product/${item.product.slug}`}
+                        href={`/products/${item.product.slug}`}
                         className="text-decoration-none text-dark"
                       >
                         <h6 className="fw-semibold mb-1">{item.product.name}</h6>

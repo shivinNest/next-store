@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 
 type Props = { params: Promise<{ category?: string[] }> };
@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
   return {
     title: cat.name,
-    description: cat.description?.substring(0, 160) ?? `Shop ${cat.name} at saaviya.in – latest styles & best prices.`,
+    description: cat.description?.substring(0, 160) ?? `Shop ${cat.name} at saaviya.in ΓÇô latest styles & best prices.`,
   };
 }
 

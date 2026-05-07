@@ -32,12 +32,12 @@ export default function Footer() {
             </p>
             <ul className="list-unstyled" style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
               {[
-                ["Kurtas", "/products/kurtas"],
-                ["Dresses", "/products/dresses"],
-                ["Tops", "/products/tops"],
-                ["Lehengas", "/products/lehengas"],
-                ["Sarees", "/products/sarees"],
-                ["Ethnic Sets", "/products/ethnic-sets"],
+                ["Kurtas", "/products/categories/kurtas"],
+                ["Dresses", "/products/categories/dresses"],
+                ["Tops", "/products/categories/tops"],
+                ["Lehengas", "/products/categories/lehengas"],
+                ["Sarees", "/products/categories/sarees"],
+                ["Ethnic Sets", "/products/categories/ethnic-sets"],
               ].map(([label, href]) => (
                 <li key={label}>
                   <Link href={href!} style={{ fontSize: "0.875rem", color: "#777", textDecoration: "none" }}
@@ -132,9 +132,24 @@ export default function Footer() {
           <p style={{ fontSize: "0.78rem", color: "#444", margin: 0 }}>
             &copy; {year} Saaviya. All rights reserved.
           </p>
-          <p style={{ fontSize: "0.78rem", color: "#444", margin: 0 }}>
-            Crafted in India &hearts;
-          </p>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <span style={{ fontSize: "0.65rem", color: "#444", marginRight: "4px", textTransform: "uppercase", letterSpacing: "0.08em" }}>We accept</span>
+            {["UPI", "Visa", "Mastercard", "Razorpay", "Net Banking"].map((method) => (
+              <span key={method} style={{
+                fontSize: "0.65rem",
+                fontWeight: 600,
+                color: "#666",
+                border: "1px solid #2a2a2a",
+                borderRadius: "4px",
+                padding: "2px 7px",
+                background: "#161616",
+                letterSpacing: "0.03em",
+                whiteSpace: "nowrap",
+              }}>
+                {method}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
     </footer>

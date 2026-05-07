@@ -12,7 +12,7 @@ export async function GET(
 
     const order = await prisma.order.findFirst({
       where: { id, userId: user.id },
-      include: { items: true, address: true },
+      include: { items: true },
     });
 
     if (!order) {

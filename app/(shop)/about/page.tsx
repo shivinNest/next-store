@@ -334,7 +334,7 @@ export default function AboutPage() {
             <div className="col-lg-4 col-md-5 col-10 mx-auto">
               <div className={styles.founderImgWrap}>
                 <Image
-                  src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&h=720&fit=crop&crop=face"
+                  src="/assets/ss-4762352_1920.jpg"
                   alt="Sneha Satheesan — Founder, Saaviya"
                   fill
                   sizes="(max-width: 768px) 80vw, 33vw"

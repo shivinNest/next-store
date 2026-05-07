@@ -172,24 +172,24 @@ export default function ProductDetailPage() {
             <div className="skeleton mb-1" style={{ height: 14, width: "100%", borderRadius: 4 }} />
             <div className="skeleton mb-1" style={{ height: 14, width: "94%", borderRadius: 4 }} />
             <div className="skeleton mb-4" style={{ height: 14, width: "80%", borderRadius: 4 }} />
-            {/* Size + Qty row */}
-            <div className="d-flex align-items-start mb-4" style={{ gap: 30 }}>
-              <div style={{ flex: 1 }}>
-                <div className="skeleton mb-3" style={{ height: 13, width: 80, borderRadius: 4 }} />
-                <div className="d-flex gap-2 mb-4">
-                  {["S","M","L","XL","XXL"].map(s => <div key={s} className="skeleton" style={{ width: 48, height: 40, borderRadius: 8 }} />)}
-                </div>
-              </div>
-              <div style={{ flexShrink: 0 }}>
-                <div className="skeleton mb-2" style={{ height: 13, width: 70, borderRadius: 4 }} />
-                <div className="skeleton" style={{ height: 42, width: 120, borderRadius: 8 }} />
-              </div>
-            </div>
-            {/* 3 action buttons in a row */}
+            {/* Size label + buttons */}
+            <div className="skeleton mb-3" style={{ height: 13, width: 80, borderRadius: 4 }} />
             <div className="d-flex gap-2 mb-4">
-              <div className="skeleton" style={{ flex: 1, height: 50, borderRadius: 10 }} />
-              <div className="skeleton" style={{ flex: 1, height: 50, borderRadius: 10 }} />
-              <div className="skeleton" style={{ flex: 1, height: 50, borderRadius: 10 }} />
+              {["S","M","L","XL","XXL"].map(s => <div key={s} className="skeleton" style={{ width: 48, height: 40, borderRadius: 8 }} />)}
+            </div>
+            {/* Qty */}
+            <div className="skeleton mb-2" style={{ height: 13, width: 70, borderRadius: 4 }} />
+            <div className="skeleton mb-4" style={{ height: 42, width: 130, borderRadius: 8 }} />
+            {/* Shipping note */}
+            <div className="skeleton mb-4" style={{ height: 50, borderRadius: 8 }} />
+            {/* Action buttons */}
+            <div className="d-flex flex-column gap-2" style={{ maxWidth: 480 }}>
+              <div className="skeleton" style={{ height: 54, borderRadius: 10 }} />
+              <div className="d-flex gap-2">
+                <div className="skeleton" style={{ flex: 1, height: 50, borderRadius: 10 }} />
+                <div className="skeleton" style={{ width: 50, height: 50, borderRadius: 10 }} />
+              </div>
+              <div className="skeleton" style={{ height: 54, borderRadius: 10 }} />
             </div>
           </div>
         </div>
@@ -221,57 +221,40 @@ export default function ProductDetailPage() {
 
   return (
     <div className="container py-4 py-md-5">
-      {/* Cart Added Toast */}
+      {/* Fixed top-right toast */}
       {addedToCart && (
         <div style={{
           position: "fixed",
-          top: "80px",
-          right: "20px",
+          top: 80,
+          right: 20,
           zIndex: 9999,
+          background: "#fff",
+          border: "1px solid rgba(32,201,151,0.3)",
+          borderRadius: 12,
+          boxShadow: "0 8px 32px rgba(0,0,0,0.12)",
+          padding: "14px 18px",
           display: "flex",
           alignItems: "center",
-          gap: "12px",
-          padding: "14px 18px",
-          background: "#fff",
-          border: "1px solid rgba(32, 201, 151, 0.4)",
-          borderLeft: "4px solid #20c997",
-          borderRadius: "10px",
-          boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
-          minWidth: "260px",
-          maxWidth: "320px",
-          animation: "slideInFromRight 0.35s ease",
+          gap: 10,
+          minWidth: 260,
+          animation: "slideInRight 0.3s ease",
         }}>
-          <i className="bi bi-check-circle-fill" style={{ color: "#20c997", fontSize: "1.3rem", flexShrink: 0 }} />
-          <div style={{ flex: 1 }}>
-            <div style={{ fontSize: "0.9rem", fontWeight: 700, color: "#1a1a1a", marginBottom: "2px" }}>Added to cart!</div>
-            <div style={{ fontSize: "0.78rem", color: "#666" }}>Item added successfully</div>
-          </div>
-          <Link
-            href="/cart"
-            style={{
-              fontSize: "0.8rem",
-              fontWeight: 700,
-              color: "#fff",
-              background: "#20c997",
-              padding: "5px 12px",
-              borderRadius: "6px",
-              textDecoration: "none",
-              whiteSpace: "nowrap",
-              flexShrink: 0,
-            }}
-          >
-            View Cart
+          <i className="bi bi-check-circle-fill" style={{ color: "#20c997", fontSize: "1.2rem", flexShrink: 0 }} />
+          <span style={{ fontSize: "0.9rem", fontWeight: 600, color: "#1a1a1a", flex: 1 }}>Added to cart!</span>
+          <Link href="/cart" className="text-decoration-none fw-bold" style={{ fontSize: "0.85rem", color: "#9f523a", whiteSpace: "nowrap" }}>
+            View Cart →
           </Link>
         </div>
       )}
+
       <style>{`
         @keyframes fadeInUp {
           from { opacity: 0; transform: translateY(10px); }
           to { opacity: 1; transform: translateY(0); }
         }
-        @keyframes slideInFromRight {
-          from { opacity: 0; transform: translateX(60px); }
-          to { opacity: 1; transform: translateX(0); }
+        @keyframes slideInRight {
+          from { opacity: 0; transform: translateX(40px); }
+          to   { opacity: 1; transform: translateX(0); }
         }
         .bc-nav {
           display: flex;
@@ -529,7 +512,7 @@ export default function ProductDetailPage() {
           background: rgba(159, 82, 58, 0.15);
           border-color: rgba(159, 82, 58, 0.3);
         }
-        /* ── Size Chart Trigger ── */
+        /* ΓöÇΓöÇ Size Chart Trigger ΓöÇΓöÇ */
         .size-chart-trigger {
           display: inline-flex;
           align-items: center;
@@ -549,7 +532,7 @@ export default function ProductDetailPage() {
           background: rgba(159,82,58,0.07);
           border-color: #9f523a;
         }
-        /* ── Size Chart Drawer ── */
+        /* ΓöÇΓöÇ Size Chart Drawer ΓöÇΓöÇ */
         @keyframes scSlideIn {
           from { transform: translateX(100%); }
           to   { transform: translateX(0); }
@@ -689,7 +672,7 @@ export default function ProductDetailPage() {
             <>
               <li className="bc-item"><span className="bc-sep">&#8250;</span></li>
               <li className="bc-item">
-                <Link href={`/products/${product.category.slug}`}>{product.category.name}</Link>
+                <Link href={`/products/categories/${product.category.slug}`}>{product.category.name}</Link>
               </li>
             </>
           )}
@@ -760,7 +743,7 @@ export default function ProductDetailPage() {
         <div className="col-lg-7">
           {product.category && (
             <Link
-              href={`/products/${product.category.slug}`}
+              href={`/products/categories/${product.category.slug}`}
               className="text-decoration-none small text-uppercase"
               style={{ color: "#9f523a", fontSize: "0.8rem", letterSpacing: "1px" }}
             >
@@ -921,7 +904,7 @@ export default function ProductDetailPage() {
                   onClick={() => setQuantity((q) => Math.max(1, q - 1))}
                   disabled={quantity <= 1}
                 >
-                  -
+                  −
                 </button>
                 <span className="qty-display">{quantity}</span>
                 <button
@@ -972,7 +955,7 @@ export default function ProductDetailPage() {
           </div>
 
           {/* Trust strip */}
-          <div style={{ display: "none", gap: 0, borderTop: "1px solid #f0ede9", borderBottom: "1px solid #f0ede9", padding: "14px 0", marginBottom: 24 }}>
+          <div style={{ display: "flex", gap: 0, borderTop: "1px solid #f0ede9", borderBottom: "1px solid #f0ede9", padding: "14px 0", marginBottom: 24 }}>
             {[
               { icon: "bi-truck",           text: "Free delivery above ₹999" },
               { icon: "bi-arrow-return-left", text: "7-day returns" },
@@ -1017,7 +1000,7 @@ export default function ProductDetailPage() {
             </div>
             {product.category && (
               <Link
-                href={`/products/${product.category.slug}`}
+                href={`/products/categories/${product.category.slug}`}
                 style={{ fontSize: "0.85rem", fontWeight: 600, color: "#9f523a", textDecoration: "none", display: "flex", alignItems: "center", gap: 6, whiteSpace: "nowrap" }}
               >
                 View all <i className="bi bi-arrow-right" />
@@ -1033,7 +1016,7 @@ export default function ProductDetailPage() {
               const rpOutOfStock = rp.sizes.length > 0 && rp.sizes.every((s) => s.stock === 0);
               return (
                 <div key={rp.id} className="col-6 col-lg-3">
-                  <Link href={`/product/${rp.slug}`} style={{ textDecoration: "none", display: "block" }}>
+                  <Link href={`/products/${rp.slug}`} style={{ textDecoration: "none", display: "block" }}>
                     <div style={{
                       borderRadius: 12,
                       overflow: "hidden",
@@ -1105,7 +1088,7 @@ export default function ProductDetailPage() {
         </section>
       )}
 
-      {/* ── Size Chart Drawer ── */}
+      {/* ΓöÇΓöÇ Size Chart Drawer ΓöÇΓöÇ */}
       {sizeChartOpen && (
         <>
           <div className="sc-overlay" onClick={() => setSizeChartOpen(false)} />
@@ -1152,14 +1135,14 @@ export default function ProductDetailPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr><td>S</td><td>34–36</td><td>26–28</td><td>36–38</td><td>40</td></tr>
-                      <tr><td>M</td><td>37–39</td><td>29–31</td><td>39–41</td><td>41</td></tr>
-                      <tr><td>L</td><td>40–42</td><td>32–34</td><td>42–44</td><td>42</td></tr>
-                      <tr><td>XL</td><td>43–45</td><td>35–37</td><td>45–47</td><td>43</td></tr>
-                      <tr><td>XXL</td><td>46–48</td><td>38–40</td><td>48–50</td><td>44</td></tr>
+                      <tr><td>S</td><td>34ΓÇô36</td><td>26ΓÇô28</td><td>36ΓÇô38</td><td>40</td></tr>
+                      <tr><td>M</td><td>37ΓÇô39</td><td>29ΓÇô31</td><td>39ΓÇô41</td><td>41</td></tr>
+                      <tr><td>L</td><td>40ΓÇô42</td><td>32ΓÇô34</td><td>42ΓÇô44</td><td>42</td></tr>
+                      <tr><td>XL</td><td>43ΓÇô45</td><td>35ΓÇô37</td><td>45ΓÇô47</td><td>43</td></tr>
+                      <tr><td>XXL</td><td>46ΓÇô48</td><td>38ΓÇô40</td><td>48ΓÇô50</td><td>44</td></tr>
                     </tbody>
                   </table>
-                  <p className="sc-unit-note">* Measurements may vary ±1 inch</p>
+                  <p className="sc-unit-note">* Measurements may vary ┬▒1 inch</p>
 
                   <div style={{ marginTop: 20, padding: "14px 16px", background: "#fdf9f7", borderRadius: 10, border: "1px solid #f0ebe6" }}>
                     <p style={{ fontSize: "0.78rem", fontWeight: 700, color: "#9f523a", marginBottom: 6 }}>
@@ -1213,7 +1196,7 @@ export default function ProductDetailPage() {
         </>
       )}
 
-      {/* ── Sticky Bottom Bar ── */}
+      {/* ΓöÇΓöÇ Sticky Bottom Bar ΓöÇΓöÇ */}
       <div style={{
         position: "fixed",
         bottom: 0,

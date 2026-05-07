@@ -72,7 +72,7 @@ function ProductCard({ product }: { product: Product }) {
 
   return (
     <div className="col-6 col-md-3">
-      <Link href={`/product/${product.slug}`} className="text-decoration-none text-dark">
+      <Link href={`/products/${product.slug}`} className="text-decoration-none text-dark">
         <div className="product-card card h-100">
           <div className="product-img-wrap">
             {product.images[0] ? (

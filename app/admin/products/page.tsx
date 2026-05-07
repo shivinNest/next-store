@@ -2,6 +2,7 @@
 import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 interface Product {
   id: string;
@@ -18,6 +19,7 @@ interface Product {
 }
 
 export default function AdminProductsPage() {
+  const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -54,6 +56,20 @@ export default function AdminProductsPage() {
       setProducts((prev) =>
         prev.map((p) => (p.id === id ? { ...p, [field]: !value } : p))
       );
+    }
+  };
+
+  const [duplicating, setDuplicating] = useState<string | null>(null);
+  const handleDuplicate = async (id: string, name: string) => {
+    if (!confirm(`Duplicate "${name}"? A copy will be created as inactive.`)) return;
+    setDuplicating(id);
+    const res = await fetch(`/api/admin/products/${id}/duplicate`, { method: "POST" });
+    const data = await res.json();
+    setDuplicating(null);
+    if (data.success) {
+      router.push(`/admin/products/${data.data.id}/edit`);
+    } else {
+      alert(data.error || "Failed to duplicate product");
     }
   };
 
@@ -170,6 +186,16 @@ export default function AdminProductsPage() {
                             title="Delete"
                           >
                             <i className="bi bi-trash small" />
+                          </button>
+                          <button
+                            className="btn btn-sm btn-outline-secondary px-2 py-1"
+                            onClick={() => handleDuplicate(p.id, p.name)}
+                            disabled={duplicating === p.id}
+                            title="Duplicate"
+                          >
+                            {duplicating === p.id
+                              ? <span className="spinner-border spinner-border-sm" style={{ width: 12, height: 12, borderWidth: 2 }} />
+                              : <i className="bi bi-copy small" />}
                           </button>
                         </div>
                       </td>

@@ -1,6 +1,7 @@
 ﻿"use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import Image from "next/image";
+import Toast from "@/components/ui/Toast";
 
 interface User {
   id: string;
@@ -50,6 +51,12 @@ export default function ProfilePage() {
   const [pwSuccess, setPwSuccess] = useState(false);
   const [pwError, setPwError] = useState("");
 
+  // Unified toast
+  const [toast, setToast] = useState({ visible: false, message: "", type: "success" as "success" | "error" });
+  const showToast = useCallback((message: string, type: "success" | "error" = "success") => {
+    setToast({ visible: true, message, type });
+  }, []);
+
   useEffect(() => {
     fetch("/api/auth/me")
       .then(r => r.json())
@@ -90,6 +97,7 @@ export default function ProfilePage() {
         setAvatarPreview("");
         setSuccess(true);
         setTimeout(() => setSuccess(false), 3000);
+        showToast("Profile updated successfully.");
       } else {
         setError(data.error || "Update failed");
       }
@@ -110,6 +118,7 @@ export default function ProfilePage() {
 
   return (
     <div style={{ background: "#fff", border: "1px solid #ece9e4", borderRadius: 12 }}>
+      <Toast message={toast.message} type={toast.type} visible={toast.visible} onHide={() => setToast(t => ({ ...t, visible: false }))} />
       {/* Card header */}
       <div style={{ padding: "24px 32px", borderBottom: "1px solid #ece9e4", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <div>
@@ -128,11 +137,7 @@ export default function ProfilePage() {
 
       {/* Body */}
       <div style={{ padding: "28px 32px" }}>
-        {success && (
-          <div style={{ background: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: 8, padding: "10px 16px", fontSize: "0.875rem", color: "#15803d", marginBottom: 20 }}>
-            Profile updated successfully.
-          </div>
-        )}
+        {/* success handled by top-right toast *}
         {error && (
           <div style={{ background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 8, padding: "10px 16px", fontSize: "0.875rem", color: "#b91c1c", marginBottom: 20 }}>
             {error}
@@ -280,11 +285,7 @@ export default function ProfilePage() {
 
         {pwEditing && (
           <div style={{ padding: "0 32px 28px" }}>
-            {pwSuccess && (
-              <div style={{ background: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: 8, padding: "10px 16px", fontSize: "0.875rem", color: "#15803d", marginBottom: 16 }}>
-                Password changed successfully.
-              </div>
-            )}
+            {/* pwSuccess handled by top-right toast */}
             {pwError && (
               <div style={{ background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 8, padding: "10px 16px", fontSize: "0.875rem", color: "#b91c1c", marginBottom: 16 }}>
                 {pwError}
@@ -308,6 +309,7 @@ export default function ProfilePage() {
                   setPwForm({ current: "", next: "", confirm: "" });
                   setPwSuccess(true);
                   setTimeout(() => setPwSuccess(false), 3000);
+                  showToast("Password changed successfully.");
                 } else {
                   setPwError(data.error || "Failed to change password");
                 }

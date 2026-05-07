@@ -15,12 +15,14 @@ interface EmailOptions {
   to: string;
   subject: string;
   html: string;
+  bcc?: string;
 }
 
-export async function sendEmail({ to, subject, html }: EmailOptions) {
+export async function sendEmail({ to, subject, html, bcc }: EmailOptions) {
   const info = await transporter.sendMail({
     from: `"Saaviya" <${process.env.EMAIL_FROM || "noreply@saaviya.in"}>`,
     to,
+    bcc,
     subject,
     html,
   });

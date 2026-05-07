@@ -1,5 +1,6 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import Toast from "@/components/ui/Toast";
 
 interface Address {
   id: string;
@@ -33,6 +34,11 @@ export default function AddressesPage() {
   const [saving, setSaving] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
+  const [toast, setToast] = useState({ visible: false, message: "", type: "success" as "success" | "error" });
+  const showToast = useCallback((message: string, type: "success" | "error" = "success") => {
+    setToast({ visible: true, message, type });
+  }, []);
+
   const fetchAddresses = async () => {
     const res = await fetch("/api/addresses");
     const data = await res.json();
@@ -58,10 +64,12 @@ export default function AddressesPage() {
     const data = await res.json();
 
     if (data.success) {
+      const wasEditing = !!editId;
       await fetchAddresses();
       setShowForm(false);
       setEditId(null);
       setForm(emptyForm);
+      showToast(wasEditing ? "Address updated successfully." : "Address added successfully.");
     } else if (data.errors) {
       setFieldErrors(data.errors);
     }
@@ -85,8 +93,14 @@ export default function AddressesPage() {
 
   const handleDelete = async (id: string) => {
     if (!confirm("Delete this address?")) return;
-    await fetch(`/api/addresses/${id}`, { method: "DELETE" });
-    setAddresses((prev) => prev.filter((a) => a.id !== id));
+    const res = await fetch(`/api/addresses/${id}`, { method: "DELETE" });
+    const data = await res.json();
+    if (data.success) {
+      setAddresses((prev) => prev.filter((a) => a.id !== id));
+      showToast("Address removed.");
+    } else {
+      alert(data.error || "Failed to delete address. Please try again.");
+    }
   };
 
   const INDIAN_STATES = [
@@ -99,6 +113,7 @@ export default function AddressesPage() {
 
   return (
     <div>
+      <Toast message={toast.message} type={toast.type} visible={toast.visible} onHide={() => setToast(t => ({ ...t, visible: false }))} />
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 28 }}>
         <div>
           <p style={{ fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#9f523a", marginBottom: 4 }}>Account</p>

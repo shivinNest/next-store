@@ -51,7 +51,7 @@ function ProductCard({ product }: { product: Product }) {
 
   return (
     <div className="col-6 col-md-4 col-lg-3">
-      <Link href={`/product/${product.slug}`} className="text-decoration-none text-dark">
+      <Link href={`/products/${product.slug}`} className="text-decoration-none text-dark">
         <div className="product-card card h-100" style={{
           background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)",
           border: "1px solid rgba(159, 82, 58, 0.1)",
@@ -158,7 +158,7 @@ export default function ProductsPage() {
   const params = useParams();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const categorySlug = params.category as string;
+  const categorySlug = (Array.isArray(params.category) ? params.category[0] : params.category as string) || "all";
 
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -297,23 +297,81 @@ export default function ProductsPage() {
           content: '';
           opacity: 0;
         }
-        .page-link {
-          color: #9f523a !important;
-          border-color: rgba(159, 82, 58, 0.2) !important;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        .pg-wrap {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 14px;
+          margin-top: 48px;
+          padding-top: 32px;
+          border-top: 1.5px solid #ede8e3;
         }
-        .page-link:hover {
-          background: #9f523a !important;
-          color: white !important;
-          border-color: #9f523a !important;
-          transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(159, 82, 58, 0.2);
+        .pg-row {
+          display: flex;
+          align-items: center;
+          gap: 4px;
         }
-        .page-item.active .page-link {
-          background: linear-gradient(135deg, #9f523a, #7a3f2c) !important;
-          color: white !important;
-          border-color: #9f523a !important;
-          box-shadow: 0 4px 12px rgba(159, 82, 58, 0.3);
+        .pg-btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-width: 38px;
+          height: 38px;
+          padding: 0 10px;
+          border: 1.5px solid #e5dfd9;
+          border-radius: 8px;
+          background: #fff;
+          color: #555;
+          font-size: 0.83rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+          letter-spacing: 0.01em;
+          white-space: nowrap;
+          user-select: none;
+        }
+        .pg-btn:hover:not(:disabled) {
+          border-color: #9f523a;
+          color: #9f523a;
+          background: rgba(159, 82, 58, 0.04);
+          transform: translateY(-1px);
+          box-shadow: 0 3px 10px rgba(159, 82, 58, 0.12);
+        }
+        .pg-btn.active {
+          background: linear-gradient(135deg, #9f523a 0%, #7a3f2c 100%);
+          border-color: #9f523a;
+          color: #fff;
+          box-shadow: 0 4px 14px rgba(159, 82, 58, 0.35);
+          transform: translateY(-1px);
+        }
+        .pg-btn:disabled {
+          opacity: 0.38;
+          cursor: not-allowed;
+        }
+        .pg-nav {
+          gap: 6px;
+          padding: 0 6px;
+          font-size: 0.8rem;
+          letter-spacing: 0.03em;
+          text-transform: uppercase;
+        }
+        .pg-ellipsis {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 38px;
+          height: 38px;
+          color: #bbb;
+          font-size: 0.95rem;
+          letter-spacing: 0.1em;
+          pointer-events: none;
+        }
+        .pg-info {
+          font-size: 0.73rem;
+          color: #aaa;
+          font-weight: 500;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
         }
         .sort-dropdown-btn {
           display: inline-flex;
@@ -409,7 +467,7 @@ export default function ProductsPage() {
               <ul className="list-unstyled mb-0">
                 <li>
                   <Link
-                    href="/products/all"
+                    href="/products"
                     className={`category-link ${categorySlug === "all" ? "active" : ""}`}
                   >
                     All Products
@@ -418,7 +476,7 @@ export default function ProductsPage() {
                 {categories.map((c) => (
                   <li key={c.id}>
                     <Link
-                      href={`/products/${c.slug}`}
+                      href={`/products/categories/${c.slug}`}
                       className={`category-link ${categorySlug === c.slug ? "active" : ""}`}
                     >
                       {c.name}
@@ -443,7 +501,7 @@ export default function ProductsPage() {
                   : categories.find((c) => c.slug === categorySlug)?.name || "Products"}
               </h1>
               {!loading && (
-                <p className="page-count mb-0">
+                <p className="page-count mb-0 d-none">
                   {pagination.total} {pagination.total === 1 ? "result" : "results"}
                 </p>
               )}
@@ -497,7 +555,7 @@ export default function ProductsPage() {
               <i className="bi bi-bag-x" style={{ fontSize: "3rem", color: "#9f523a" }} />
               <h5 className="mt-3" style={{ color: "#666", fontWeight: 600 }}>No products found</h5>
               <p style={{ color: "#999", fontSize: "0.95rem" }}>Try adjusting your filters or search terms</p>
-              <Link href="/products/all" className="btn btn-primary mt-3" style={{
+              <Link href="/products" className="btn btn-primary mt-3" style={{
                 background: "linear-gradient(135deg, #9f523a, #7a3f2c)",
                 border: "none",
                 padding: "10px 24px",
@@ -517,53 +575,49 @@ export default function ProductsPage() {
               </div>
 
               {/* Pagination */}
-              {pagination.pages > 1 && (
-                <nav className="mt-5 pt-4 border-top border-secondary-subtle">
-                  <ul className="pagination justify-content-center">
-                    <li className={`page-item ${page <= 1 ? "disabled" : ""}`}>
-                      <button
-                        className="page-link"
-                        onClick={() => {
-                          const sp = new URLSearchParams(searchParams.toString());
-                          sp.set("page", String(page - 1));
-                          router.push(`?${sp}`);
-                        }}
-                        style={{ fontWeight: 600 }}
-                      >
-                        <i className="bi bi-chevron-left me-1"></i>Previous
-                      </button>
-                    </li>
-                    {Array.from({ length: pagination.pages }, (_, i) => i + 1).map((p) => (
-                      <li key={p} className={`page-item ${page === p ? "active" : ""}`}>
+              {pagination.pages > 1 && (() => {
+                const goTo = (p: number) => {
+                  const sp = new URLSearchParams(searchParams.toString());
+                  sp.set("page", String(p));
+                  router.push(`?${sp}`);
+                };
+                // Build page numbers with ellipsis
+                const range: (number | "...")[] = [];
+                const total = pagination.pages;
+                if (total <= 7) {
+                  for (let i = 1; i <= total; i++) range.push(i);
+                } else {
+                  range.push(1);
+                  if (page > 3) range.push("...");
+                  for (let i = Math.max(2, page - 1); i <= Math.min(total - 1, page + 1); i++) range.push(i);
+                  if (page < total - 2) range.push("...");
+                  range.push(total);
+                }
+                return (
+                <div className="pg-wrap">
+                  <div className="pg-row">
+                    <button className="pg-btn pg-nav" disabled={page <= 1} onClick={() => goTo(page - 1)}>
+                      <i className="bi bi-chevron-left" style={{ fontSize: "0.7rem" }} />&nbsp;Prev
+                    </button>
+                    {range.map((r, i) =>
+                      r === "..." ? (
+                        <span key={`e${i}`} className="pg-ellipsis">···</span>
+                      ) : (
                         <button
-                          className="page-link"
-                          onClick={() => {
-                            const sp = new URLSearchParams(searchParams.toString());
-                            sp.set("page", String(p));
-                            router.push(`?${sp}`);
-                          }}
-                          style={{ fontWeight: page === p ? 700 : 500 }}
-                        >
-                          {p}
-                        </button>
-                      </li>
-                    ))}
-                    <li className={`page-item ${page >= pagination.pages ? "disabled" : ""}`}>
-                      <button
-                        className="page-link"
-                        onClick={() => {
-                          const sp = new URLSearchParams(searchParams.toString());
-                          sp.set("page", String(page + 1));
-                          router.push(`?${sp}`);
-                        }}
-                        style={{ fontWeight: 600 }}
-                      >
-                        Next<i className="bi bi-chevron-right ms-1"></i>
-                      </button>
-                    </li>
-                  </ul>
-                </nav>
-              )}
+                          key={r}
+                          className={`pg-btn${page === r ? " active" : ""}`}
+                          onClick={() => goTo(r as number)}
+                        >{r}</button>
+                      )
+                    )}
+                    <button className="pg-btn pg-nav" disabled={page >= pagination.pages} onClick={() => goTo(page + 1)}>
+                      Next&nbsp;<i className="bi bi-chevron-right" style={{ fontSize: "0.7rem" }} />
+                    </button>
+                  </div>
+                  <span className="pg-info">Page {page} of {pagination.pages} &nbsp;·&nbsp; {pagination.total} items</span>
+                </div>
+                );
+              })()}
             </>
           )}
         </div>

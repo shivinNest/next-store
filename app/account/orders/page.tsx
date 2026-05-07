@@ -18,12 +18,10 @@ interface Order {
   total: string | number;
   createdAt: string;
   items: OrderItem[];
-  address: {
-    name: string;
-    city: string;
-    state: string;
-    pincode: string;
-  };
+  shippingName?: string;
+  shippingCity?: string;
+  shippingState?: string;
+  shippingPincode?: string;
 }
 
 const STATUS_CONFIG: Record<string, { label: string; bg: string; color: string }> = {
@@ -137,7 +135,7 @@ export default function OrdersPage() {
                     <div style={{ borderTop: "1px solid #ece9e4", paddingTop: 16, marginTop: 4 }}>
                       <p style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#9f523a", marginBottom: 8 }}>Delivered to</p>
                       <p style={{ fontSize: "0.875rem", color: "#555", margin: 0 }}>
-                        {order.address.name} &mdash; {order.address.city}, {order.address.state} &ndash; {order.address.pincode}
+                        {order.shippingName} &mdash; {order.shippingCity}, {order.shippingState} &ndash; {order.shippingPincode}
                       </p>
                     </div>
                     {order.status === "PENDING_VERIFICATION" && (

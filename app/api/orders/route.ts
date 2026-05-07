@@ -13,7 +13,6 @@ export async function GET() {
       where: { userId: user.id },
       include: {
         items: true,
-        address: true,
       },
       orderBy: { createdAt: "desc" },
     });
@@ -116,6 +115,13 @@ export async function POST(req: NextRequest) {
         orderNumber: generateOrderNumber(),
         userId: user.id,
         addressId,
+        shippingName: address.name,
+        shippingPhone: address.phone,
+        shippingLine1: address.line1,
+        shippingLine2: address.line2,
+        shippingCity: address.city,
+        shippingState: address.state,
+        shippingPincode: address.pincode,
         subtotal,
         shippingCharge,
         couponCode: appliedCoupon ? appliedCoupon.code : null,
@@ -133,7 +139,7 @@ export async function POST(req: NextRequest) {
           })),
         },
       },
-      include: { items: true, address: true },
+      include: { items: true },
     });
 
     // Record coupon usage and increment counter
@@ -158,6 +164,7 @@ export async function POST(req: NextRequest) {
       sendEmail({
         to: fullUser.email,
         subject: `Order #${order.orderNumber} confirmed - Saaviya`,
+        bcc: process.env.ADMIN_EMAIL,
         html: orderConfirmationTemplate(
           fullUser.name,
           order.orderNumber,

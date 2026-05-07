@@ -40,6 +40,50 @@ export default function CheckoutPage() {
   const [step, setStep] = useState<1 | 2 | 3>(1); // 1=address, 2=payment, 3=success
   const [orderNumber, setOrderNumber] = useState("");
   const [error, setError] = useState("");
+  const [showAddressModal, setShowAddressModal] = useState(false);
+  const [addressForm, setAddressForm] = useState({
+    name: "", phone: "", line1: "", line2: "", city: "", state: "", pincode: "", isDefault: false,
+  });
+  const [addressSaving, setAddressSaving] = useState(false);
+  const [addressErrors, setAddressErrors] = useState<Record<string, string>>({});
+
+  const INDIAN_STATES = [
+    "Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Goa","Gujarat",
+    "Haryana","Himachal Pradesh","Jharkhand","Karnataka","Kerala","Madhya Pradesh",
+    "Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Punjab",
+    "Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh",
+    "Uttarakhand","West Bengal","Delhi","Jammu & Kashmir","Ladakh","Puducherry",
+  ];
+
+  const handleAddressModalSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAddressSaving(true);
+    setAddressErrors({});
+    try {
+      const res = await fetch("/api/addresses", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(addressForm),
+      });
+      const data = await res.json();
+      if (data.success) {
+        const newAddr: Address = data.data;
+        setAddresses((prev) => [...prev, newAddr]);
+        setSelectedAddress(newAddr.id);
+        setShowAddressModal(false);
+        setAddressForm({ name: "", phone: "", line1: "", line2: "", city: "", state: "", pincode: "", isDefault: false });
+      } else if (data.errors) {
+        setAddressErrors(data.errors);
+      } else {
+        setAddressErrors({ general: data.error || "Failed to save address" });
+      }
+    } catch {
+      setAddressErrors({ general: "Something went wrong. Please try again." });
+    } finally {
+      setAddressSaving(false);
+    }
+  };
+
   const [couponCode, setCouponCode] = useState("");
   const [couponApplied, setCouponApplied] = useState<{
     code: string; discountAmount: number; description: string | null; discountType: string; discountValue: number;
@@ -456,29 +500,21 @@ export default function CheckoutPage() {
                 <div style={{ textAlign: "center", padding: "40px 20px", background: "#f8f9fa", borderRadius: "10px" }}>
                   <i className="bi bi-inbox" style={{ fontSize: "2.5rem", color: "#ccc", display: "block", marginBottom: "15px" }} />
                   <p style={{ color: "#999", marginBottom: "20px" }}>No delivery addresses saved yet</p>
-                  <Link
-                    href="/account/addresses?returnTo=/checkout"
+                  <button
+                    onClick={() => setShowAddressModal(true)}
                     style={{
-                      display: "inline-block",
                       background: "#9f523a",
                       color: "white",
+                      border: "none",
                       padding: "10px 25px",
                       borderRadius: "6px",
-                      textDecoration: "none",
                       fontWeight: "600",
+                      cursor: "pointer",
                       transition: "all 0.3s ease"
-                    }}
-                    onMouseEnter={(e) => {
-                      (e.currentTarget as HTMLElement).style.background = "#7a3f2c";
-                      (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
-                    }}
-                    onMouseLeave={(e) => {
-                      (e.currentTarget as HTMLElement).style.background = "#9f523a";
-                      (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
                     }}
                   >
                     <i className="bi bi-plus-circle me-2" />Add Address
-                  </Link>
+                  </button>
                 </div>
               ) : (
                 <>
@@ -557,25 +593,20 @@ export default function CheckoutPage() {
                     ))}
                   </div>
 
-                  <Link
-                    href="/account/addresses?returnTo=/checkout"
+                  <button
+                    onClick={() => setShowAddressModal(true)}
                     style={{
-                      display: "inline-block",
+                      background: "none",
+                      border: "none",
                       color: "#9f523a",
-                      textDecoration: "none",
                       fontWeight: "600",
                       fontSize: "0.95rem",
-                      transition: "all 0.3s ease"
-                    }}
-                    onMouseEnter={(e) => {
-                      (e.currentTarget as HTMLElement).style.opacity = "0.7";
-                    }}
-                    onMouseLeave={(e) => {
-                      (e.currentTarget as HTMLElement).style.opacity = "1";
+                      cursor: "pointer",
+                      padding: 0,
                     }}
                   >
                     <i className="bi bi-plus-circle me-1" />Add New Address
-                  </Link>
+                  </button>
                 </>
               )}
 
@@ -945,6 +976,175 @@ export default function CheckoutPage() {
           to   { transform: rotate(360deg); }
         }
       `}</style>
+
+      {/* Add Address Modal */}
+      {showAddressModal && (
+        <div
+          onClick={(e) => { if (e.target === e.currentTarget) setShowAddressModal(false); }}
+          style={{
+            position: "fixed", inset: 0, zIndex: 1050,
+            background: "rgba(0,0,0,0.5)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            padding: "16px",
+          }}
+        >
+          <div style={{
+            background: "#fff",
+            borderRadius: "14px",
+            width: "100%",
+            maxWidth: "680px",
+            maxHeight: "90vh",
+            overflowY: "auto",
+            boxShadow: "0 20px 60px rgba(0,0,0,0.2)",
+          }}>
+            {/* Modal header */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "24px 28px 0" }}>
+              <h5 style={{ fontWeight: 700, fontSize: "1.1rem", color: "#111", margin: 0 }}>
+                <i className="bi bi-geo-alt me-2" style={{ color: "#9f523a" }} />
+                Add Delivery Address
+              </h5>
+              <button
+                onClick={() => setShowAddressModal(false)}
+                style={{ background: "none", border: "none", fontSize: "1.3rem", color: "#999", cursor: "pointer", lineHeight: 1 }}
+              >
+                &times;
+              </button>
+            </div>
+
+            {/* Modal body */}
+            <form onSubmit={handleAddressModalSubmit} style={{ padding: "20px 28px 28px" }}>
+              {addressErrors.general && (
+                <div style={{ background: "#fef2f2", border: "1px solid #fecaca", color: "#b91c1c", padding: "10px 14px", borderRadius: "8px", marginBottom: "16px", fontSize: "0.85rem" }}>
+                  {addressErrors.general}
+                </div>
+              )}
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
+                {/* Full Name */}
+                <div>
+                  <label style={{ fontSize: "0.8rem", fontWeight: 600, color: "#555", display: "block", marginBottom: 5 }}>Full Name *</label>
+                  <input
+                    type="text" required
+                    value={addressForm.name}
+                    onChange={(e) => setAddressForm(f => ({ ...f, name: e.target.value }))}
+                    placeholder="Recipient name"
+                    style={{ width: "100%", border: `1.5px solid ${addressErrors.name ? "#f87171" : "#e5e0da"}`, borderRadius: 8, padding: "9px 12px", fontSize: "0.9rem", outline: "none", boxSizing: "border-box" }}
+                  />
+                  {addressErrors.name && <p style={{ color: "#b91c1c", fontSize: "0.75rem", margin: "4px 0 0" }}>{addressErrors.name}</p>}
+                </div>
+
+                {/* Phone */}
+                <div>
+                  <label style={{ fontSize: "0.8rem", fontWeight: 600, color: "#555", display: "block", marginBottom: 5 }}>Phone *</label>
+                  <input
+                    type="tel" required
+                    value={addressForm.phone}
+                    onChange={(e) => setAddressForm(f => ({ ...f, phone: e.target.value }))}
+                    placeholder="10-digit mobile number"
+                    style={{ width: "100%", border: `1.5px solid ${addressErrors.phone ? "#f87171" : "#e5e0da"}`, borderRadius: 8, padding: "9px 12px", fontSize: "0.9rem", outline: "none", boxSizing: "border-box" }}
+                  />
+                  {addressErrors.phone && <p style={{ color: "#b91c1c", fontSize: "0.75rem", margin: "4px 0 0" }}>{addressErrors.phone}</p>}
+                </div>
+
+                {/* Address Line 1 */}
+                <div style={{ gridColumn: "1 / -1" }}>
+                  <label style={{ fontSize: "0.8rem", fontWeight: 600, color: "#555", display: "block", marginBottom: 5 }}>Address Line 1 *</label>
+                  <input
+                    type="text" required
+                    value={addressForm.line1}
+                    onChange={(e) => setAddressForm(f => ({ ...f, line1: e.target.value }))}
+                    placeholder="House no., Street, Area"
+                    style={{ width: "100%", border: `1.5px solid ${addressErrors.line1 ? "#f87171" : "#e5e0da"}`, borderRadius: 8, padding: "9px 12px", fontSize: "0.9rem", outline: "none", boxSizing: "border-box" }}
+                  />
+                  {addressErrors.line1 && <p style={{ color: "#b91c1c", fontSize: "0.75rem", margin: "4px 0 0" }}>{addressErrors.line1}</p>}
+                </div>
+
+                {/* Address Line 2 */}
+                <div style={{ gridColumn: "1 / -1" }}>
+                  <label style={{ fontSize: "0.8rem", fontWeight: 600, color: "#555", display: "block", marginBottom: 5 }}>Address Line 2 <span style={{ color: "#999", fontWeight: 400 }}>(optional)</span></label>
+                  <input
+                    type="text"
+                    value={addressForm.line2}
+                    onChange={(e) => setAddressForm(f => ({ ...f, line2: e.target.value }))}
+                    placeholder="Landmark, Apartment, etc."
+                    style={{ width: "100%", border: "1.5px solid #e5e0da", borderRadius: 8, padding: "9px 12px", fontSize: "0.9rem", outline: "none", boxSizing: "border-box" }}
+                  />
+                </div>
+
+                {/* City */}
+                <div>
+                  <label style={{ fontSize: "0.8rem", fontWeight: 600, color: "#555", display: "block", marginBottom: 5 }}>City *</label>
+                  <input
+                    type="text" required
+                    value={addressForm.city}
+                    onChange={(e) => setAddressForm(f => ({ ...f, city: e.target.value }))}
+                    placeholder="City"
+                    style={{ width: "100%", border: `1.5px solid ${addressErrors.city ? "#f87171" : "#e5e0da"}`, borderRadius: 8, padding: "9px 12px", fontSize: "0.9rem", outline: "none", boxSizing: "border-box" }}
+                  />
+                  {addressErrors.city && <p style={{ color: "#b91c1c", fontSize: "0.75rem", margin: "4px 0 0" }}>{addressErrors.city}</p>}
+                </div>
+
+                {/* Pincode */}
+                <div>
+                  <label style={{ fontSize: "0.8rem", fontWeight: 600, color: "#555", display: "block", marginBottom: 5 }}>Pincode *</label>
+                  <input
+                    type="text" required
+                    value={addressForm.pincode}
+                    onChange={(e) => setAddressForm(f => ({ ...f, pincode: e.target.value }))}
+                    placeholder="6-digit pincode"
+                    style={{ width: "100%", border: `1.5px solid ${addressErrors.pincode ? "#f87171" : "#e5e0da"}`, borderRadius: 8, padding: "9px 12px", fontSize: "0.9rem", outline: "none", boxSizing: "border-box" }}
+                  />
+                  {addressErrors.pincode && <p style={{ color: "#b91c1c", fontSize: "0.75rem", margin: "4px 0 0" }}>{addressErrors.pincode}</p>}
+                </div>
+
+                {/* State */}
+                <div style={{ gridColumn: "1 / -1" }}>
+                  <label style={{ fontSize: "0.8rem", fontWeight: 600, color: "#555", display: "block", marginBottom: 5 }}>State *</label>
+                  <select
+                    required
+                    value={addressForm.state}
+                    onChange={(e) => setAddressForm(f => ({ ...f, state: e.target.value }))}
+                    style={{ width: "100%", border: `1.5px solid ${addressErrors.state ? "#f87171" : "#e5e0da"}`, borderRadius: 8, padding: "9px 12px", fontSize: "0.9rem", outline: "none", background: "#fff", boxSizing: "border-box" }}
+                  >
+                    <option value="">Select state</option>
+                    {INDIAN_STATES.map(s => <option key={s} value={s}>{s}</option>)}
+                  </select>
+                  {addressErrors.state && <p style={{ color: "#b91c1c", fontSize: "0.75rem", margin: "4px 0 0" }}>{addressErrors.state}</p>}
+                </div>
+
+                {/* Set as default */}
+                <div style={{ gridColumn: "1 / -1", display: "flex", alignItems: "center", gap: 10 }}>
+                  <input
+                    type="checkbox"
+                    id="modal-isDefault"
+                    checked={addressForm.isDefault}
+                    onChange={(e) => setAddressForm(f => ({ ...f, isDefault: e.target.checked }))}
+                    style={{ width: 16, height: 16, accentColor: "#9f523a", cursor: "pointer" }}
+                  />
+                  <label htmlFor="modal-isDefault" style={{ fontSize: "0.875rem", color: "#555", cursor: "pointer", margin: 0 }}>Set as default address</label>
+                </div>
+              </div>
+
+              <div style={{ display: "flex", gap: 12, marginTop: 24 }}>
+                <button
+                  type="button"
+                  onClick={() => setShowAddressModal(false)}
+                  style={{ flex: 1, background: "#fff", border: "1.5px solid #e5e0da", borderRadius: 8, padding: "11px", fontWeight: 600, color: "#555", cursor: "pointer", fontSize: "0.9rem" }}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={addressSaving}
+                  style={{ flex: 2, background: "linear-gradient(135deg, #9f523a 0%, #7a3f2c 100%)", border: "none", borderRadius: 8, padding: "11px", fontWeight: 700, color: "#fff", cursor: addressSaving ? "not-allowed" : "pointer", opacity: addressSaving ? 0.75 : 1, fontSize: "0.9rem" }}
+                >
+                  {addressSaving ? "Saving…" : "Save & Use This Address"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

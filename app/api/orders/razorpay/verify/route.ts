@@ -111,6 +111,13 @@ export async function POST(req: NextRequest) {
         orderNumber: generateOrderNumber(),
         userId: user.id,
         addressId,
+        shippingName: address.name,
+        shippingPhone: address.phone,
+        shippingLine1: address.line1,
+        shippingLine2: address.line2,
+        shippingCity: address.city,
+        shippingState: address.state,
+        shippingPincode: address.pincode,
         status: "PLACED",
         subtotal,
         shippingCharge,
@@ -132,7 +139,7 @@ export async function POST(req: NextRequest) {
           })),
         },
       },
-      include: { items: true, address: true },
+      include: { items: true },
     });
 
     // Record coupon usage and increment counter
@@ -157,6 +164,7 @@ export async function POST(req: NextRequest) {
       sendEmail({
         to: fullUser.email,
         subject: `Order #${order.orderNumber} confirmed - Saaviya`,
+        bcc: process.env.ADMIN_EMAIL,
         html: orderConfirmationTemplate(
           fullUser.name,
           order.orderNumber,
@@ -173,13 +181,13 @@ export async function POST(req: NextRequest) {
             price: Number(i.price),
           })),
           {
-            name: address.name,
-            phone: address.phone,
-            line1: address.line1,
-            line2: address.line2,
-            city: address.city,
-            state: address.state,
-            pincode: address.pincode,
+            name: order.shippingName ?? "",
+            phone: order.shippingPhone ?? "",
+            line1: order.shippingLine1 ?? "",
+            line2: order.shippingLine2 ?? undefined,
+            city: order.shippingCity ?? "",
+            state: order.shippingState ?? "",
+            pincode: order.shippingPincode ?? "",
           }
         ),
       }).catch(console.error);

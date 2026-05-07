@@ -24,7 +24,6 @@ export async function GET(
       where: { id },
       include: {
         user: { select: { name: true, email: true, phone: true } },
-        address: true,
         items: true,
       },
     });

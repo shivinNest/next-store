@@ -1,4 +1,4 @@
-import { PrismaClient, Role } from "@prisma/client";
+﻿import { PrismaClient, Role } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import bcrypt from "bcryptjs";
 import "dotenv/config";
@@ -7,7 +7,7 @@ const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
-  console.log("🌱 Seeding database...");
+  console.log("ðŸŒ± Seeding database...");
 
   // Clear existing seeded data (order matters for FK constraints)
   await prisma.orderItem.deleteMany();
@@ -21,7 +21,7 @@ async function main() {
   await prisma.faqItem.deleteMany();
   await prisma.blog.deleteMany();
   await prisma.testimonial.deleteMany();
-  console.log("🗑️  Cleared old seed data");
+  console.log("ðŸ—‘ï¸  Cleared old seed data");
 
   // Admin user
   const adminPassword = await bcrypt.hash("Admin@123", 10);
@@ -36,7 +36,7 @@ async function main() {
       isVerified: true,
     },
   });
-  console.log("✅ Admin user:", admin.email);
+  console.log("âœ… Admin user:", admin.email);
 
   // Categories
   const categoryData = [
@@ -57,10 +57,10 @@ async function main() {
     });
     categories[cat.slug] = c.id;
   }
-  console.log("✅ Categories created:", Object.keys(categories).length);
+  console.log("âœ… Categories created:", Object.keys(categories).length);
 
   // Products are seeded separately. Run: npm run seed:products
-  console.log("ℹ️  Products skipped — run `npm run seed:products` to seed 25 products.");
+  console.log("â„¹ï¸  Products skipped â€” run `npm run seed:products` to seed 25 products.");
 
   // FAQ items
   const faqs = [
@@ -75,23 +75,23 @@ async function main() {
   for (const faq of faqs) {
     await prisma.faqItem.create({ data: faq });
   }
-  console.log("✅ FAQ items created:", faqs.length);
+  console.log("âœ… FAQ items created:", faqs.length);
 
-  // Hero slides  (1920×600px)
+  // Hero slides  (1920Ã—600px)
   const heroSlides = [
     {
       title: "New Arrivals",
       subtitle: "Discover our latest collection of ethnic wear",
       image: "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=1920&h=600&fit=crop",
-      link: "/products/kurtas",
+      link: "/products/categories/kurtas",
       isActive: true,
       sortOrder: 1,
     },
     {
-      title: "Festive Sale – Up to 50% Off",
+      title: "Festive Sale â€“ Up to 50% Off",
       subtitle: "Stunning lehengas & sarees for every celebration",
       image: "https://images.unsplash.com/photo-1583391733956-3c5f7a4b2ce0?w=1920&h=600&fit=crop",
-      link: "/products/lehengas",
+      link: "/products/categories/lehengas",
       isActive: true,
       sortOrder: 2,
     },
@@ -99,7 +99,7 @@ async function main() {
       title: "Summer Dresses",
       subtitle: "Light, breezy styles for sunny days",
       image: "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=1920&h=600&fit=crop",
-      link: "/products/dresses",
+      link: "/products/categories/dresses",
       isActive: true,
       sortOrder: 3,
     },
@@ -108,14 +108,14 @@ async function main() {
   for (const slide of heroSlides) {
     await prisma.heroSlide.create({ data: slide });
   }
-  console.log("✅ Hero slides created:", heroSlides.length);
+  console.log("âœ… Hero slides created:", heroSlides.length);
 
-  // Banners  (1200×400px wide)
+  // Banners  (1200Ã—400px wide)
   const banners = [
     {
       title: "Summer Collection 2025",
       image: "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=1200&h=400&fit=crop",
-      link: "/products/dresses",
+      link: "/products/categories/dresses",
       isActive: true,
       position: "home",
       sortOrder: 1,
@@ -123,7 +123,7 @@ async function main() {
     {
       title: "Kurta Fiesta",
       image: "https://images.unsplash.com/photo-1614093302611-8efc4a99faea?w=1200&h=400&fit=crop",
-      link: "/products/kurtas",
+      link: "/products/categories/kurtas",
       isActive: true,
       position: "home",
       sortOrder: 2,
@@ -131,7 +131,7 @@ async function main() {
     {
       title: "Lehenga & Wedding Wear",
       image: "https://images.unsplash.com/photo-1583391733956-3c5f7a4b2ce0?w=1200&h=400&fit=crop",
-      link: "/products/lehengas",
+      link: "/products/categories/lehengas",
       isActive: true,
       position: "home",
       sortOrder: 3,
@@ -139,7 +139,7 @@ async function main() {
     {
       title: "Flat 40% Off on Tops",
       image: "https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?w=1200&h=400&fit=crop",
-      link: "/products/tops",
+      link: "/products/categories/tops",
       isActive: true,
       position: "home",
       sortOrder: 4,
@@ -149,7 +149,7 @@ async function main() {
   for (const b of banners) {
     await prisma.banner.create({ data: b });
   }
-  console.log("✅ Banners created:", banners.length);
+  console.log("âœ… Banners created:", banners.length);
 
   // Blog posts
   const blogPosts = [
@@ -176,7 +176,7 @@ async function main() {
     {
       title: "The Complete Guide to Choosing Ethnic Wear for Weddings",
       slug: "complete-guide-ethnic-wear-weddings",
-      excerpt: "From lehengas to anarkalis — find the perfect outfit for every wedding function this season.",
+      excerpt: "From lehengas to anarkalis â€” find the perfect outfit for every wedding function this season.",
       content: "<p>Wedding season is a showcase of India's most beautiful textiles and craftsmanship. Whether you're the bride, bridesmaid or a guest, this guide will help you dress perfectly for every ceremony...</p>",
       image: "https://images.unsplash.com/photo-1619410283995-43d9134e7656?w=800&h=500&fit=crop",
       author: "Fashion Desk",
@@ -192,12 +192,12 @@ async function main() {
       create: { ...post, isPublished: true },
     });
   }
-  console.log("✅ Blog posts seeded:", blogPosts.length);
+  console.log("âœ… Blog posts seeded:", blogPosts.length);
 
   // Testimonials
   const testimonialData = [
     { name: "Priya Sharma", location: "Mumbai, Maharashtra", rating: 5, avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=face", review: "Absolutely love the quality! The fabric of the kurta is so soft and the embroidery is beautiful. Will definitely order again.", sortOrder: 1 },
-    { name: "Ananya Krishnan", location: "Bengaluru, Karnataka", rating: 5, avatar: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&h=150&fit=crop&crop=face", review: "Ordered a saree for my cousin's wedding — it arrived well-packaged and looked even better in person. Got so many compliments!", sortOrder: 2 },
+    { name: "Ananya Krishnan", location: "Bengaluru, Karnataka", rating: 5, avatar: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&h=150&fit=crop&crop=face", review: "Ordered a saree for my cousin's wedding â€” it arrived well-packaged and looked even better in person. Got so many compliments!", sortOrder: 2 },
     { name: "Meera Joshi", location: "Pune, Maharashtra", rating: 4, avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face", review: "Great selection of ethnic wear. The delivery was fast and the sizing was accurate. Slight delay in customer support response but overall a great experience.", sortOrder: 3 },
     { name: "Deepika Nair", location: "Kochi, Kerala", rating: 5, avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face", review: "The lehenga I ordered was stunning! The colors were exactly as shown. Saaviya has become my go-to for ethnic fashion online.", sortOrder: 4 },
     { name: "Ritu Agarwal", location: "Jaipur, Rajasthan", rating: 5, avatar: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&h=150&fit=crop&crop=face", review: "Super happy with my purchase! The salwar set is gorgeous and stitching quality is top-notch. Highly recommend this store.", sortOrder: 5 },
@@ -210,9 +210,9 @@ async function main() {
   for (const t of testimonialData) {
     await prisma.testimonial.create({ data: { ...t, isActive: true } });
   }
-  console.log("✅ Testimonials seeded:", testimonialData.length);
+  console.log("âœ… Testimonials seeded:", testimonialData.length);
 
-  console.log("\n🎉 Seeding complete!");
+  console.log("\nðŸŽ‰ Seeding complete!");
   console.log("Admin login: admin@saaviya.in / Admin@123");
 }
 

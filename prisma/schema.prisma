@@ -116,7 +116,6 @@ model Address {
   updatedAt DateTime @updatedAt
 
   user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  orders Order[]
 
   @@map("addresses")
 }
@@ -141,7 +140,15 @@ model Order {
   id                  String      @id @default(cuid())
   orderNumber         String      @unique
   userId              String
-  addressId           String
+  addressId           String?     // plain reference, no FK — address is snapshotted below
+  // Snapshot of delivery address at the time of order
+  shippingName        String?
+  shippingPhone       String?
+  shippingLine1       String?
+  shippingLine2       String?
+  shippingCity        String?
+  shippingState       String?
+  shippingPincode     String?
   status              OrderStatus @default(PENDING_VERIFICATION)
   subtotal            Decimal     @db.Decimal(10, 2)
   shippingCharge      Decimal     @default(0) @db.Decimal(10, 2)
@@ -159,7 +166,6 @@ model Order {
   updatedAt           DateTime    @updatedAt
 
   user    User      @relation(fields: [userId], references: [id])
-  address Address   @relation(fields: [addressId], references: [id])
   items   OrderItem[]
 
   @@map("orders")

@@ -3,24 +3,6 @@ import React, { useEffect, useState, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import dynamic from "next/dynamic";
-import "react-quill-new/dist/quill.snow.css";
-
-// CSS imported at top level so it's included in the bundle (SSR-safe)
-// react-quill-new module loaded client-side only to avoid SSR window errors
-const ReactQuill = dynamic(() => import("react-quill-new"), {
-  ssr: false,
-  loading: () => <div className="form-control" style={{ minHeight: 200, background: "#f8f9fa", borderRadius: 6 }} />,
-}) as React.ComponentType<{
-  theme?: string;
-  value?: string;
-  onChange?: (value: string) => void;
-  modules?: Record<string, unknown>;
-  formats?: string[];
-  style?: React.CSSProperties;
-  placeholder?: string;
-}>;
-
 interface Category {
   id: string;
   name: string;
@@ -214,32 +196,14 @@ export default function ProductFormPage({ mode }: ProductFormProps) {
                   <div className="col-12">
                     <label className="form-label small fw-semibold">
                       Full Description
-                      <span className="text-muted fw-normal ms-2" style={{ fontSize: "0.78rem" }}>
-                        Supports rich text formatting
-                      </span>
                     </label>
-                    <ReactQuill
-                      theme="snow"
+                    <textarea
+                      className="form-control"
+                      rows={8}
                       value={form.description}
-                      onChange={(val) => setForm({ ...form, description: val.replace(/&nbsp;/g, " ") })}
-                      modules={{
-                        toolbar: [
-                          [{ header: [2, 3, false] }],
-                          ["bold", "italic", "underline", "strike"],
-                          [{ list: "ordered" }, { list: "bullet" }],
-                          ["blockquote", "clean"],
-                        ],
-                      }}
-                      formats={["header", "bold", "italic", "underline", "strike", "list", "blockquote"]}
-                      style={{ background: "white" }}
-                      placeholder="Detailed product description with formatting..."
+                      onChange={(e) => setForm({ ...form, description: e.target.value })}
+                      placeholder="Detailed product description..."
                     />
-                    <style>{`
-                      .ql-container { font-size: 0.9rem; min-height: 160px; }
-                      .ql-editor { min-height: 160px; }
-                      .ql-toolbar { border-top-left-radius: 6px; border-top-right-radius: 6px; }
-                      .ql-container { border-bottom-left-radius: 6px; border-bottom-right-radius: 6px; }
-                    `}</style>
                   </div>
                   <div className="col-md-6">
                     <label className="form-label small fw-semibold">Price (₹) *</label>

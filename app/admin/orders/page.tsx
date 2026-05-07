@@ -14,13 +14,11 @@ interface Order {
   razorpayPaymentId?: string;
   adminNote?: string;
   user: { name: string; email: string };
-  address: {
-    name: string;
-    line1: string;
-    city: string;
-    state: string;
-    pincode: string;
-  };
+  shippingName?: string;
+  shippingLine1?: string;
+  shippingCity?: string;
+  shippingState?: string;
+  shippingPincode?: string;
   items: {
     id: string;
     name: string;
@@ -235,9 +233,9 @@ export default function AdminOrdersPage() {
                   </div>
                   <div className="col-6">
                     <p className="text-muted small mb-1 text-uppercase fw-semibold">Ship to</p>
-                    <p className="mb-0 small">{selectedOrder.address.line1}</p>
+                    <p className="mb-0 small">{selectedOrder.shippingLine1}</p>
                     <p className="mb-0 small text-muted">
-                      {selectedOrder.address.city}, {selectedOrder.address.state} – {selectedOrder.address.pincode}
+                      {selectedOrder.shippingCity}, {selectedOrder.shippingState} – {selectedOrder.shippingPincode}
                     </p>
                   </div>
                 </div>
