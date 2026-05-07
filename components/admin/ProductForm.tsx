@@ -221,7 +221,7 @@ export default function ProductFormPage({ mode }: ProductFormProps) {
                     <ReactQuill
                       theme="snow"
                       value={form.description}
-                      onChange={(val) => setForm({ ...form, description: val })}
+                      onChange={(val) => setForm({ ...form, description: val.replace(/&nbsp;/g, " ") })}
                       modules={{
                         toolbar: [
                           [{ header: [2, 3, false] }],

@@ -501,7 +501,7 @@ export default function ProductsPage() {
                   : categories.find((c) => c.slug === categorySlug)?.name || "Products"}
               </h1>
               {!loading && (
-                <p className="page-count mb-0">
+                <p className="page-count mb-0 d-none">
                   {pagination.total} {pagination.total === 1 ? "result" : "results"}
                 </p>
               )}

@@ -1,8 +1,14 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+
+declare global {
+  interface Window {
+    Razorpay: new (options: Record<string, unknown>) => { open(): void };
+  }
+}
 
 interface CartItem {
   id: string;
@@ -25,13 +31,10 @@ interface Address {
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const screenshotRef = useRef<HTMLInputElement>(null);
 
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [selectedAddress, setSelectedAddress] = useState("");
-  const [screenshot, setScreenshot] = useState<File | null>(null);
-  const [screenshotPreview, setScreenshotPreview] = useState("");
   const [loading, setLoading] = useState(true);
   const [placing, setPlacing] = useState(false);
   const [step, setStep] = useState<1 | 2 | 3>(1); // 1=address, 2=payment, 3=success
@@ -75,12 +78,15 @@ export default function CheckoutPage() {
     load();
   }, [router]);
 
-  const handleScreenshotChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const f = e.target.files?.[0];
-    if (f) {
-      setScreenshot(f);
-      setScreenshotPreview(URL.createObjectURL(f));
-    }
+  const loadRazorpayScript = (): Promise<boolean> => {
+    return new Promise((resolve) => {
+      if (typeof window.Razorpay !== "undefined") return resolve(true);
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
   };
 
   const handleApplyCoupon = async () => {
@@ -113,38 +119,91 @@ export default function CheckoutPage() {
     setCouponError("");
   };
 
-  const handlePlaceOrder = async () => {
+  const handleRazorpayPayment = async () => {
     if (!selectedAddress) {
       setError("Please select a delivery address");
-      return;
-    }
-    if (!screenshot) {
-      setError("Please upload the payment screenshot");
       return;
     }
 
     setPlacing(true);
     setError("");
 
-    const formData = new FormData();
-    formData.append("addressId", selectedAddress);
-    formData.append("paymentScreenshot", screenshot);
-    if (couponApplied) {
-      formData.append("couponCode", couponApplied.code);
-    }
-
     try {
-      const res = await fetch("/api/orders", { method: "POST", body: formData });
-      const data = await res.json();
-      if (data.success) {
-        setOrderNumber(data.data.orderNumber);
-        setStep(3);
-      } else {
-        setError(data.error || "Failed to place order");
+      // Load Razorpay script
+      const loaded = await loadRazorpayScript();
+      if (!loaded) {
+        setError("Failed to load payment gateway. Please try again.");
+        setPlacing(false);
+        return;
       }
+
+      // Create Razorpay order on server
+      const createRes = await fetch("/api/orders/razorpay/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          addressId: selectedAddress,
+          couponCode: couponApplied?.code ?? null,
+        }),
+      });
+      const createData = await createRes.json();
+      if (!createData.success) {
+        setError(createData.error || "Failed to initiate payment");
+        setPlacing(false);
+        return;
+      }
+
+      const { orderId, amount, currency } = createData.data;
+
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        amount,
+        currency,
+        name: "Saaviya",
+        description: "Order Payment",
+        order_id: orderId,
+        handler: async (response: {
+          razorpay_order_id: string;
+          razorpay_payment_id: string;
+          razorpay_signature: string;
+        }) => {
+          // Verify payment and create order
+          const verifyRes = await fetch("/api/orders/razorpay/verify", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              addressId: selectedAddress,
+              couponCode: couponApplied?.code ?? null,
+            }),
+          });
+          const verifyData = await verifyRes.json();
+          if (verifyData.success) {
+            setOrderNumber(verifyData.data.orderNumber);
+            setStep(3);
+          } else {
+            setError(verifyData.error || "Payment verification failed");
+          }
+          setPlacing(false);
+        },
+        prefill: {
+          name: addresses.find((a) => a.id === selectedAddress)?.name ?? "",
+          contact: addresses.find((a) => a.id === selectedAddress)?.phone ?? "",
+        },
+        theme: { color: "#9f523a" },
+        modal: {
+          ondismiss: () => {
+            setPlacing(false);
+          },
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
     } catch {
       setError("Something went wrong. Please try again.");
-    } finally {
       setPlacing(false);
     }
   };
@@ -161,8 +220,96 @@ export default function CheckoutPage() {
 
   if (loading) {
     return (
-      <div className="container py-5 text-center">
-        <div className="spinner-border text-primary" />
+      <div style={{ background: "#fafafa", minHeight: "100vh", paddingTop: "40px", paddingBottom: "60px" }}>
+        <style>{`
+          @keyframes shimmer {
+            0%   { background-position: -600px 0; }
+            100% { background-position: 600px 0; }
+          }
+          .sk {
+            background: linear-gradient(90deg, #ece9e4 25%, #f5f2ef 50%, #ece9e4 75%);
+            background-size: 600px 100%;
+            animation: shimmer 1.4s infinite linear;
+            border-radius: 6px;
+          }
+        `}</style>
+        <div className="container">
+          {/* Header skeleton */}
+          <div style={{ marginBottom: "40px" }}>
+            <div className="sk" style={{ height: 38, width: 200, marginBottom: 12 }} />
+            <div className="sk" style={{ height: 16, width: 260 }} />
+          </div>
+
+          {/* Progress steps skeleton */}
+          <div style={{ background: "white", padding: "25px", borderRadius: "12px", boxShadow: "0 2px 8px rgba(0,0,0,0.05)", marginBottom: "32px", display: "flex", gap: "16px", alignItems: "center" }}>
+            {[1, 2, 3].map((n, i) => (
+              <div key={n} style={{ display: "flex", alignItems: "center", gap: "12px", flex: 1 }}>
+                <div className="sk" style={{ width: 50, height: 50, borderRadius: "50%", flexShrink: 0 }} />
+                <div>
+                  <div className="sk" style={{ height: 11, width: 40, marginBottom: 6 }} />
+                  <div className="sk" style={{ height: 14, width: 70 }} />
+                </div>
+                {i < 2 && <div className="sk" style={{ flex: 1, height: 2, minWidth: 20 }} />}
+              </div>
+            ))}
+          </div>
+
+          <div className="row g-4">
+            {/* Main panel skeleton */}
+            <div className="col-lg-7">
+              <div style={{ background: "white", borderRadius: "12px", padding: "40px", boxShadow: "0 4px 15px rgba(0,0,0,0.08)" }}>
+                {/* Section title */}
+                <div className="sk" style={{ height: 24, width: 200, marginBottom: 8 }} />
+                <div className="sk" style={{ height: 14, width: 280, marginBottom: 28 }} />
+                {/* Address cards */}
+                {[1, 2].map((n) => (
+                  <div key={n} style={{ border: "2px solid #e9ecef", borderRadius: "10px", padding: "20px", marginBottom: "16px" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                      <div style={{ flex: 1 }}>
+                        <div className="sk" style={{ height: 16, width: 140, marginBottom: 10 }} />
+                        <div className="sk" style={{ height: 13, width: 220, marginBottom: 8 }} />
+                        <div className="sk" style={{ height: 13, width: 170, marginBottom: 8 }} />
+                        <div className="sk" style={{ height: 13, width: 110 }} />
+                      </div>
+                      <div className="sk" style={{ width: 24, height: 24, borderRadius: "50%", flexShrink: 0 }} />
+                    </div>
+                  </div>
+                ))}
+                {/* Button */}
+                <div className="sk" style={{ height: 48, width: "100%", borderRadius: "8px", marginTop: "30px" }} />
+              </div>
+            </div>
+
+            {/* Order summary sidebar skeleton */}
+            <div className="col-lg-5">
+              <div style={{ background: "white", borderRadius: "12px", padding: "30px", boxShadow: "0 4px 15px rgba(0,0,0,0.08)" }}>
+                <div className="sk" style={{ height: 20, width: 150, marginBottom: 8 }} />
+                <div className="sk" style={{ height: 13, width: 80, marginBottom: 24 }} />
+                {/* Items */}
+                {[1, 2, 3].map((n) => (
+                  <div key={n} style={{ display: "flex", gap: "12px", marginBottom: "16px", paddingBottom: "16px", borderBottom: "1px solid #f0f0f0" }}>
+                    <div className="sk" style={{ width: 60, height: 75, borderRadius: "8px", flexShrink: 0 }} />
+                    <div style={{ flex: 1 }}>
+                      <div className="sk" style={{ height: 14, width: "80%", marginBottom: 8 }} />
+                      <div className="sk" style={{ height: 12, width: "50%", marginBottom: 8 }} />
+                      <div className="sk" style={{ height: 14, width: 60 }} />
+                    </div>
+                  </div>
+                ))}
+                {/* Totals */}
+                <div style={{ borderTop: "2px solid #f0f0f0", paddingTop: "20px" }}>
+                  {[1, 2, 3].map((n) => (
+                    <div key={n} style={{ display: "flex", justifyContent: "space-between", marginBottom: "12px" }}>
+                      <div className="sk" style={{ height: 14, width: 80 }} />
+                      <div className="sk" style={{ height: 14, width: 60 }} />
+                    </div>
+                  ))}
+                  <div className="sk" style={{ height: 48, width: "100%", borderRadius: "8px", marginTop: "8px" }} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -269,10 +416,10 @@ export default function CheckoutPage() {
                 Your order <strong style={{ color: "#9f523a" }}>#{orderNumber}</strong> has been successfully created.
               </p>
 
-              <div style={{ background: "#f8f9fa", padding: "18px 20px", borderRadius: "10px", marginBottom: "28px", border: "1px solid rgba(159,82,58,0.1)", textAlign: "left" }}>
-                <p style={{ fontSize: "0.78rem", fontWeight: 700, color: "#999", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 6 }}>Order Status</p>
-                <p style={{ color: "#9f523a", fontSize: "1rem", fontWeight: "700", marginBottom: 4 }}>Pending Payment Verification</p>
-                <p style={{ color: "#999", fontSize: "0.85rem", marginBottom: 0 }}>We&apos;ll notify you once your payment is verified.</p>
+              <div style={{ background: "#f8f9fa", padding: "18px 20px", borderRadius: "10px", marginBottom: "28px", border: "1px solid rgba(32,201,151,0.2)", textAlign: "left" }}>
+                <p style={{ fontSize: "0.78rem", fontWeight: 700, color: "#999", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 6 }}>Payment Status</p>
+                <p style={{ color: "#20c997", fontSize: "1rem", fontWeight: "700", marginBottom: 4 }}>Payment Successful</p>
+                <p style={{ color: "#999", fontSize: "0.85rem", marginBottom: 0 }}>Your payment has been confirmed. We&apos;ll start processing your order soon.</p>
               </div>
 
               <div style={{ display: "flex", gap: "12px", flexDirection: "column" }}>
@@ -504,7 +651,7 @@ export default function CheckoutPage() {
                 </button>
               </div>
 
-              {/* UPI QR Section */}
+              {/* Razorpay Payment Section */}
               <div style={{
                 background: "linear-gradient(135deg, rgba(159, 82, 58, 0.05) 0%, rgba(159, 82, 58, 0.02) 100%)",
                 padding: "35px",
@@ -513,38 +660,13 @@ export default function CheckoutPage() {
                 textAlign: "center",
                 marginBottom: "35px"
               }}>
-                <p style={{ color: "#666", fontWeight: "700", fontSize: "1.05rem", marginBottom: "20px" }}>
-                  <i className="bi bi-qr-code me-2" style={{ color: "#9f523a" }} />
-                  Scan UPI QR Code to Pay
+                <i className="bi bi-shield-lock" style={{ fontSize: "2.5rem", color: "#9f523a", display: "block", marginBottom: "16px" }} />
+                <p style={{ color: "#333", fontWeight: "700", fontSize: "1.1rem", marginBottom: "8px" }}>
+                  Secure Online Payment
                 </p>
-
-                <div style={{
-                  width: "220px",
-                  height: "220px",
-                  borderRadius: "12px",
-                  background: "white",
-                  border: "2px solid rgba(159, 82, 58, 0.1)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  margin: "0 auto 25px",
-                  boxShadow: "0 4px 12px rgba(159, 82, 58, 0.1)",
-                  overflow: "hidden",
-                  padding: "6px"
-                }}>
-                  <Image
-                    src="/assets/qr22309612024.png"
-                    alt="UPI QR Code"
-                    width={208}
-                    height={208}
-                    style={{ objectFit: "contain", borderRadius: "8px" }}
-                  />
-                </div>
-
-                <p style={{ color: "#666", marginBottom: "15px" }}>
-                  <strong>UPI ID:</strong> <span style={{ fontFamily: "monospace", color: "#9f523a" }}>snehasatheesan91-1@okicici</span>
+                <p style={{ color: "#666", fontSize: "0.9rem", marginBottom: "20px" }}>
+                  Pay safely using UPI, Cards, Net Banking, or Wallets via Razorpay
                 </p>
-
                 <div style={{
                   display: "inline-block",
                   background: "linear-gradient(135deg, #9f523a 0%, #7a3f2c 100%)",
@@ -554,68 +676,8 @@ export default function CheckoutPage() {
                   fontWeight: "700",
                   fontSize: "1.1rem"
                 }}>
-                  Pay ₹{total.toLocaleString("en-IN")}
-                </div>              </div>
-
-              {/* Screenshot Upload */}
-              <div style={{ marginBottom: "25px" }}>
-                <label style={{ display: "block", fontWeight: "700", color: "#333", marginBottom: "12px", fontSize: "0.95rem" }}>
-                  Upload Payment Screenshot *
-                </label>
-                <div
-                  onClick={() => screenshotRef.current?.click()}
-                  style={{
-                    border: screenshotPreview ? "2px solid #20c997" : "2px dashed #9f523a",
-                    borderRadius: "12px",
-                    padding: "35px 20px",
-                    textAlign: "center",
-                    cursor: "pointer",
-                    transition: "all 0.3s ease",
-                    background: screenshotPreview ? "rgba(32, 201, 151, 0.03)" : "rgba(159, 82, 58, 0.02)"
-                  }}
-                  onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLElement).style.background = "rgba(159, 82, 58, 0.05)";
-                    (e.currentTarget as HTMLElement).style.borderColor = "#9f523a";
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLElement).style.background = screenshotPreview ? "rgba(32, 201, 151, 0.03)" : "rgba(159, 82, 58, 0.02)";
-                    (e.currentTarget as HTMLElement).style.borderColor = screenshotPreview ? "#20c997" : "#9f523a";
-                  }}
-                >
-                  {screenshotPreview ? (
-                    <div>
-                      <Image
-                        src={screenshotPreview}
-                        alt="Payment screenshot"
-                        width={200}
-                        height={150}
-                        style={{
-                          borderRadius: "8px",
-                          objectFit: "cover",
-                          maxHeight: "150px",
-                          marginBottom: "12px"
-                        }}
-                      />
-                      <p style={{ color: "#20c997", fontWeight: "600", marginBottom: "0" }}>
-                        <i className="bi bi-check-circle me-2" />
-                        {screenshot?.name}
-                      </p>
-                    </div>
-                  ) : (
-                    <div>
-                      <i className="bi bi-cloud-upload" style={{ fontSize: "2.5rem", color: "#9f523a", display: "block", marginBottom: "12px" }} />
-                      <p style={{ color: "#666", fontWeight: "600", marginBottom: "5px" }}>Click to upload payment screenshot</p>
-                      <p style={{ color: "#999", fontSize: "0.9rem", marginBottom: "0" }}>PNG, JPG up to 5MB</p>
-                    </div>
-                  )}
+                  Total: ₹{total.toLocaleString("en-IN")}
                 </div>
-                <input
-                  ref={screenshotRef}
-                  type="file"
-                  accept="image/*"
-                  style={{ display: "none" }}
-                  onChange={handleScreenshotChange}
-                />
               </div>
 
               {error && (
@@ -634,7 +696,7 @@ export default function CheckoutPage() {
               )}
 
               <button
-                onClick={handlePlaceOrder}
+                onClick={handleRazorpayPayment}
                 disabled={placing}
                 style={{
                   width: "100%",
@@ -668,12 +730,12 @@ export default function CheckoutPage() {
                     <span style={{ display: "inline-block", marginRight: "8px" }}>
                       <i className="bi bi-arrow-repeat" style={{ animation: "spin 1s linear infinite" }} />
                     </span>
-                    Placing Order...
+                    Processing...
                   </>
                 ) : (
                   <>
-                    <i className="bi bi-bag-check me-2" />
-                    Place Order
+                    <i className="bi bi-credit-card me-2" />
+                    Pay ₹{total.toLocaleString("en-IN")} with Razorpay
                   </>
                 )}
               </button>

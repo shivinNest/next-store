@@ -20,6 +20,8 @@ interface CartItem {
 export default function CartPage() {
   const [items, setItems] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [updatingIds, setUpdatingIds] = useState<Set<string>>(new Set());
+  const [removingIds, setRemovingIds] = useState<Set<string>>(new Set());
   const [isGuest, setIsGuest] = useState(false);
   const router = useRouter();
 
@@ -55,41 +57,50 @@ export default function CartPage() {
     if (quantity < 1) return;
 
     if (isGuest) {
-      // Update guest cart in localStorage
       const updatedItems = items.map((item) =>
         item.id === id ? { ...item, quantity } : item
       );
       setItems(updatedItems);
       localStorage.setItem("guestCart", JSON.stringify(updatedItems));
     } else {
-      // Update user cart via API
-      const res = await fetch(`/api/cart/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ quantity }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        setItems((prev) =>
-          prev.map((item) =>
-            item.id === id ? { ...item, quantity } : item
-          )
-        );
+      setUpdatingIds((prev) => new Set(prev).add(id));
+      try {
+        const res = await fetch(`/api/cart/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ quantity }),
+        });
+        const data = await res.json();
+        if (data.success) {
+          setItems((prev) =>
+            prev.map((item) =>
+              item.id === id ? { ...item, quantity } : item
+            )
+          );
+          window.dispatchEvent(new CustomEvent("cartUpdated"));
+        }
+      } finally {
+        setUpdatingIds((prev) => { const next = new Set(prev); next.delete(id); return next; });
       }
     }
   };
 
   const removeItem = async (id: string) => {
     if (isGuest) {
-      // Remove from guest cart
       const updatedItems = items.filter((item) => item.id !== id);
       setItems(updatedItems);
       localStorage.setItem("guestCart", JSON.stringify(updatedItems));
+      window.dispatchEvent(new CustomEvent("cartUpdated"));
     } else {
-      // Remove from user cart via API
-      const res = await fetch(`/api/cart/${id}`, { method: "DELETE" });
-      if (res.ok) {
-        setItems((prev) => prev.filter((item) => item.id !== id));
+      setRemovingIds((prev) => new Set(prev).add(id));
+      try {
+        const res = await fetch(`/api/cart/${id}`, { method: "DELETE" });
+        if (res.ok) {
+          setItems((prev) => prev.filter((item) => item.id !== id));
+          window.dispatchEvent(new CustomEvent("cartUpdated"));
+        }
+      } finally {
+        setRemovingIds((prev) => { const next = new Set(prev); next.delete(id); return next; });
       }
     }
   };
@@ -194,10 +205,11 @@ export default function CartPage() {
           <div className="col-lg-8">
             <div className="card border-0 shadow-sm">
               <div className="card-body p-0">
-                {items.map((item, idx) => (
+                {items.map((item) => (
                   <div
                     key={item.id}
                     className="cart-item px-4 d-flex gap-3 align-items-start"
+                    style={{ opacity: removingIds.has(item.id) ? 0.4 : 1, transition: "opacity 0.2s" }}
                   >
                     {/* Image */}
                     <Link href={`/product/${item.product.slug}`}>
@@ -235,14 +247,19 @@ export default function CartPage() {
                           <button
                             className="qty-btn"
                             onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                            disabled={item.quantity <= 1}
+                            disabled={item.quantity <= 1 || updatingIds.has(item.id)}
                           >
                             −
                           </button>
-                          <span className="fw-bold">{item.quantity}</span>
+                          {updatingIds.has(item.id) ? (
+                            <span className="spinner-border spinner-border-sm text-secondary" style={{ width: 16, height: 16, borderWidth: 2 }} />
+                          ) : (
+                            <span className="fw-bold">{item.quantity}</span>
+                          )}
                           <button
                             className="qty-btn"
                             onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                            disabled={updatingIds.has(item.id)}
                           >
                             +
                           </button>
@@ -257,9 +274,12 @@ export default function CartPage() {
                     <button
                       className="btn btn-sm btn-link text-danger text-decoration-none p-0"
                       onClick={() => removeItem(item.id)}
+                      disabled={removingIds.has(item.id)}
                       title="Remove"
                     >
-                      <i className="bi bi-trash" />
+                      {removingIds.has(item.id)
+                        ? <span className="spinner-border spinner-border-sm" style={{ width: 14, height: 14, borderWidth: 2 }} />
+                        : <i className="bi bi-trash" />}
                     </button>
                   </div>
                 ))}

@@ -191,6 +191,7 @@ body {
 
 /* Order status badges */
 .status-PENDING_VERIFICATION { background-color: #fff3cd; color: #856404; }
+.status-PLACED { background-color: #d4edda; color: #155724; }
 .status-VERIFIED { background-color: #d1ecf1; color: #0c5460; }
 .status-PROCESSING { background-color: #cce5ff; color: #004085; }
 .status-SHIPPED { background-color: #d4edda; color: #155724; }

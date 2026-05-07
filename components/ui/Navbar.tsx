@@ -86,6 +86,12 @@ export default function Navbar() {
     if (user) fetchCartCount();
   }, [user, fetchCartCount, pathname]);
 
+  useEffect(() => {
+    const handler = () => fetchCartCount();
+    window.addEventListener("cartUpdated", handler);
+    return () => window.removeEventListener("cartUpdated", handler);
+  }, [fetchCartCount]);
+
   const handleLogout = async () => {
     await fetch("/api/auth/logout", { method: "POST" });
     setUser(null);

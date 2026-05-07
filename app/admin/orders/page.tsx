@@ -8,7 +8,10 @@ interface Order {
   status: string;
   total: string | number;
   createdAt: string;
+  paymentMethod?: string;
   paymentScreenshot?: string;
+  razorpayOrderId?: string;
+  razorpayPaymentId?: string;
   adminNote?: string;
   user: { name: string; email: string };
   address: {
@@ -30,6 +33,7 @@ interface Order {
 
 const ALL_STATUSES = [
   "PENDING_VERIFICATION",
+  "PLACED",
   "VERIFIED",
   "PROCESSING",
   "SHIPPED",
@@ -40,6 +44,7 @@ const ALL_STATUSES = [
 
 const STATUS_COLORS: Record<string, string> = {
   PENDING_VERIFICATION: "warning",
+  PLACED: "success",
   VERIFIED: "info",
   PROCESSING: "primary",
   SHIPPED: "success",
@@ -269,8 +274,30 @@ export default function AdminOrdersPage() {
                   </div>
                 </div>
 
-                {/* Payment screenshot */}
-                {selectedOrder.paymentScreenshot && (
+                {/* Payment info */}
+                {selectedOrder.paymentMethod === "RAZORPAY" ? (
+                  <div className="mb-4">
+                    <p className="text-muted small mb-2 text-uppercase fw-semibold">Payment Info</p>
+                    <div className="rounded border p-3 bg-light small">
+                      <div className="d-flex gap-2 mb-1">
+                        <span className="text-muted" style={{ minWidth: 120 }}>Method</span>
+                        <span className="fw-semibold text-success">Razorpay</span>
+                      </div>
+                      {selectedOrder.razorpayPaymentId && (
+                        <div className="d-flex gap-2 mb-1">
+                          <span className="text-muted" style={{ minWidth: 120 }}>Payment ID</span>
+                          <span className="fw-semibold font-monospace">{selectedOrder.razorpayPaymentId}</span>
+                        </div>
+                      )}
+                      {selectedOrder.razorpayOrderId && (
+                        <div className="d-flex gap-2">
+                          <span className="text-muted" style={{ minWidth: 120 }}>Order ID</span>
+                          <span className="fw-semibold font-monospace">{selectedOrder.razorpayOrderId}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ) : selectedOrder.paymentScreenshot ? (
                   <div className="mb-4">
                     <p className="text-muted small mb-2 text-uppercase fw-semibold">Payment Screenshot</p>
                     <a
@@ -288,13 +315,13 @@ export default function AdminOrdersPage() {
                       />
                     </a>
                   </div>
-                )}
+                ) : null}
 
                 {/* Update status */}
                 <div className="border-top pt-3">
                   <p className="text-muted small mb-2 text-uppercase fw-semibold">Update Status</p>
                   <div className="d-flex gap-2 flex-wrap mb-2">
-                    {["VERIFIED", "PROCESSING", "SHIPPED", "DELIVERED", "REJECTED"].map((s) => (
+                    {["VERIFIED", "PROCESSING", "SHIPPED", "DELIVERED", "CANCELLED", "REJECTED"].map((s) => (
                       <button
                         key={s}
                         className={`btn btn-sm ${newStatus === s ? "btn-primary" : "btn-outline-secondary"}`}

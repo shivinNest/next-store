@@ -4,6 +4,7 @@ import { requireAdmin } from "@/lib/auth";
 
 const VALID_STATUSES = [
   "PENDING_VERIFICATION",
+  "PLACED",
   "VERIFIED",
   "PROCESSING",
   "SHIPPED",

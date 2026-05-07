@@ -28,6 +28,7 @@ interface Order {
 
 const STATUS_CONFIG: Record<string, { label: string; bg: string; color: string }> = {
   PENDING_VERIFICATION: { label: "Pending Verification", bg: "#fff7ed", color: "#c2410c" },
+  PLACED:               { label: "Order Placed",         bg: "#ecfdf5", color: "#065f46" },
   VERIFIED:             { label: "Verified",             bg: "#ecfdf5", color: "#065f46" },
   PROCESSING:           { label: "Processing",           bg: "#eff6ff", color: "#1d4ed8" },
   SHIPPED:              { label: "Shipped",              bg: "#f3e8ff", color: "#6d28d9" },

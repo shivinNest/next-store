@@ -169,7 +169,7 @@ export default function AdminBlogsPage() {
                     <ReactQuill
                       theme="snow"
                       value={form.content}
-                      onChange={(v) => setForm({ ...form, content: v })}
+                      onChange={(v) => setForm({ ...form, content: v.replace(/&nbsp;/g, " ") })}
                       modules={QUILL_MODULES}
                       formats={QUILL_FORMATS}
                       placeholder="Write your story here..."

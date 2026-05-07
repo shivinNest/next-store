@@ -28,7 +28,7 @@ export async function GET() {
     ]);
 
     const revenue = await prisma.order.aggregate({
-      where: { status: { in: ["VERIFIED", "PROCESSING", "SHIPPED", "DELIVERED"] } },
+      where: { status: { in: ["PLACED", "VERIFIED", "PROCESSING", "SHIPPED", "DELIVERED"] } },
       _sum: { total: true },
     });
 

@@ -22,6 +22,12 @@ function LoginForm() {
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [shake, setShake] = useState(false);
+
+  const triggerShake = () => { setShake(true); setTimeout(() => setShake(false), 500); };
+
+  const clearFieldError = (field: string) =>
+    setFieldErrors((prev) => { const next = { ...prev }; delete next[field]; return next; });
 
   // Forgot password
   const [forgotMode, setForgotMode] = useState(false);
@@ -48,7 +54,7 @@ function LoginForm() {
     e.preventDefault();
     setError("");
     setFieldErrors({});
-    if (!validate()) return;
+    if (!validate()) { triggerShake(); return; }
     setLoading(true);
 
     try {
@@ -128,12 +134,14 @@ function LoginForm() {
           {!forgotMode && (
             <>
               {error && (
-                <div style={{ background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 10, padding: "10px 14px", fontSize: "0.83rem", color: "#b91c1c", marginBottom: 20, display: "flex", alignItems: "center", gap: 8 }}>
-                  <i className="bi bi-exclamation-circle-fill" style={{ flexShrink: 0 }} />{error}
+                <div className="auth-error-banner">
+                  <i className="bi bi-x-circle-fill" style={{ flexShrink: 0, fontSize: "1rem" }} />
+                  <span style={{ flex: 1 }}>{error}</span>
+                  <button type="button" className="auth-error-dismiss" onClick={() => setError("")} aria-label="Dismiss">×</button>
                 </div>
               )}
 
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit} className={shake ? "auth-shake" : ""}>
                 <div className="mb-3">
                   <label className="auth-label">Email address</label>
                   <input
@@ -141,10 +149,10 @@ function LoginForm() {
                     className={`auth-input ${fieldErrors.email ? "auth-input-error" : ""}`}
                     placeholder="you@example.com"
                     value={form.email}
-                    onChange={(e) => setForm({ ...form, email: e.target.value })}
+                    onChange={(e) => { setForm({ ...form, email: e.target.value }); clearFieldError("email"); }}
                     autoFocus
                   />
-                  {fieldErrors.email && <p className="auth-field-error">{fieldErrors.email}</p>}
+                  {fieldErrors.email && <p className="auth-field-error"><i className="bi bi-exclamation-circle me-1" />{fieldErrors.email}</p>}
                 </div>
 
                 <div className="mb-4">
@@ -165,13 +173,13 @@ function LoginForm() {
                       style={{ paddingRight: 44 }}
                       placeholder="Your password"
                       value={form.password}
-                      onChange={(e) => setForm({ ...form, password: e.target.value })}
+                      onChange={(e) => { setForm({ ...form, password: e.target.value }); clearFieldError("password"); }}
                     />
                     <button type="button" onClick={() => setShowPassword((v) => !v)} className="auth-eye-btn">
                       <i className={`bi ${showPassword ? "bi-eye-slash" : "bi-eye"}`} />
                     </button>
                   </div>
-                  {fieldErrors.password && <p className="auth-field-error">{fieldErrors.password}</p>}
+                  {fieldErrors.password && <p className="auth-field-error"><i className="bi bi-exclamation-circle me-1" />{fieldErrors.password}</p>}
                 </div>
 
                 <button type="submit" className="auth-submit-btn" disabled={loading}>
@@ -212,8 +220,10 @@ function LoginForm() {
                   finally { setForgotLoading(false); }
                 }}>
                   {forgotError && (
-                    <div style={{ background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 10, padding: "10px 14px", fontSize: "0.83rem", color: "#b91c1c", marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>
-                      <i className="bi bi-exclamation-circle-fill" style={{ flexShrink: 0 }} />{forgotError}
+                    <div className="auth-error-banner">
+                      <i className="bi bi-x-circle-fill" style={{ flexShrink: 0, fontSize: "1rem" }} />
+                      <span style={{ flex: 1 }}>{forgotError}</span>
+                      <button type="button" className="auth-error-dismiss" onClick={() => setForgotError("")} aria-label="Dismiss">×</button>
                     </div>
                   )}
                   <div className="mb-4">
@@ -330,12 +340,61 @@ const authStyles = `
     border-color: #9f523a;
     box-shadow: 0 0 0 3px rgba(159,82,58,0.12);
   }
-  .auth-input-error { border-color: #ef4444 !important; }
-  .auth-field-error {
-    font-size: 0.74rem;
-    color: #ef4444;
-    margin: 5px 0 0;
+  .auth-input-error {
+    border-color: #ef4444 !important;
+    background: #fff8f8 !important;
   }
+  .auth-input-error:focus {
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 0 3px rgba(239,68,68,0.12) !important;
+  }
+  .auth-field-error {
+    display: flex;
+    align-items: center;
+    font-size: 0.74rem;
+    color: #dc2626;
+    margin: 5px 0 0;
+    animation: authErrIn 0.2s ease both;
+  }
+  @keyframes authErrIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .auth-error-banner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-left: 3px solid #ef4444;
+    border-radius: 10px;
+    padding: 11px 14px;
+    font-size: 0.83rem;
+    color: #b91c1c;
+    margin-bottom: 20px;
+    animation: authErrIn 0.25s ease both;
+  }
+  .auth-error-dismiss {
+    background: none;
+    border: none;
+    color: #fca5a5;
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    transition: color 0.15s;
+  }
+  .auth-error-dismiss:hover { color: #b91c1c; }
+  @keyframes authShake {
+    0%, 100% { transform: translateX(0); }
+    18%       { transform: translateX(-5px); }
+    36%       { transform: translateX(5px); }
+    54%       { transform: translateX(-4px); }
+    72%       { transform: translateX(4px); }
+    88%       { transform: translateX(-2px); }
+  }
+  .auth-shake { animation: authShake 0.45s ease both; }
   .auth-eye-btn {
     position: absolute;
     right: 12px;

@@ -1223,7 +1223,7 @@ export default function HomePage() {
                   letterSpacing: "0.05em",
                 }}>
                   <i className="bi bi-instagram" style={{ fontSize: "1.1rem" }} />
-                  Follow @saa.viya
+                  Follow us on Instagram
                 </a>
               </div>
             </section>
