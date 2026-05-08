@@ -34,6 +34,7 @@ export default function AddressesPage() {
   const [saving, setSaving] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
+  const [confirmId, setConfirmId] = useState<string | null>(null);
   const [toast, setToast] = useState({ visible: false, message: "", type: "success" as "success" | "error" });
   const showToast = useCallback((message: string, type: "success" | "error" = "success") => {
     setToast({ visible: true, message, type });
@@ -91,15 +92,21 @@ export default function AddressesPage() {
     setShowForm(true);
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Delete this address?")) return;
+  const handleDelete = (id: string) => {
+    setConfirmId(id);
+  };
+
+  const doDelete = async () => {
+    if (!confirmId) return;
+    const id = confirmId;
+    setConfirmId(null);
     const res = await fetch(`/api/addresses/${id}`, { method: "DELETE" });
     const data = await res.json();
     if (data.success) {
       setAddresses((prev) => prev.filter((a) => a.id !== id));
       showToast("Address removed.");
     } else {
-      alert(data.error || "Failed to delete address. Please try again.");
+      showToast(data.error || "Failed to delete address. Please try again.", "error");
     }
   };
 
@@ -114,6 +121,43 @@ export default function AddressesPage() {
   return (
     <div>
       <Toast message={toast.message} type={toast.type} visible={toast.visible} onHide={() => setToast(t => ({ ...t, visible: false }))} />
+
+      {/* Delete Confirm Modal */}
+      {confirmId && (
+        <div
+          className="modal fade show"
+          style={{ display: "flex", alignItems: "center", justifyContent: "center", position: "fixed", inset: 0, zIndex: 1055, background: "rgba(0,0,0,0.5)" }}
+          onClick={(e) => { if (e.target === e.currentTarget) setConfirmId(null); }}
+        >
+          <div className="modal-dialog modal-dialog-centered" style={{ width: "100%", maxWidth: 400, margin: "0 auto" }}>
+            <div className="modal-content" style={{ borderRadius: 12, border: "none", boxShadow: "0 8px 32px rgba(0,0,0,0.18)" }}>
+              <div className="modal-header" style={{ borderBottom: "1px solid #f0ece8", padding: "18px 24px" }}>
+                <h5 className="modal-title" style={{ fontWeight: 700, fontSize: "1rem", color: "#111" }}>Delete Address</h5>
+                <button type="button" className="btn-close" onClick={() => setConfirmId(null)} />
+              </div>
+              <div className="modal-body" style={{ padding: "20px 24px", fontSize: "0.9rem", color: "#555" }}>
+                Are you sure you want to delete this address? This action cannot be undone.
+              </div>
+              <div className="modal-footer" style={{ borderTop: "1px solid #f0ece8", padding: "14px 24px", gap: 8 }}>
+                <button
+                  type="button"
+                  style={{ background: "#fff", color: "#555", border: "1px solid #ddd", padding: "8px 20px", borderRadius: 7, fontSize: "0.85rem", fontWeight: 600, cursor: "pointer" }}
+                  onClick={() => setConfirmId(null)}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  style={{ background: "#b91c1c", color: "#fff", border: "none", padding: "8px 20px", borderRadius: 7, fontSize: "0.85rem", fontWeight: 700, cursor: "pointer" }}
+                  onClick={doDelete}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 28 }}>
         <div>
           <p style={{ fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#9f523a", marginBottom: 4 }}>Account</p>

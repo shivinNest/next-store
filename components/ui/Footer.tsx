@@ -128,27 +128,48 @@ export default function Footer() {
 
       {/* Bottom bar */}
       <div style={{ borderTop: "1px solid #1a1a1a", padding: "20px 0", marginTop: "32px" }}>
-        <div className="container d-flex flex-column flex-md-row align-items-center justify-content-between" style={{ gap: "10px" }}>
-          <p style={{ fontSize: "0.78rem", color: "#444", margin: 0 }}>
-            &copy; {year} Saaviya. All rights reserved.
+        <div className="container d-flex flex-column flex-md-row align-items-center justify-content-between" style={{ gap: "12px" }}>
+          <p style={{ fontSize: "0.88rem", color: "#444", margin: 0 }}>
+            &copy; {year} Saaviya. All rights reserved. Crafted with care in India.
           </p>
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <span style={{ fontSize: "0.65rem", color: "#444", marginRight: "4px", textTransform: "uppercase", letterSpacing: "0.08em" }}>We accept</span>
-            {["UPI", "Visa", "Mastercard", "Razorpay", "Net Banking"].map((method) => (
-              <span key={method} style={{
-                fontSize: "0.65rem",
-                fontWeight: 600,
-                color: "#666",
-                border: "1px solid #2a2a2a",
-                borderRadius: "4px",
-                padding: "2px 7px",
-                background: "#161616",
-                letterSpacing: "0.03em",
-                whiteSpace: "nowrap",
-              }}>
-                {method}
-              </span>
-            ))}
+          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <span style={{ fontSize: "0.55rem", color: "#3a3a3a", textTransform: "uppercase", letterSpacing: "0.12em", marginRight: "2px" }}>We accept</span>
+
+            {/* Visa */}
+            <span title="Visa" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", background: "#1c1c1c", border: "1px solid #2e2e2e", borderRadius: "4px", padding: "2px 6px", height: "20px" }}>
+              <svg viewBox="0 0 50 16" width="28" height="9">
+                <text x="0" y="13" fill="#888" fontSize="14" fontWeight="800" fontStyle="italic" fontFamily="serif">VISA</text>
+              </svg>
+            </span>
+
+            {/* Mastercard */}
+            <span title="Mastercard" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", background: "#1c1c1c", border: "1px solid #2e2e2e", borderRadius: "4px", padding: "2px 6px", height: "20px" }}>
+              <svg viewBox="0 0 34 22" width="24" height="16">
+                <circle cx="13" cy="11" r="9" fill="#555" />
+                <circle cx="21" cy="11" r="9" fill="#777" />
+                <path d="M17 4.5a9 9 0 0 1 0 13A9 9 0 0 1 17 4.5z" fill="#666" />
+              </svg>
+            </span>
+
+            {/* UPI */}
+            <span title="UPI" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", background: "#1c1c1c", border: "1px solid #2e2e2e", borderRadius: "4px", padding: "2px 6px", height: "20px" }}>
+              <svg viewBox="0 0 36 14" width="28" height="10">
+                <text x="18" y="11.5" textAnchor="middle" fill="#888" fontSize="10.5" fontWeight="800" fontFamily="Arial, sans-serif" letterSpacing="0.5">UPI</text>
+              </svg>
+            </span>
+
+            {/* RuPay */}
+            <span title="RuPay" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", background: "#1c1c1c", border: "1px solid #2e2e2e", borderRadius: "4px", padding: "2px 6px", height: "20px" }}>
+              <svg viewBox="0 0 42 14" width="32" height="10">
+                <text x="21" y="11.5" textAnchor="middle" fill="#888" fontSize="10" fontWeight="700" fontFamily="Arial, sans-serif" letterSpacing="0.3">RuPay</text>
+              </svg>
+            </span>
+
+            {/* Net Banking */}
+            <span title="Net Banking" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "3px", background: "#1c1c1c", border: "1px solid #2e2e2e", borderRadius: "4px", padding: "2px 6px", height: "20px" }}>
+              <i className="bi bi-bank" style={{ fontSize: "9px", color: "#888" }} />
+              <span style={{ fontSize: "0.55rem", fontWeight: 700, color: "#888", letterSpacing: "0.04em", whiteSpace: "nowrap" }}>Net Banking</span>
+            </span>
           </div>
         </div>
       </div>

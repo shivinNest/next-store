@@ -5,7 +5,7 @@ const CONTACT_DETAILS = [
   {
     icon: "bi-geo-alt-fill",
     title: "Our Store",
-    lines: ["12, Fashion Street", "Lajpat Nagar, New Delhi – 110024", "India"],
+    lines: ["Saaviya, Perambra, Kozhikode, Kerala, India", "PIN - 673525"],
   },
   {
     icon: "bi-envelope-fill",

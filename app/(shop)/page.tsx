@@ -313,19 +313,81 @@ export default function HomePage() {
           backdrop-filter: blur(4px);
           margin-bottom: 20px;
         }
-        .banner-img-wrap {
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          border-radius: 12px;
+        .banner-card {
+          position: relative;
+          border-radius: 16px;
           overflow: hidden;
-          box-shadow: 0 4px 12px rgba(159, 82, 58, 0.1);
+          display: block;
+          text-decoration: none;
+          background: #111;
         }
-        .banner-img-wrap:hover {
-          transform: scale(1.02);
-          box-shadow: 0 8px 20px rgba(159, 82, 58, 0.15);
+        .banner-card img {
+          transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+          display: block;
+          width: 100%;
+          object-fit: cover;
         }
-        .banner-overlay {
-          background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.4));
-          backdrop-filter: blur(4px);
+        .banner-card:hover img {
+          transform: scale(1.06);
+        }
+        .banner-scrim {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(to top, rgba(10,6,4,0.88) 0%, rgba(10,6,4,0.45) 45%, rgba(10,6,4,0.1) 100%);
+          transition: opacity 0.4s ease;
+        }
+        .banner-card:hover .banner-scrim {
+          opacity: 0.85;
+        }
+        .banner-content {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          padding: 28px 28px 24px;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 6px;
+        }
+        .banner-tag {
+          font-size: 0.62rem;
+          font-weight: 800;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: #d4956a;
+          background: rgba(212,149,106,0.12);
+          border: 1px solid rgba(212,149,106,0.3);
+          border-radius: 100px;
+          padding: 4px 12px;
+          line-height: 1.6;
+        }
+        .banner-title {
+          font-size: 1.15rem;
+          font-weight: 800;
+          color: #fff;
+          letter-spacing: -0.02em;
+          line-height: 1.25;
+          margin: 0;
+        }
+        .banner-card.banner-lg .banner-title {
+          font-size: 1.5rem;
+        }
+        .banner-cta {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 0.75rem;
+          font-weight: 700;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.7);
+          margin-top: 4px;
+          transition: gap 0.25s ease, color 0.25s ease;
+        }
+        .banner-card:hover .banner-cta {
+          color: #fff;
+          gap: 10px;
         }
         .promo-banner {
           position: relative;
@@ -702,68 +764,68 @@ export default function HomePage() {
 
       {/* Banners */}
       {heroData.banners.length > 0 && (
-        <section className="py-4 bg-light">
+        <section style={{ padding: "48px 0", background: "#f9f6f3" }}>
           <div className="container">
-            <div className="row g-3">
-              {heroData.banners.length >= 2 ? (
-                <>
-                  {/* First banner spans full width on mobile, half on md */}
-                  <div className={heroData.banners.length === 1 ? "col-12" : "col-md-6"}>
-                    <Link href={heroData.banners[0].link || "#"} className="d-block position-relative rounded overflow-hidden banner-img-wrap">
-                      <Image
-                        src={heroData.banners[0].image}
-                        alt={heroData.banners[0].title}
-                        width={700}
-                        height={300}
-                        className="img-fluid w-100"
-                        style={{ objectFit: "cover", height: 300 }}
-                      />
-                      <div className="banner-overlay position-absolute bottom-0 start-0 p-3">
-                        <span className="fw-bold text-white fs-6">{heroData.banners[0].title}</span>
-                      </div>
-                    </Link>
-                  </div>
-                  {/* Remaining banners stacked on the right */}
-                  <div className="col-md-6">
-                    <div className="row g-3 h-100">
-                      {heroData.banners.slice(1).map((banner) => (
-                        <div key={banner.id} className={heroData.banners.length <= 3 ? "col-12" : "col-6"}>
-                          <Link href={banner.link || "#"} className="d-block position-relative rounded overflow-hidden banner-img-wrap">
-                            <Image
-                              src={banner.image}
-                              alt={banner.title}
-                              width={400}
-                              height={heroData.banners.length <= 3 ? 138 : 138}
-                              className="img-fluid w-100"
-                              style={{ objectFit: "cover", height: heroData.banners.length <= 3 ? 138 : 138 }}
-                            />
-                            <div className="banner-overlay position-absolute bottom-0 start-0 p-2">
-                              <span className="fw-semibold text-white small">{banner.title}</span>
-                            </div>
-                          </Link>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <div className="col-12">
-                  <Link href={heroData.banners[0].link || "#"} className="d-block position-relative rounded overflow-hidden banner-img-wrap">
+            {heroData.banners.length >= 2 ? (
+              <div className="row g-3">
+                {/* Large feature banner */}
+                <div className="col-md-7">
+                  <Link href={heroData.banners[0].link || "#"} className="banner-card banner-lg" style={{ height: 420 }}>
                     <Image
                       src={heroData.banners[0].image}
                       alt={heroData.banners[0].title}
-                      width={1200}
-                      height={300}
-                      className="img-fluid w-100"
-                      style={{ objectFit: "cover", height: 300 }}
+                      width={800}
+                      height={420}
+                      style={{ height: 420 }}
                     />
-                    <div className="banner-overlay position-absolute bottom-0 start-0 p-3">
-                      <span className="fw-bold text-white fs-6">{heroData.banners[0].title}</span>
+                    <div className="banner-scrim" />
+                    <div className="banner-content">
+                      <span className="banner-tag">Featured</span>
+                      <p className="banner-title">{heroData.banners[0].title}</p>
+                      <span className="banner-cta">Shop now <i className="bi bi-arrow-right" /></span>
                     </div>
                   </Link>
                 </div>
-              )}
-            </div>
+                {/* Side banners */}
+                <div className="col-md-5">
+                  <div className="d-flex flex-column gap-3" style={{ height: 420 }}>
+                    {heroData.banners.slice(1, 3).map((banner, i) => (
+                      <Link key={banner.id} href={banner.link || "#"} className="banner-card" style={{ flex: 1 }}>
+                        <Image
+                          src={banner.image}
+                          alt={banner.title}
+                          width={500}
+                          height={200}
+                          style={{ height: "100%" }}
+                        />
+                        <div className="banner-scrim" />
+                        <div className="banner-content" style={{ padding: "20px 22px 18px" }}>
+                          <span className="banner-tag">{i === 0 ? "New Arrival" : "Sale"}</span>
+                          <p className="banner-title" style={{ fontSize: "1rem" }}>{banner.title}</p>
+                          <span className="banner-cta">Explore <i className="bi bi-arrow-right" /></span>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <Link href={heroData.banners[0].link || "#"} className="banner-card banner-lg" style={{ height: 380 }}>
+                <Image
+                  src={heroData.banners[0].image}
+                  alt={heroData.banners[0].title}
+                  width={1200}
+                  height={380}
+                  style={{ height: 380 }}
+                />
+                <div className="banner-scrim" />
+                <div className="banner-content">
+                  <span className="banner-tag">Featured</span>
+                  <p className="banner-title">{heroData.banners[0].title}</p>
+                  <span className="banner-cta">Shop now <i className="bi bi-arrow-right" /></span>
+                </div>
+              </Link>
+            )}
           </div>
         </section>
       )}
@@ -840,7 +902,7 @@ export default function HomePage() {
 
             {/* Visual side */}
             <div className="col-lg-6 order-1 order-lg-2">
-              <div className="about-img-stack" style={{ paddingBottom: 48, paddingRight: 24 }}>
+              <div className="about-img-stack" style={{ paddingBottom: 48, paddingRight: 0 }}>
                 <div className="about-img-main" style={{ aspectRatio: "4/5", position: "relative" }}>
                   <Image
                     src="/assets/mahimayadav0-ethnic-4762352_1920.jpg"
@@ -868,22 +930,7 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                {/* Accent box — brand value */}
-                <div style={{
-                  position: "absolute",
-                  bottom: 0,
-                  right: 0,
-                  background: "linear-gradient(135deg, #9f523a, #7a3f2c)",
-                  color: "white",
-                  padding: "18px 22px",
-                  borderRadius: 14,
-                  boxShadow: "0 8px 28px rgba(159,82,58,0.4)",
-                  minWidth: 140,
-                  border: "3px solid white",
-                }}>
-                  <div style={{ fontSize: "1.8rem", fontWeight: 800, lineHeight: 1, letterSpacing: "-1px" }}>500+</div>
-                  <div style={{ fontSize: "0.78rem", opacity: 0.85, marginTop: 4, lineHeight: 1.4 }}>Styles curated<br />every season</div>
-                </div>
+                
 
                 {/* Floating badge */}
                 <div className="about-years-badge">
