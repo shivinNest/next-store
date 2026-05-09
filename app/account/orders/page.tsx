@@ -61,8 +61,21 @@ export default function OrdersPage() {
       </h2>
 
       {loading ? (
-        <div style={{ textAlign: "center", padding: "48px 0" }}>
-          <div className="spinner-border" style={{ color: "#9f523a" }} />
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          {[1, 2, 3].map(i => (
+            <div key={i} style={{ border: "1px solid #ece9e4", borderRadius: 12, overflow: "hidden", background: "#fff", padding: "18px 24px" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
+                <div style={{ flex: 1 }}>
+                  <div className="skeleton" style={{ height: 14, width: "35%", borderRadius: 6, marginBottom: 10 }} />
+                  <div className="skeleton" style={{ height: 12, width: "55%", borderRadius: 6 }} />
+                </div>
+                <div style={{ textAlign: "right", flexShrink: 0 }}>
+                  <div className="skeleton" style={{ height: 14, width: 72, borderRadius: 6, marginBottom: 8, marginLeft: "auto" }} />
+                  <div className="skeleton" style={{ height: 22, width: 110, borderRadius: 20, marginLeft: "auto" }} />
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       ) : orders.length === 0 ? (
         <div style={{ textAlign: "center", padding: "64px 20px", background: "#fff", border: "1px solid #ece9e4", borderRadius: 12 }}>

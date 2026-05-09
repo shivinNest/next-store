@@ -286,7 +286,25 @@ export default function AddressesPage() {
 
       {/* Address List */}
       {loading ? (
-        <div className="text-center py-4"><div className="spinner-border text-primary" /></div>
+        <div className="row g-3">
+          {[1, 2].map((i) => (
+            <div key={i} className="col-md-6">
+              <div style={{ border: "1px solid #ece9e4", borderRadius: 12, padding: "20px 22px", background: "#fff" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+                  <div className="skeleton" style={{ height: 14, width: "40%", borderRadius: 6 }} />
+                  <div className="skeleton" style={{ height: 20, width: 56, borderRadius: 4 }} />
+                </div>
+                <div className="skeleton" style={{ height: 12, width: "85%", borderRadius: 6, marginBottom: 8 }} />
+                <div className="skeleton" style={{ height: 12, width: "70%", borderRadius: 6, marginBottom: 8 }} />
+                <div className="skeleton" style={{ height: 12, width: "45%", borderRadius: 6, marginBottom: 20 }} />
+                <div style={{ display: "flex", gap: 8 }}>
+                  <div className="skeleton" style={{ height: 32, width: 60, borderRadius: 6 }} />
+                  <div className="skeleton" style={{ height: 32, width: 60, borderRadius: 6 }} />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       ) : addresses.length === 0 ? (
         <div style={{ textAlign: "center", padding: "64px 20px", background: "#fff", border: "1px solid #ece9e4", borderRadius: 12 }}>
           <p style={{ fontSize: "2.4rem", marginBottom: 12 }}>&#128205;</p>

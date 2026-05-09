@@ -161,7 +161,7 @@ export async function POST(req: NextRequest) {
     // Send confirmation email
     const fullUser = await prisma.user.findUnique({ where: { id: user.id } });
     if (fullUser) {
-      sendEmail({
+      await sendEmail({
         to: fullUser.email,
         subject: `Order #${order.orderNumber} confirmed - Saaviya`,
         bcc: process.env.ADMIN_EMAIL,
@@ -190,7 +190,7 @@ export async function POST(req: NextRequest) {
             pincode: address.pincode,
           }
         ),
-      }).catch(console.error);
+      });
     }
 
     return NextResponse.json({ success: true, data: order }, { status: 201 });

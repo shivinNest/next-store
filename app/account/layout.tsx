@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 import styles from "./account.module.css";
@@ -15,12 +16,12 @@ const links = [
 
 export default function AccountLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const [user, setUser] = useState<{ name: string; email: string } | null>(null);
+  const [user, setUser] = useState<{ name: string; email: string; avatar?: string } | null>(null);
 
   useEffect(() => {
     fetch("/api/auth/me")
       .then(r => r.json())
-      .then(d => d.success && setUser({ name: d.data.name, email: d.data.email }));
+      .then(d => d.success && setUser({ name: d.data.name, email: d.data.email, avatar: d.data.avatar }));
   }, []);
 
   return (
@@ -34,13 +35,25 @@ export default function AccountLayout({ children }: { children: React.ReactNode 
               <div className={styles.sidebar}>
                 <div className={styles.sidebarHeader}>
                   <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                    <div style={{
-                      width: 42, height: 42, borderRadius: "50%",
-                      background: "#9f523a", color: "#fff",
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      fontWeight: 700, fontSize: "1rem", flexShrink: 0,
-                    }}>
-                      {user?.name?.[0]?.toUpperCase() ?? "U"}
+                    <div style={{ width: 42, height: 42, borderRadius: "50%", flexShrink: 0, overflow: "hidden", position: "relative" }}>
+                      {user?.avatar ? (
+                        <Image
+                          src={user.avatar}
+                          alt={user.name}
+                          fill
+                          sizes="42px"
+                          style={{ objectFit: "cover" }}
+                        />
+                      ) : (
+                        <div style={{
+                          width: "100%", height: "100%", borderRadius: "50%",
+                          background: "#9f523a", color: "#fff",
+                          display: "flex", alignItems: "center", justifyContent: "center",
+                          fontWeight: 700, fontSize: "1rem",
+                        }}>
+                          {user?.name?.[0]?.toUpperCase() ?? "U"}
+                        </div>
+                      )}
                     </div>
                     <div style={{ minWidth: 0 }}>
                       <p style={{ fontWeight: 700, fontSize: "0.875rem", color: "#111", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>

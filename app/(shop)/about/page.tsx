@@ -87,27 +87,16 @@ export default function AboutPage() {
                 <span style={{ color: "#9f523a", display: "block" }}>designed for today.</span>
               </h2>
               <p style={{ fontSize: "0.975rem", color: "#555", lineHeight: 1.8, marginBottom: 16 }}>
-                Founded in 2026, Saaviya is a women&apos;s ethnic fashion brand curated for the contemporary Indian woman. We work with skilled artisans across India to bring you handcrafted pieces that honour tradition while embracing modern silhouettes.
+                
+                Founded in 2026, Saaviya is a women&apos;s ethnic fashion brand curated for the contemporary Indian woman. We work with skilled artisans across India to bring you handcrafted pieces that honour tradition while embracing modern silhouettes. Our commitment is to celebrate the rich heritage of Indian textiles and embroidery techniques while making them relevant for today&apos;s woman—whether she&apos;s heading to the office, attending a wedding, or spending time with family.
               </p>
               <p style={{ fontSize: "0.975rem", color: "#555", lineHeight: 1.8, marginBottom: 16 }}>
-                From daily kurtas to celebration lehengas, every piece in our collection is chosen for its quality, craft, and timeless appeal.
+                From daily kurtas to celebration lehengas, every piece in our collection is chosen for its quality, craft, and timeless appeal. We partner directly with weavers, embroiderers, and textile artisans who have perfected their craft over generations. Each garment tells a story of dedicated craftsmanship and sustainable practices, ensuring you&apos;re not just wearing fashion—you&apos;re supporting communities and preserving traditions.
               </p>
               <p style={{ fontSize: "0.975rem", color: "#555", lineHeight: 1.8, marginBottom: 28 }}>
-                We believe that fashion is deeply personal — a reflection of culture, confidence, and self-expression. That&apos;s why every Saaviya piece is thoughtfully designed to help you feel as beautiful on the inside as you look on the outside.
+                We believe that fashion is deeply personal — a reflection of culture, confidence, and self-expression. That&apos;s why every Saaviya piece is thoughtfully designed to help you feel as beautiful on the inside as you look on the outside. Whether you&apos;re exploring your ethnic roots or discovering Indian fashion for the first time, Saaviya is here to make you feel seen, celebrated, and empowered in every outfit you choose.
               </p>
-              {/* Inline trust row */}
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "12px 24px" }}>
-                {[
-                  { icon: "bi-patch-check-fill", text: "100% Authentic Products" },
-                  { icon: "bi-truck",            text: "Pan-India Shipping" },
-                  { icon: "bi-arrow-repeat",     text: "7-Day Easy Returns" },
-                ].map((t) => (
-                  <div key={t.text} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                    <i className={`bi ${t.icon}`} style={{ color: "#9f523a", fontSize: "0.95rem" }} />
-                    <span style={{ fontSize: "0.85rem", fontWeight: 600, color: "#444" }}>{t.text}</span>
-                  </div>
-                ))}
-              </div>
+
             </div>
           </div>
         </div>

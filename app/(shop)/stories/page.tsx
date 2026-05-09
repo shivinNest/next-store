@@ -35,24 +35,48 @@ export default function BlogListPage() {
       <div className="container">
 
         {/* Header */}
-        <div className="text-center mb-5" style={{ maxWidth: 560, margin: "0 auto 56px" }}>
-          <span style={{
-            display: "inline-flex", alignItems: "center", gap: 8,
-            background: "rgba(159,82,58,0.08)",
-            border: "1px solid rgba(159,82,58,0.15)",
-            borderRadius: 100, padding: "6px 16px",
-            fontSize: "0.72rem", fontWeight: 700,
-            letterSpacing: "0.14em", textTransform: "uppercase",
-            color: "#9f523a", marginBottom: 20,
+        <div style={{ maxWidth: 720, margin: "0 auto 64px", textAlign: "center" }}>
+          {/* Eyebrow */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 14, marginBottom: 28 }}>
+            <span style={{ display: "block", width: 40, height: 1, background: "#c9b4a8" }} />
+            <span style={{
+              fontSize: "0.68rem", fontWeight: 800,
+              letterSpacing: "0.22em", textTransform: "uppercase",
+              color: "#9f523a",
+            }}>
+              The Saaviya Journal
+            </span>
+            <span style={{ display: "block", width: 40, height: 1, background: "#c9b4a8" }} />
+          </div>
+
+          {/* Title */}
+          <h1 style={{
+            fontSize: "clamp(2.2rem, 5vw, 3.4rem)",
+            fontWeight: 800,
+            color: "#111",
+            letterSpacing: "-0.03em",
+            lineHeight: 1.1,
+            marginBottom: 24,
           }}>
-            <i className="bi bi-journal-text" style={{ fontSize: "0.8rem" }} />
-            Journal
-          </span>
-          <h1 style={{ fontSize: "clamp(1.8rem, 4vw, 2.6rem)", fontWeight: 700, color: "#111", letterSpacing: "-0.02em", lineHeight: 1.2, marginBottom: "16px", display: "block" }}>
-            Our Stories
+            Stories &amp; Inspiration
           </h1>
-          <p style={{ fontSize: "1rem", color: "#777", lineHeight: 1.7, margin: 0 }}>
-            Fashion tips, style guides, and trend reports to inspire your wardrobe.
+
+          {/* Divider dot */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 24 }}>
+            <span style={{ display: "block", width: 48, height: 1, background: "#e5ddd8" }} />
+            <span style={{ width: 5, height: 5, borderRadius: "50%", background: "#9f523a", display: "block" }} />
+            <span style={{ display: "block", width: 48, height: 1, background: "#e5ddd8" }} />
+          </div>
+
+          {/* Subtitle */}
+          <p style={{
+            fontSize: "1rem",
+            color: "#777",
+            lineHeight: 1.8,
+            maxWidth: 500,
+            margin: "0 auto",
+          }}>
+            Style guides, trend reports, and behind-the-brand narratives — curated for the modern wardrobe.
           </p>
         </div>
 

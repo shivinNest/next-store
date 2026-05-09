@@ -847,6 +847,11 @@ export default function HomePage() {
               <p style={{ color: "#666", fontSize: "1rem", lineHeight: 1.8, marginBottom: "2rem", maxWidth: 480 }}>
                 Saaviya was born from a simple belief — every woman deserves to feel beautiful, confident, and effortlessly stylish. We curate ethnic and contemporary fashion that blends tradition with modern sensibility, delivered straight to your doorstep.
               </p>
+
+              <p style={{ color: "#666", fontSize: "1rem", lineHeight: 1.8, marginBottom: "2rem", maxWidth: 480 }}>
+                Our commitment goes beyond fashion. We believe in sustainability, fair practices, and supporting local artisans. Every collection tells a story of craftsmanship, cultural heritage, and timeless elegance that celebrates the essence of Indian femininity. From vibrant textiles to intricate embroidery, each piece is curated to reflect your unique personality while honoring the rich traditions of Indian craftsmanship.
+              </p>
+              
               <div className="row g-3 mb-4">
                 {[
                   { icon: "bi-gem", title: "Premium Quality", desc: "Handpicked fabrics & finishes that stand the test of time" },
@@ -867,37 +872,7 @@ export default function HomePage() {
                   </div>
                 ))}
               </div>
-              <Link
-                href="/about"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 8,
-                  background: "linear-gradient(135deg, #9f523a, #7a3f2c)",
-                  color: "#fff",
-                  padding: "13px 32px",
-                  borderRadius: 10,
-                  fontWeight: 700,
-                  fontSize: "0.9rem",
-                  textDecoration: "none",
-                  letterSpacing: "0.04em",
-                  boxShadow: "0 4px 16px rgba(159,82,58,0.3)",
-                  transition: "all 0.25s",
-                }}
-                onMouseEnter={e => {
-                  (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
-                  (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 24px rgba(159,82,58,0.45)";
-                }}
-                onMouseLeave={e => {
-                  (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
-                  (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 16px rgba(159,82,58,0.3)";
-                }}
-              >
-                Discover Our Story
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M3 8h10M9 4l4 4-4 4" />
-                </svg>
-              </Link>
+
             </div>
 
             {/* Visual side */}
@@ -928,14 +903,6 @@ export default function HomePage() {
                     <p style={{ fontWeight: 700, fontSize: "1rem", letterSpacing: "0.12em", textTransform: "uppercase", margin: 0, textShadow: "0 1px 6px rgba(0,0,0,0.4)" }}>Saaviya</p>
                     <p style={{ fontSize: "0.78rem", letterSpacing: "0.06em", margin: 0, opacity: 0.85, textShadow: "0 1px 4px rgba(0,0,0,0.4)" }}>Fashion that speaks for you</p>
                   </div>
-                </div>
-
-                
-
-                {/* Floating badge */}
-                <div className="about-years-badge">
-                  <div style={{ fontSize: "1.5rem", fontWeight: 800, lineHeight: 1 }}>10K+</div>
-                  <div style={{ fontSize: "0.7rem", opacity: 0.85, marginTop: 4, lineHeight: 1.3 }}>Happy<br />Customers</div>
                 </div>
               </div>
             </div>

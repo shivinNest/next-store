@@ -288,13 +288,23 @@ export default function ContactPage() {
       `}</style>
 
       {/* Hero */}
-      <div className="hero-contact py-5 text-white">
-        <div className="container hero-contact-content">
-          <h1 className="fw-bold" style={{ fontSize: "2.5rem", marginBottom: "1rem", letterSpacing: "-0.5px" }}>
+      <div className="hero-contact" style={{ padding: "80px 0 70px" }}>
+        <div className="container hero-contact-content text-center">
+          <span style={{
+            display: "inline-flex", alignItems: "center", gap: 8,
+            background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.22)",
+            borderRadius: 100, padding: "5px 16px",
+            fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase",
+            color: "rgba(255,255,255,0.88)", marginBottom: 18,
+          }}>
+            <i className="bi bi-chat-dots-fill" style={{ fontSize: "0.75rem" }} />
+            Customer Support
+          </span>
+          <h1 style={{ color: "#fff", fontWeight: 900, fontSize: "clamp(1.9rem, 4.5vw, 3rem)", letterSpacing: "-0.03em", lineHeight: 1.15, margin: "0 0 14px" }}>
             Contact Us
           </h1>
-          <p className="lead" style={{ fontSize: "1.1rem", opacity: 0.9, marginBottom: 0, maxWidth: "600px" }}>
-            We&apos;d love to hear from you. Let us know how we can help.
+          <p style={{ color: "rgba(255,255,255,0.72)", fontSize: "0.98rem", lineHeight: 1.75, maxWidth: 460, margin: "0 auto" }}>
+            Have a question about an order or a product? Our team typically responds within 24 hours.
           </p>
         </div>
       </div>

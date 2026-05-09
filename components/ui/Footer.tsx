@@ -12,7 +12,7 @@ export default function Footer() {
 
           {/* Brand */}
           <div className="col-lg-4 col-md-12">
-            <p style={{ fontSize: "1.4rem", fontWeight: "700", color: "#fff", letterSpacing: "0.04em", marginBottom: "16px" }}>
+            <p style={{ fontSize: "1.4rem", fontWeight: "700", color: "#777", letterSpacing: "0.04em", marginBottom: "16px" }}>
               Saaviya
             </p>
             <p style={{ fontSize: "0.875rem", lineHeight: "1.75", color: "#777", maxWidth: "320px", marginBottom: "28px" }}>

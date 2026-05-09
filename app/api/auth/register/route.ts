@@ -38,12 +38,12 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Send verification email (non-blocking)
-    sendEmail({
+    // Send verification email
+    await sendEmail({
       to: email,
       subject: "Verify your saaviya.in account",
       html: verificationEmailTemplate(name, verifyToken),
-    }).catch(console.error);
+    });
 
     return NextResponse.json(
       {

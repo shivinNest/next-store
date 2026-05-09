@@ -40,8 +40,8 @@ export default function WishlistPage() {
 
       {loading ? (
         <div className="row g-3">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="col-6 col-md-4">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="col-6 col-md-3">
               <div className="skeleton" style={{ height: 240, borderRadius: 8 }} />
               <div className="skeleton mt-2" style={{ height: 16, width: "70%" }} />
             </div>
@@ -60,11 +60,11 @@ export default function WishlistPage() {
           {items.map((item) => {
             const p = item.product;
             return (
-              <div key={item.id} className="col-6 col-md-4">
+              <div key={item.id} className="col-6 col-md-3">
                 <div style={{ border: "1px solid #ece9e4", borderRadius: 10, overflow: "hidden", background: "#fff", height: "100%", display: "flex", flexDirection: "column" }}>
-                  <div className="product-img-wrap" style={{ position: "relative" }}>
+                  <div className="product-img-wrap" style={{ position: "relative", aspectRatio: "3/4", overflow: "hidden", background: "#f8f9fa" }}>
                     {p.images[0] ? (
-                      <Image src={p.images[0]} alt={p.name} fill className="object-fit-cover" />
+                      <Image src={p.images[0]} alt={p.name} fill sizes="(max-width:576px) 50vw, 33vw" style={{ objectFit: "cover" }} />
                     ) : (
                       <div className="w-100 h-100 d-flex align-items-center justify-content-center bg-light">
                         <span style={{ fontSize: "2rem", color: "#ccc" }}>&#128444;</span>
