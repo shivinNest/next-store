@@ -45,8 +45,8 @@ function emailLayout(logoUrl: string, content: string) {
 
         <!-- Logo header -->
         <tr>
-          <td style="background:linear-gradient(135deg,#9f523a,#7a3f2c);border-radius:12px 12px 0 0;padding:28px 40px;text-align:center;">
-            <img src="${logoUrl}" alt="Saaviya" style="height:48px;max-width:180px;object-fit:contain;display:block;margin:0 auto;" />
+          <td style="background:#fef3ef;border-radius:12px 12px 0 0;padding:8px 40px;text-align:center;">
+            <img src="${logoUrl}" alt="Saaviya" style="height:78px;max-width:180px;object-fit:contain;display:block;margin:0 auto;" />
           </td>
         </tr>
 
