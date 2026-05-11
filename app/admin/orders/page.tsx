@@ -218,10 +218,22 @@ export default function AdminOrdersPage() {
             <div className="card border-0 shadow-sm">
               <div className="card-header bg-white border-0 d-flex justify-content-between align-items-center pt-3">
                 <h6 className="fw-bold mb-0">Order #{selectedOrder.orderNumber}</h6>
-                <button
-                  className="btn-close btn-sm"
-                  onClick={() => setSelectedOrder(null)}
-                />
+                <div className="d-flex align-items-center gap-2">
+                  <a
+                    href={`/api/admin/orders/${selectedOrder.id}/invoice`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-sm btn-outline-secondary px-2 py-1 small"
+                    title="Download Invoice"
+                  >
+                    <i className="bi bi-file-earmark-text me-1" />
+                    Invoice
+                  </a>
+                  <button
+                    className="btn-close btn-sm"
+                    onClick={() => setSelectedOrder(null)}
+                  />
+                </div>
               </div>
               <div className="card-body">
                 {/* Customer & Address */}

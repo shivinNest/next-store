@@ -31,6 +31,9 @@ export async function POST(req: NextRequest) {
         password: await hashPassword(password),
         resetToken: null,
         resetTokenExp: null,
+        isVerified: true,
+        verifyToken: null,
+        verifyTokenExp: null,
       },
     });
 
